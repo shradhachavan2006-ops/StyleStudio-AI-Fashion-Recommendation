@@ -1,0 +1,76 @@
+# ========================
+# Environment & Secrets
+# ========================
+.env
+.env.local
+.env.*
+!.env.example
+
+# ========================
+# Node.js / npm
+# ========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+
+# ========================
+# Next.js (Frontend)
+# ========================
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.vercel
+frontend/next-env.d.ts
+frontend/*.tsbuildinfo
+frontend/.pnp
+frontend/.pnp.*
+frontend/.yarn/*
+!frontend/.yarn/patches
+!frontend/.yarn/plugins
+!frontend/.yarn/releases
+!frontend/.yarn/versions
+frontend/coverage/
+
+# ========================
+# Python / ML
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.eggs/
+*.egg-info/
+dist/
+build/
+
+# ========================
+# ML Model Artifacts
+# (large binary files — regenerate locally)
+# ========================
+*.pkl
+ml/dataset.csv
+
+# ========================
+# Backend
+# ========================
+backend/uploads/
+backend/outfits_debug.json
+
+# ========================
+# Misc / OS
+# ========================
+.DS_Store
+Thumbs.db
+*.pem
+*.log
+.idea/
+.vscode/

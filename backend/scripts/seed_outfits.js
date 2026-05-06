@@ -1,0 +1,425 @@
+/**
+ * seed_outfits.js — StyleStudio Outfit Seeder (v2)
+ * =================================================
+ * Seeds diverse outfits using real images from the local dataset.
+ * Images are served by the backend at http://localhost:5000/images/{id}.jpg
+ *
+ * Usage:
+ *   node backend/scripts/seed_outfits.js
+ */
+
+require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
+const mongoose = require('mongoose');
+const Outfit = require('../models/Outfit');
+
+// Backend serves dataset images at /images/{id}.jpg
+const IMG = (id) => `http://localhost:5000/images/${id}.jpg`;
+
+// These image IDs are confirmed to exist in data/images/ and are large enough (>8KB) to be real photos
+const SAMPLE_OUTFITS = [
+  {
+    outfitName: 'Classic Navy Blazer',
+    theme: 'Formal',
+    style: 'elegant',
+    colors: ['navy', '#003087'],
+    clothingPieces: ['Blazer', 'Dress Shirt', 'Trousers'],
+    top: 'Navy Blazer',
+    bottom: 'Grey Trousers',
+    imageUrl: IMG('10003'),
+    occasion: 'Formal',
+    description: 'A timeless navy blazer paired with crisp trousers.',
+  },
+  {
+    outfitName: 'Casual White Tee Set',
+    theme: 'Casual',
+    style: 'minimal',
+    colors: ['white', '#f5f5f5'],
+    clothingPieces: ['T-Shirt', 'Jeans', 'Sneakers'],
+    top: 'White T-Shirt',
+    bottom: 'Blue Jeans',
+    imageUrl: IMG('10007'),
+    occasion: 'Casual',
+    description: 'Fresh, clean and effortlessly stylish for everyday wear.',
+  },
+  {
+    outfitName: 'Red Party Dress',
+    theme: 'Party',
+    style: 'bold',
+    colors: ['red', '#cc0000'],
+    clothingPieces: ['Wrap Dress', 'Heels', 'Clutch'],
+    top: 'Red Wrap Dress',
+    bottom: '',
+    imageUrl: IMG('10009'),
+    occasion: 'Party',
+    description: 'Make heads turn with this bold, elegant red wrap dress.',
+  },
+  {
+    outfitName: 'Sporty Track Set',
+    theme: 'Sports',
+    style: 'sporty',
+    colors: ['black', '#1c1c1c'],
+    clothingPieces: ['Track Jacket', 'Track Pants', 'Sneakers'],
+    top: 'Black Track Jacket',
+    bottom: 'Black Track Pants',
+    imageUrl: IMG('10010'),
+    occasion: 'Sports',
+    description: 'Performance meets style in this sleek all-black track set.',
+  },
+  {
+    outfitName: 'Boho Floral Maxi',
+    theme: 'Casual',
+    style: 'elegant',
+    colors: ['coral', '#ff6347'],
+    clothingPieces: ['Maxi Dress', 'Sandals', 'Woven Bag'],
+    top: 'Coral Maxi Dress',
+    bottom: '',
+    imageUrl: IMG('10013'),
+    occasion: 'Casual',
+    description: 'Free-spirited and vibrant — perfect for warm days.',
+  },
+  {
+    outfitName: 'Monochrome Grey Suit',
+    theme: 'Formal',
+    style: 'structured',
+    colors: ['grey', '#808080'],
+    clothingPieces: ['Suit Jacket', 'Suit Trousers', 'Tie'],
+    top: 'Grey Suit Jacket',
+    bottom: 'Grey Trousers',
+    imageUrl: IMG('10017'),
+    occasion: 'Formal',
+    description: 'Sharp, polished and authoritative.',
+  },
+  {
+    outfitName: 'Streetwear Hoodie Look',
+    theme: 'Casual',
+    style: 'streetwear',
+    colors: ['olive', '#808000'],
+    clothingPieces: ['Oversized Hoodie', 'Cargo Pants', 'High-Tops'],
+    top: 'Olive Oversized Hoodie',
+    bottom: 'Cargo Pants',
+    imageUrl: IMG('10018'),
+    occasion: 'Casual',
+    description: 'Urban and edgy with a laid-back comfort vibe.',
+  },
+  {
+    outfitName: 'Pastel Pink Blazer',
+    theme: 'Smart',
+    style: 'trendy',
+    colors: ['pink', '#ff69b4'],
+    clothingPieces: ['Pastel Blazer', 'White Trousers', 'Block Heels'],
+    top: 'Pink Blazer',
+    bottom: 'White Trousers',
+    imageUrl: IMG('10021'),
+    occasion: 'Smart',
+    description: 'Feminine power dressing with a modern pastel palette.',
+  },
+  {
+    outfitName: 'Elegant Black Gown',
+    theme: 'Formal',
+    style: 'elegant',
+    colors: ['black', '#000000'],
+    clothingPieces: ['Evening Gown', 'Stilettos', 'Pearl Necklace'],
+    top: 'Black Evening Gown',
+    bottom: '',
+    imageUrl: IMG('10022'),
+    occasion: 'Formal',
+    description: 'A timeless little black dress for any formal occasion.',
+  },
+  {
+    outfitName: 'Yellow Sundress',
+    theme: 'Casual',
+    style: 'minimal',
+    colors: ['yellow', '#ffff00'],
+    clothingPieces: ['Sundress', 'Espadrilles', 'Straw Hat'],
+    top: 'Yellow Sundress',
+    bottom: '',
+    imageUrl: IMG('10024'),
+    occasion: 'Casual',
+    description: 'Bright and breezy — ideal for sunny days.',
+  },
+  {
+    outfitName: 'Layered Denim Jacket',
+    theme: 'Casual',
+    style: 'layered',
+    colors: ['blue', '#4444ff'],
+    clothingPieces: ['Denim Jacket', 'Graphic Tee', 'Slim Jeans'],
+    top: 'Denim Jacket',
+    bottom: 'Slim Jeans',
+    imageUrl: IMG('10027'),
+    occasion: 'Casual',
+    description: 'Classic denim layering for a relaxed, cool look.',
+  },
+  {
+    outfitName: 'Emerald Cocktail Dress',
+    theme: 'Party',
+    style: 'bold',
+    colors: ['green', '#008000'],
+    clothingPieces: ['Cocktail Dress', 'Heels', 'Clutch'],
+    top: 'Emerald Dress',
+    bottom: '',
+    imageUrl: IMG('10031'),
+    occasion: 'Party',
+    description: 'A jewel-toned showstopper for glamorous evenings.',
+  },
+  {
+    outfitName: 'Athleisure Yoga Set',
+    theme: 'Sports',
+    style: 'fitted',
+    colors: ['purple', '#800080'],
+    clothingPieces: ['Sports Bra', 'Leggings', 'Running Shoes'],
+    top: 'Purple Sports Bra',
+    bottom: 'Purple Leggings',
+    imageUrl: IMG('10032'),
+    occasion: 'Sports',
+    description: 'Flattering and functional for yoga, pilates, or the gym.',
+  },
+  {
+    outfitName: 'Brown Leather Jacket',
+    theme: 'Casual',
+    style: 'bold',
+    colors: ['brown', '#8b4513'],
+    clothingPieces: ['Leather Jacket', 'White Tee', 'Black Jeans'],
+    top: 'Brown Leather Jacket',
+    bottom: 'Black Jeans',
+    imageUrl: IMG('10033'),
+    occasion: 'Casual',
+    description: 'Rugged sophistication with timeless leather.',
+  },
+  {
+    outfitName: 'Teal Wrap Midi Skirt',
+    theme: 'Smart',
+    style: 'elegant',
+    colors: ['teal', '#008080'],
+    clothingPieces: ['Wrap Midi Skirt', 'Silk Blouse', 'Kitten Heels'],
+    top: 'Cream Silk Blouse',
+    bottom: 'Teal Wrap Skirt',
+    imageUrl: IMG('10034'),
+    occasion: 'Smart',
+    description: 'Effortlessly chic for business casual settings.',
+  },
+  {
+    outfitName: 'Beige Linen Co-ord',
+    theme: 'Casual',
+    style: 'minimal',
+    colors: ['beige', '#f5f5dc'],
+    clothingPieces: ['Linen Shirt', 'Linen Trousers', 'Slip-ons'],
+    top: 'Beige Linen Shirt',
+    bottom: 'Beige Linen Trousers',
+    imageUrl: IMG('10041'),
+    occasion: 'Casual',
+    description: 'Breathable, earthy, and timelessly minimal.',
+  },
+  {
+    outfitName: 'Printed Ethnic Kurta',
+    theme: 'Ethnic',
+    style: 'bold',
+    colors: ['orange', '#ffa500'],
+    clothingPieces: ['Printed Kurta', 'Palazzo Pants', 'Kolhapuri Sandals'],
+    top: 'Orange Printed Kurta',
+    bottom: 'Palazzo Pants',
+    imageUrl: IMG('10042'),
+    occasion: 'Ethnic',
+    description: 'Vibrant ethnic wear for festivals and celebrations.',
+  },
+  {
+    outfitName: 'Charcoal Business Suit',
+    theme: 'Formal',
+    style: 'structured',
+    colors: ['charcoal', '#36454f'],
+    clothingPieces: ['Suit Jacket', 'Dress Shirt', 'Tie', 'Leather Shoes'],
+    top: 'Charcoal Suit Jacket',
+    bottom: 'Matching Trousers',
+    imageUrl: IMG('10078'),
+    occasion: 'Formal',
+    description: 'Command the boardroom with this sharp business suit.',
+  },
+  {
+    outfitName: 'Ivory Wrap Blouse',
+    theme: 'Smart',
+    style: 'elegant',
+    colors: ['ivory', '#fffff0'],
+    clothingPieces: ['Wrap Blouse', 'Wide-Leg Trousers', 'Mules'],
+    top: 'Ivory Wrap Blouse',
+    bottom: 'Beige Wide-Leg Trousers',
+    imageUrl: IMG('10079'),
+    occasion: 'Smart',
+    description: 'Soft and polished — ideal for office-to-evening.',
+  },
+  {
+    outfitName: 'Varsity Jacket Look',
+    theme: 'Casual',
+    style: 'trendy',
+    colors: ['red', '#cc0000'],
+    clothingPieces: ['Varsity Jacket', 'Graphic Tee', 'Joggers', 'Sneakers'],
+    top: 'Red Varsity Jacket',
+    bottom: 'Black Joggers',
+    imageUrl: IMG('10081'),
+    occasion: 'Casual',
+    description: 'Retro-inspired campus style with modern attitude.',
+  },
+  {
+    outfitName: 'Floral Summer Dress',
+    theme: 'Casual',
+    style: 'elegant',
+    colors: ['pink', '#ffc0cb'],
+    clothingPieces: ['Floral Dress', 'Ballet Flats', 'Straw Bag'],
+    top: 'Floral Dress',
+    bottom: '',
+    imageUrl: IMG('10114'),
+    occasion: 'Casual',
+    description: 'Feminine and fresh — perfect for summer brunches.',
+  },
+  {
+    outfitName: 'Navy Formal Suit',
+    theme: 'Formal',
+    style: 'structured',
+    colors: ['navy', '#001f5b'],
+    clothingPieces: ['Navy Suit', 'White Shirt', 'Leather Shoes'],
+    top: 'Navy Suit Jacket',
+    bottom: 'Navy Trousers',
+    imageUrl: IMG('10117'),
+    occasion: 'Formal',
+    description: 'Navy confidence for high-stakes meetings.',
+  },
+  {
+    outfitName: 'Warm Tone Ethnic Set',
+    theme: 'Ethnic',
+    style: 'bold',
+    colors: ['gold', '#ffd700'],
+    clothingPieces: ['Embroidered Kurta', 'Churidar', 'Juttis'],
+    top: 'Gold Embroidered Kurta',
+    bottom: 'Churidar',
+    imageUrl: IMG('10130'),
+    occasion: 'Ethnic',
+    description: 'Rich golden hues that celebrate Indian craftsmanship.',
+  },
+  {
+    outfitName: 'Cobalt Blue Blazer',
+    theme: 'Smart',
+    style: 'bold',
+    colors: ['blue', '#0047ab'],
+    clothingPieces: ['Cobalt Blazer', 'White Tee', 'Dark Jeans'],
+    top: 'Cobalt Blue Blazer',
+    bottom: 'Dark Slim Jeans',
+    imageUrl: IMG('10133'),
+    occasion: 'Smart',
+    description: 'Stand out in smart casual with a vibrant cobalt blazer.',
+  },
+  {
+    outfitName: 'Gym Performance Set',
+    theme: 'Sports',
+    style: 'sporty',
+    colors: ['teal', '#008080'],
+    clothingPieces: ['Performance Tee', 'Shorts', 'Running Shoes'],
+    top: 'Teal Performance Tee',
+    bottom: 'Black Shorts',
+    imageUrl: IMG('10134'),
+    occasion: 'Sports',
+    description: 'Engineered for peak performance and style at the gym.',
+  },
+  {
+    outfitName: 'Neutral Linen Suit',
+    theme: 'Smart',
+    style: 'minimal',
+    colors: ['tan', '#d2b48c'],
+    clothingPieces: ['Linen Blazer', 'Linen Trousers', 'Loafers'],
+    top: 'Tan Linen Blazer',
+    bottom: 'Matching Linen Trousers',
+    imageUrl: IMG('10135'),
+    occasion: 'Smart',
+    description: 'Breathable linen suiting for a relaxed professional look.',
+  },
+  {
+    outfitName: 'Festival Kurta Set',
+    theme: 'Ethnic',
+    style: 'bold',
+    colors: ['purple', '#800080'],
+    clothingPieces: ['Embroidered Kurta', 'Dhoti Pants', 'Kolhapuri Sandals'],
+    top: 'Purple Kurta',
+    bottom: 'Dhoti Pants',
+    imageUrl: IMG('10137'),
+    occasion: 'Ethnic',
+    description: 'Festive and vibrant — perfect for Diwali or weddings.',
+  },
+  {
+    outfitName: 'Classic White Shirt Dress',
+    theme: 'Smart',
+    style: 'minimal',
+    colors: ['white', '#ffffff'],
+    clothingPieces: ['Shirt Dress', 'Belt', 'Ankle Boots'],
+    top: 'White Shirt Dress',
+    bottom: '',
+    imageUrl: IMG('10138'),
+    occasion: 'Smart',
+    description: 'A crisp shirt dress for effortless smart-casual dressing.',
+  },
+  {
+    outfitName: 'Evening Party Jumpsuit',
+    theme: 'Party',
+    style: 'bold',
+    colors: ['black', '#1a1a1a'],
+    clothingPieces: ['Tailored Jumpsuit', 'Heels', 'Statement Earrings'],
+    top: 'Black Jumpsuit',
+    bottom: '',
+    imageUrl: IMG('10139'),
+    occasion: 'Party',
+    description: 'Sleek and sophisticated — the ideal party jumpsuit.',
+  },
+  {
+    outfitName: 'Pastel Casual Co-ord',
+    theme: 'Casual',
+    style: 'trendy',
+    colors: ['lavender', '#c4b5fd'],
+    clothingPieces: ['Lavender Top', 'Wide-Leg Pants', 'Sneakers'],
+    top: 'Lavender Crop Top',
+    bottom: 'Matching Wide-Leg Pants',
+    imageUrl: IMG('10144'),
+    occasion: 'Casual',
+    description: 'Dreamy pastel co-ord for effortless weekend style.',
+  },
+  {
+    outfitName: 'Denim On Denim',
+    theme: 'Casual',
+    style: 'streetwear',
+    colors: ['blue', '#5b7fa6'],
+    clothingPieces: ['Denim Shirt', 'Ripped Jeans', 'White Sneakers'],
+    top: 'Light Denim Shirt',
+    bottom: 'Dark Ripped Jeans',
+    imageUrl: IMG('10148'),
+    occasion: 'Casual',
+    description: 'The classic Canadian tuxedo done right.',
+  },
+];
+
+async function seed() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('[OK] Connected to MongoDB');
+
+    let inserted = 0;
+    let skipped = 0;
+
+    for (const outfit of SAMPLE_OUTFITS) {
+      const exists = await Outfit.findOne({ outfitName: outfit.outfitName });
+      if (exists) {
+        // Update image URL if it's still using Unsplash
+        if (exists.imageUrl && exists.imageUrl.includes('unsplash')) {
+          await Outfit.updateOne({ _id: exists._id }, { imageUrl: outfit.imageUrl });
+          console.log(`[UPDATED] ${outfit.outfitName} -> local image`);
+        }
+        skipped++;
+        continue;
+      }
+      await Outfit.create(outfit);
+      inserted++;
+    }
+
+    console.log(`[OK] Seeding complete: ${inserted} inserted, ${skipped} skipped`);
+    process.exit(0);
+  } catch (err) {
+    console.error('[ERROR] Seeding failed:', err.message);
+    process.exit(1);
+  }
+}
+
+seed();
