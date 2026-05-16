@@ -412,7 +412,7 @@ export default function BodyProfilePage() {
                 location_type: form.location_type,
             });
             await refreshUser();
-            router.push('/recommend');
+            router.push('/themes');
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Save failed. Please try again.');
         } finally {
