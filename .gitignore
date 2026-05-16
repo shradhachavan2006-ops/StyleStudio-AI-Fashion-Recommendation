@@ -31,7 +31,7 @@ frontend/.yarn/*
 !frontend/.yarn/patches
 !frontend/.yarn/plugins
 !frontend/.yarn/releases
-!frontend/.yarn/versions
+!frontend/.yarn/v
 frontend/coverage/
 
 # ========================

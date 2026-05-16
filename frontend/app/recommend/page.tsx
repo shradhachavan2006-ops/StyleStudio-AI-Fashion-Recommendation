@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, Loader2, AlertCircle, RotateCcw, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { Sparkles, Loader2, AlertCircle, RotateCcw, ChevronDown, MapPin } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Recommendation {
@@ -414,6 +415,54 @@ export default function RecommendPage() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* ── Explore Stores CTA ── */}
+      <div className="max-w-7xl mx-auto px-6 pb-16">
+        <div className="relative overflow-hidden rounded-3xl border border-violet-500/20
+                        bg-gradient-to-br from-violet-900/30 via-gray-900/60 to-pink-900/20
+                        backdrop-blur-md p-8 flex flex-col sm:flex-row items-center gap-6
+                        shadow-2xl shadow-violet-900/20">
+          {/* Glow */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute -top-10 -left-10 w-48 h-48 bg-violet-600/20 rounded-full blur-3xl" />
+            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-pink-600/15 rounded-full blur-3xl" />
+          </div>
+
+          {/* Map emoji */}
+          <div className="relative flex-shrink-0 w-16 h-16 rounded-2xl bg-violet-500/20 border border-violet-500/30
+                          flex items-center justify-center text-3xl shadow-lg shadow-violet-900/30">
+            🗺️
+          </div>
+
+          {/* Text */}
+          <div className="relative flex-1 text-center sm:text-left">
+            <h3 className="text-lg font-bold text-white mb-1 flex items-center justify-center sm:justify-start gap-2">
+              <MapPin size={16} className="text-violet-400" />
+              Nearby Fashion Stores
+            </h3>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              Found your perfect outfits? Now shop them in person! Explore{' '}
+              <span className="text-violet-300 font-medium">Zara, H&amp;M, Westside &amp; Trends</span>{' '}
+              on an interactive Pune map with real-time distance from your location.
+            </p>
+          </div>
+
+          {/* CTA button */}
+          <div className="relative flex-shrink-0">
+            <Link
+              href="/stores"
+              id="explore-stores-btn"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm
+                         bg-gradient-to-r from-violet-600 to-pink-600 text-white
+                         hover:opacity-90 active:scale-[0.97] transition-all duration-200
+                         shadow-lg shadow-violet-900/40 whitespace-nowrap"
+            >
+              <MapPin size={15} />
+              Explore Stores
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

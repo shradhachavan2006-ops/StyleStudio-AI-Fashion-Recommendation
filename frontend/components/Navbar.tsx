@@ -59,6 +59,7 @@ export default function Navbar() {
             {navLink('/dashboard',  'Dashboard')}
             {navLink('/themes',     'Themes')}
             {navLink('/outfits',    'Outfits')}
+            {navLink('/stores',     '🗺️ Stores')}
 
             {/* Recommend — highlighted */}
             <Link

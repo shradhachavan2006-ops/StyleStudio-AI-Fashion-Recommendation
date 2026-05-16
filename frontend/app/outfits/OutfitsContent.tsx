@@ -64,16 +64,16 @@ export default function OutfitsContent() {
 
   // Called by each OutfitCard when a meaningful action happens
   const handleCardAction = useCallback(
-    (action: 'like' | 'dislike' | 'save' | 'try') => {
-      if (feedbackShown) return; // don't re-trigger after modal was shown
+    (action: 'like' | 'reject' | 'save' | 'try_on') => {
+      if (feedbackShown) return;
 
       let nextLikes = likeCount;
       let nextSaves = saveCount;
       let nextTries = tryCount;
 
-      if (action === 'like') nextLikes = likeCount + 1;
-      if (action === 'save') nextSaves = saveCount + 1;
-      if (action === 'try')  nextTries = tryCount + 1;
+      if (action === 'like')   nextLikes = likeCount + 1;
+      if (action === 'save')   nextSaves = saveCount + 1;
+      if (action === 'try_on') nextTries = tryCount + 1;
 
       setLikeCount(nextLikes);
       setSaveCount(nextSaves);
