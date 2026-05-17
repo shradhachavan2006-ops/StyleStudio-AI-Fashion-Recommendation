@@ -51,12 +51,10 @@ function ImageTile({ label, src, pieceName, colour }: {
   label: string; src?: string; pieceName?: string; colour?: string;
 }) {
   const [err, setErr] = useState(false);
-  // Map raw colour string to a CSS colour for the dot
   const dotColor = colourNameToHex(colour || '');
 
   return (
     <div className="flex flex-col rounded-2xl overflow-hidden bg-[#13132a] border border-white/8 flex-1 min-w-0">
-      {/* Image area */}
       <div className="relative bg-[#1a1a35] flex items-center justify-center" style={{ aspectRatio: '3/4' }}>
         {src && !err ? (
           <img
@@ -70,7 +68,6 @@ function ImageTile({ label, src, pieceName, colour }: {
           </div>
         )}
       </div>
-      {/* Label + piece name + colour */}
       <div className="px-3 py-2.5">
         <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase mb-1">{label}</p>
         {pieceName && (
@@ -90,7 +87,7 @@ function ImageTile({ label, src, pieceName, colour }: {
   );
 }
 
-// Map a colour name string (e.g. 'Navy Blue', 'White') to a CSS hex for the dot
+// Map colour name to CSS hex
 function colourNameToHex(colour: string): string {
   const c = colour.toLowerCase().trim();
   const map: Record<string, string> = {
@@ -119,21 +116,20 @@ export default function OutfitsContent() {
   const sp = useSearchParams();
   const theme = sp.get('theme');
 
-  const [outfits,      setOutfits]     = useState<Outfit[]>([]);
-  const [fetching,     setFetching]    = useState(true);
-  const [generating,   setGenerating]  = useState(false);
-  const [autoRefresh,  setAutoRefresh] = useState(false);  // silent background refresh
-  const [hasLoaded,    setHasLoaded]   = useState(false);
-  const [error,        setError]       = useState('');
-  const [mlRecs,       setMlRecs]      = useState<MLRec[]>([]);
-  const [idx,          setIdx]         = useState(0);
-  const [liked,        setLiked]       = useState(false);
-  const [saved,        setSaved]       = useState(false);
-  const [dislikedIds,  setDislikedIds] = useState<Set<string>>(new Set());
-  const [removing,     setRemoving]    = useState(false);
-  const [showFeedback, setShowFeedback]= useState(false);
-  const [feedbackShown,setFeedbackShown]=useState(false);
-  const [totalGenerated, setTotalGenerated] = useState(0); // total ever generated this session
+  const [outfits,       setOutfits]      = useState<Outfit[]>([]);
+  const [fetching,      setFetching]     = useState(true);
+  const [generating,    setGenerating]   = useState(false);
+  const [autoRefresh,   setAutoRefresh]  = useState(false);
+  const [hasLoaded,     setHasLoaded]    = useState(false);
+  const [error,         setError]        = useState('');
+  const [mlRecs,        setMlRecs]       = useState<MLRec[]>([]);
+  const [idx,           setIdx]          = useState(0);
+  const [liked,         setLiked]        = useState(false);
+  const [saved,         setSaved]        = useState(false);
+  const [dislikedIds,   setDislikedIds]  = useState<Set<string>>(new Set());
+  const [removing,      setRemoving]     = useState(false);
+  const [showFeedback,  setShowFeedback] = useState(false);
+  const [feedbackShown, setFeedbackShown]= useState(false);
 
   // Load ML recs from session
   useEffect(() => {
@@ -149,9 +145,7 @@ export default function OutfitsContent() {
     try {
       const url = theme ? `/api/outfits?theme=${theme}` : '/api/outfits';
       const res = await axios.get(url);
-      const fetched = res.data.outfits ?? [];
-      setOutfits(fetched);
-      setTotalGenerated(fetched.length);
+      setOutfits(res.data.outfits ?? []);
       setIdx(0);
     } catch (e: unknown) {
       const err = e as { response?: { data?: { message?: string } } };
@@ -164,21 +158,18 @@ export default function OutfitsContent() {
     fetchOutfits();
   }, [theme, user, fetchOutfits]);
 
-  // Generate fresh outfits then reload
+  // Generate fresh outfits
   const generateMore = useCallback(async (silent = false) => {
     if (!theme) { router.push('/themes'); return; }
     if (!silent) setGenerating(true);
-    else setAutoRefresh(true);
+    else         setAutoRefresh(true);
     setError('');
     try {
       await axios.post('/api/outfits/generate', { theme });
       setDislikedIds(new Set());
-      // Append new outfits instead of resetting idx
-      const url = `/api/outfits?theme=${theme}`;
-      const res = await axios.get(url);
+      const res = await axios.get(`/api/outfits?theme=${theme}`);
       const fresh = res.data.outfits ?? [];
       setOutfits(fresh);
-      setTotalGenerated(fresh.length);
       if (!silent) setIdx(0);
     } catch (e: unknown) {
       const err = e as { response?: { data?: { message?: string } } };
@@ -190,9 +181,7 @@ export default function OutfitsContent() {
   }, [theme, router]);
 
   // Reset action states when outfit changes
-  useEffect(() => {
-    setLiked(false); setSaved(false);
-  }, [idx]);
+  useEffect(() => { setLiked(false); setSaved(false); }, [idx]);
 
   const go = useCallback((dir: 1 | -1) => {
     setIdx(i => (i + dir + outfits.length) % outfits.length);
@@ -203,7 +192,7 @@ export default function OutfitsContent() {
     if (!feedbackShown) { setShowFeedback(true); setFeedbackShown(true); }
   };
 
-  // Permanently remove the current outfit — never shows again
+  // Dislike: remove current outfit; auto-refresh when ≤2 remain
   const handleDislike = useCallback(() => {
     const outfit = outfits[idx] ?? outfits[0];
     if (!outfit || removing) return;
@@ -213,7 +202,6 @@ export default function OutfitsContent() {
       setDislikedIds(prev => new Set([...prev, dislikedId]));
       setOutfits(prev => {
         const filtered = prev.filter(o => o._id !== dislikedId);
-        // Auto-refresh silently when only 2 outfits remain
         if (filtered.length <= 2 && !generating && !autoRefresh) {
           generateMore(true);
         }
@@ -227,47 +215,41 @@ export default function OutfitsContent() {
 
   if (loading || !user) return null;
 
-  const current   = outfits[idx] ?? outfits[0];
-  const topRec    = mlRecs[0];
-  const matchPct  = topRec ? Math.round(topRec.score * 100) : null;
+  const current  = outfits[idx] ?? outfits[0];
+  const topRec   = mlRecs[0];
+  const matchPct = topRec ? Math.round(topRec.score * 100) : null;
 
-  // ── Keyword-based piece-name resolver (accurate for all 4 tiles) ────────────
-  // Uses category keywords to find the RIGHT piece name from clothingPieces[]
-  // instead of relying on outfit.top/outfit.bottom (which were often wrong)
+  // ── Keyword-based piece-name resolver ─────────────────────────────────────
   const TILE_KEYWORDS: Record<string, string[]> = {
     topImage: [
-      'shirt', 't-shirt', 'tshirt', 'tee', 'blouse', 'top', 'polo',
-      'kurta', 'kurti', 'sherwani', 'blazer', 'jacket', 'coat', 'suit',
-      'sweater', 'hoodie', 'sweatshirt', 'vest', 'tunic', 'cardigan',
-      'crop', 'gown', 'dress', 'saree', 'anarkali', 'choli', 'lehenga blouse',
+      'shirt','t-shirt','tshirt','tee','blouse','top','polo',
+      'kurta','kurti','sherwani','blazer','jacket','coat','suit',
+      'sweater','hoodie','sweatshirt','vest','tunic','cardigan',
+      'crop','gown','dress','saree','anarkali','choli','lehenga blouse',
     ],
     bottomImage: [
-      'jeans', 'trouser', 'pants', 'shorts', 'skirt', 'legging',
-      'chino', 'cargo', 'capri', 'palazzo', 'dhoti', 'churidar',
-      'jogger', 'trackpant', 'track pant', 'culottes', 'tights',
+      'jeans','trouser','pants','shorts','skirt','legging',
+      'chino','cargo','capri','palazzo','dhoti','churidar',
+      'jogger','trackpant','track pant','culottes','tights',
     ],
     footwearImage: [
-      'shoe', 'sneaker', 'sandal', 'heel', 'boot', 'loafer', 'flat',
-      'mule', 'jutti', 'mojari', 'espadrille', 'slipper', 'oxford',
-      'derby', 'stiletto', 'platform', 'wedge', 'pump', 'clog',
+      'shoe','sneaker','sandal','heel','boot','loafer','flat',
+      'mule','jutti','mojari','espadrille','slipper','oxford',
+      'derby','stiletto','platform','wedge','pump','clog',
     ],
     accessoryImage: [
-      'tie', 'belt', 'bag', 'tote', 'clutch', 'watch', 'jewelry',
-      'jewel', 'earring', 'necklace', 'cap', 'hat', 'dupatta',
-      'cufflink', 'pendant', 'brooch', 'ring', 'bracelet', 'scarf',
-      'stole', 'safa', 'turban', 'backpack', 'wallet', 'purse',
-      'sunglasses', 'glove', 'socks', 'bandana',
+      'tie','belt','bag','tote','clutch','watch','jewelry',
+      'jewel','earring','necklace','cap','hat','dupatta',
+      'cufflink','pendant','brooch','ring','bracelet','scarf',
+      'stole','safa','turban','backpack','wallet','purse',
+      'sunglasses','glove','socks','bandana',
     ],
   };
 
   function getPieceName(outfit: Outfit, _pieceKey: string | null, tileKey: string): string {
     const kw = TILE_KEYWORDS[tileKey] || [];
-    // Scan clothingPieces with keyword matching — most accurate
-    const found = outfit.clothingPieces.find(p =>
-      kw.some(k => p.toLowerCase().includes(k))
-    );
+    const found = outfit.clothingPieces.find(p => kw.some(k => p.toLowerCase().includes(k)));
     if (found) return found;
-    // Secondary: use stored top/bottom fields
     if (tileKey === 'topImage'    && outfit.top)    return outfit.top;
     if (tileKey === 'bottomImage' && outfit.bottom) return outfit.bottom;
     return '';
@@ -283,19 +265,19 @@ export default function OutfitsContent() {
             className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-sm font-medium">
             <ArrowLeft size={18} /> Back to Themes
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap justify-end">
             {theme && (
               <span className="px-3 py-1 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-xs font-bold uppercase tracking-wider">
                 {theme}
               </span>
             )}
-            {/* Outfit counter pill */}
+            {/* Remaining counter */}
             {!fetching && outfits.length > 0 && (
               <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-semibold">
                 {outfits.length} outfit{outfits.length !== 1 ? 's' : ''} remaining
               </span>
             )}
-            {/* Silent background refresh indicator */}
+            {/* Silent refresh indicator */}
             {autoRefresh && (
               <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
                 <span className="w-2.5 h-2.5 border border-emerald-400 border-t-transparent rounded-full animate-spin" />
@@ -326,23 +308,19 @@ export default function OutfitsContent() {
           </div>
         )}
 
-        {/* ── All Caught Up / Generate More ── */}
+        {/* ── All Caught Up ── */}
         {!fetching && !error && hasLoaded && outfits.length === 0 && (
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            {/* Animated ring */}
             <div className="relative mb-8">
               <div className="w-28 h-28 rounded-full bg-gradient-to-br from-violet-600/20 to-pink-600/20 border border-violet-500/30 flex items-center justify-center">
                 <span className="text-5xl">✨</span>
               </div>
               <div className="absolute inset-0 rounded-full animate-ping bg-violet-500/10" />
             </div>
-
             <h2 className="text-2xl font-extrabold text-white mb-2">All caught up!</h2>
             <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
-              You&apos;ve seen all {theme ? `${theme} ` : ''}outfits in this session.
-              Generate a fresh batch tailored just for you.
+              You&apos;ve seen all {theme ? `${theme} ` : ''}outfits. Generate a fresh batch tailored just for you.
             </p>
-
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => generateMore()}
@@ -354,27 +332,18 @@ export default function OutfitsContent() {
                            disabled:cursor-not-allowed transition-all duration-200"
               >
                 {generating ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                    Generating…
-                  </>
+                  <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Generating…</>
                 ) : (
-                  <>
-                    <Sparkles size={16} /> Generate More Outfits
-                  </>
+                  <><Sparkles size={16} /> Generate More Outfits</>
                 )}
               </button>
-
-              <Link
-                href="/themes"
+              <Link href="/themes"
                 className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl
                            border-2 border-white/15 text-gray-400 font-bold text-sm
-                           hover:border-white/30 hover:text-white transition-all duration-200"
-              >
+                           hover:border-white/30 hover:text-white transition-all duration-200">
                 <ArrowLeft size={15} /> Change Theme
               </Link>
             </div>
-
             {error && (
               <div className="mt-4 flex items-center gap-2 text-rose-400 text-sm">
                 <AlertCircle size={14} /> {error}
@@ -383,27 +352,13 @@ export default function OutfitsContent() {
           </div>
         )}
 
-        {/* ── First-time Empty (never fetched any outfits) ── */}
-        {!fetching && !error && outfits.length === 0 && (
-          <div className="text-center py-24 rounded-3xl border border-dashed border-white/10">
-            <Sparkles size={48} className="mx-auto text-gray-600 mb-4" />
-            <h3 className="text-xl font-bold mb-2">No outfits yet</h3>
-            <p className="text-gray-500 mb-6">Pick a theme to generate AI outfit suggestions.</p>
-            <Link href="/themes"
-              className="px-6 py-3 bg-gradient-to-r from-violet-600 to-pink-600 text-white rounded-xl font-bold">
-              Pick a Theme
-            </Link>
-          </div>
-        )}
-
         {/* ── Main Outfit Card ── */}
         {!fetching && !error && current && (
           <div className="space-y-5">
 
-            {/* Outfit header row */}
+            {/* Outfit header */}
             <div className="flex items-start justify-between gap-4">
               <div>
-                {/* Tags */}
                 <div className="flex items-center gap-2 mb-3">
                   {theme && (
                     <span className="flex items-center gap-1 text-xs font-semibold text-gray-400 border border-white/10 px-2.5 py-1 rounded-full">
@@ -419,18 +374,14 @@ export default function OutfitsContent() {
                 <h1 className="text-2xl font-extrabold text-white">{current.outfitName}</h1>
                 <p className="text-sm text-gray-400 mt-1 max-w-xl leading-relaxed">{current.description}</p>
               </div>
-
-              {/* Match score */}
               {matchPct !== null && (
                 <div className="flex-shrink-0 text-right">
                   <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase flex items-center gap-1 justify-end mb-1">
                     <Zap size={9} /> Match Score
                   </p>
                   <div className="w-36 h-2 bg-white/10 rounded-full overflow-hidden mb-1">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-violet-500 to-pink-500 transition-all duration-700"
-                      style={{ width: `${matchPct}%` }}
-                    />
+                    <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-pink-500 transition-all duration-700"
+                      style={{ width: `${matchPct}%` }} />
                   </div>
                   <p className="text-xl font-extrabold bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">
                     {matchPct}%
@@ -439,7 +390,7 @@ export default function OutfitsContent() {
               )}
             </div>
 
-            {/* ── 4 Category Image Tiles ── */}
+            {/* 4 Category Image Tiles */}
             <div className={`flex gap-3 transition-all duration-400 ${removing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
               {TILES.map(tile => (
                 <ImageTile
@@ -452,7 +403,7 @@ export default function OutfitsContent() {
               ))}
             </div>
 
-            {/* ── Color Palette ── */}
+            {/* Color Palette */}
             {current.colors.length > 0 && (
               <div className="flex items-center gap-3">
                 <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Color Palette</p>
@@ -460,14 +411,14 @@ export default function OutfitsContent() {
                   {current.colors.slice(0, 5).map((col, i) => (
                     <div key={i} className="flex items-center gap-1.5">
                       <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: col }} />
-                      <span className="text-[10px] text-gray-400">{colourNameToHex(col) !== '#6b7280' ? col : 'Custom'}</span>
+                      <span className="text-[10px] text-gray-400">{col}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* ── ML Reason ── */}
+            {/* ML Reason */}
             {topRec?.reason && (
               <div className="flex items-start gap-3 p-4 rounded-2xl bg-violet-950/40 border border-violet-800/40">
                 <Brain size={16} className="text-violet-400 flex-shrink-0 mt-0.5" />
@@ -475,58 +426,44 @@ export default function OutfitsContent() {
               </div>
             )}
 
-            {/* ── 4 Action Buttons ── */}
+            {/* 4 Action Buttons */}
             <div className="grid grid-cols-4 gap-3 pt-1">
-
-              {/* Dislike — removes outfit permanently */}
               <button
                 onClick={handleDislike}
                 disabled={removing || outfits.length <= 1}
                 className="flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2
                            border-rose-500/40 text-rose-400 font-bold text-sm
                            hover:bg-rose-500/15 hover:border-rose-500
-                           disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-              >
+                           disabled:opacity-40 disabled:cursor-not-allowed transition-all">
                 <ThumbsDown size={16} /> Dislike
               </button>
-
-              {/* Like */}
               <button
                 onClick={() => setLiked(v => !v)}
                 className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-bold text-sm transition-all
                   ${liked
                     ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
                     : 'border-white/15 text-gray-400 hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/10'
-                  }`}
-              >
+                  }`}>
                 <ThumbsUp size={16} fill={liked ? 'currentColor' : 'none'} /> Like
               </button>
-
-              {/* Save */}
               <button
                 onClick={handleSave}
-                className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm transition-all
-                  ${saved
-                    ? 'bg-gradient-to-r from-violet-600 to-pink-600 text-white border-2 border-transparent'
-                    : 'bg-gradient-to-r from-violet-600 to-pink-600 text-white border-2 border-transparent hover:opacity-90'
-                  }`}
-              >
+                className="flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm
+                           bg-gradient-to-r from-violet-600 to-pink-600 text-white border-2 border-transparent
+                           hover:opacity-90 transition-all">
                 <Bookmark size={16} fill={saved ? 'currentColor' : 'none'} />
                 {saved ? 'Saved!' : 'Save'}
               </button>
-
-              {/* Visit Store */}
               <button
                 onClick={() => router.push('/stores')}
                 className="flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2
                            border-emerald-500/40 text-emerald-400 font-bold text-sm
-                           hover:bg-emerald-500/15 hover:border-emerald-500 transition-all"
-              >
+                           hover:bg-emerald-500/15 hover:border-emerald-500 transition-all">
                 <MapPin size={16} /> Visit Store
               </button>
             </div>
 
-            {/* ── Navigation ── */}
+            {/* Navigation */}
             {outfits.length > 1 && (
               <div className="flex items-center justify-between pt-2">
                 <button onClick={() => go(-1)}
@@ -534,8 +471,6 @@ export default function OutfitsContent() {
                              text-sm font-medium text-gray-400 hover:text-white hover:border-white/30 transition-all">
                   <ChevronLeft size={16} /> Previous
                 </button>
-
-                {/* Dots */}
                 <div className="flex gap-2">
                   {outfits.map((_, i) => (
                     <button key={i} onClick={() => setIdx(i)}
@@ -543,7 +478,6 @@ export default function OutfitsContent() {
                         ${i === idx ? 'w-8 bg-violet-500' : 'w-2 bg-white/20 hover:bg-white/40'}`} />
                   ))}
                 </div>
-
                 <button onClick={() => go(1)}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10
                              text-sm font-medium text-gray-400 hover:text-white hover:border-white/30 transition-all">
@@ -552,7 +486,7 @@ export default function OutfitsContent() {
               </div>
             )}
 
-            {/* ── ML Score breakdown ── */}
+            {/* ML Score breakdown */}
             {mlRecs.length > 1 && (
               <div className="mt-6 border-t border-white/8 pt-6">
                 <div className="flex items-center gap-2 mb-4">
