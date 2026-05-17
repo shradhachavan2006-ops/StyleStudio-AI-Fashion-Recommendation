@@ -3,300 +3,592 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Sparkles, AlertCircle, Brain, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
 import axios from '@/lib/api';
-import OutfitCard from '@/components/OutfitCard';
 import FeedbackModal from '@/components/FeedbackModal';
+import {
+  ArrowLeft, Sparkles, AlertCircle, Brain, ThumbsDown, ThumbsUp,
+  Bookmark, MapPin, ChevronLeft, ChevronRight, RefreshCw, Zap,
+} from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-interface MLRecommendation {
-  name: string;
-  type: string;
-  usage: string;
-  baseColour?: string;
-  score: number;
-  reasons: string[];
-  link?: string;
+interface Outfit {
+  _id: string;
+  outfitName: string;
+  description: string;
+  colors: string[];
+  clothingPieces: string[];
+  imageUrl: string;
+  theme: string;
+  top?: string;
+  bottom?: string;
+  style?: string;
+  // 4 category images from backend
+  topImage?:        string;
+  topColour?:       string;
+  topArticle?:      string;
+  bottomImage?:     string;
+  bottomColour?:    string;
+  bottomArticle?:   string;
+  footwearImage?:   string;
+  footwearColour?:  string;
+  footwearArticle?: string;
+  accessoryImage?:  string;
+  accessoryColour?: string;
+  accessoryArticle?:string;
 }
+interface MLRec { name:string; type:string; usage:string; color?:string; score:number; reason:string; }
 
-// ── Feedback threshold ────────────────────────────────────────────────────────
-function shouldShowFeedback(likes: number, saves: number, tries: number): boolean {
-  return likes >= 2 || saves >= 1 || tries >= 1;
-}
+// ── Category tile config ───────────────────────────────────────────────────────
+const TILES = [
+  { key: 'topImage',       colourKey: 'topColour',       label: 'TOP WEAR',    pieceKey: 'top' },
+  { key: 'bottomImage',    colourKey: 'bottomColour',    label: 'BOTTOM WEAR', pieceKey: 'bottom' },
+  { key: 'footwearImage',  colourKey: 'footwearColour',  label: 'FOOTWEAR',    pieceKey: null },
+  { key: 'accessoryImage', colourKey: 'accessoryColour', label: 'ACCESSORY',   pieceKey: null },
+] as const;
 
-// ── Score colour helper ───────────────────────────────────────────────────────
-function scoreColor(score: number) {
-  if (score >= 0.8) return { bar: 'bg-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' };
-  if (score >= 0.6) return { bar: 'bg-violet-500',  text: 'text-violet-600 dark:text-violet-400' };
-  return               { bar: 'bg-amber-500',   text: 'text-amber-600 dark:text-amber-400' };
-}
-
-// ── ML Recommendation Card ────────────────────────────────────────────────────
-function MLCard({ rec, rank }: { rec: MLRecommendation; rank: number }) {
-  const [expanded, setExpanded] = useState(false);
-  const pct = Math.round(rec.score * 100);
-  const { bar, text } = scoreColor(rec.score);
+// ── Image tile ─────────────────────────────────────────────────────────────────
+function ImageTile({ label, src, pieceName, colour }: {
+  label: string; src?: string; pieceName?: string; colour?: string;
+}) {
+  const [err, setErr] = useState(false);
+  // Map raw colour string to a CSS colour for the dot
+  const dotColor = colourNameToHex(colour || '');
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 hover:shadow-lg transition-shadow">
-      {/* Rank + name row */}
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-start gap-3">
-          <span className="flex-shrink-0 w-7 h-7 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 text-xs font-bold flex items-center justify-center">
-            {rank}
-          </span>
-          <div>
-            <p className="font-bold text-gray-900 dark:text-white text-sm leading-snug">{rec.name}</p>
-            <p className="text-xs text-gray-400 mt-0.5">{rec.type} · {rec.usage}</p>
-          </div>
-        </div>
-        {rec.baseColour && (
-          <div
-            className="w-6 h-6 rounded-full flex-shrink-0 border border-gray-200 dark:border-gray-700"
-            title={rec.baseColour}
-            style={{ backgroundColor: rec.baseColour.toLowerCase() === 'multi' ? 'transparent' : rec.baseColour.toLowerCase() }}
+    <div className="flex flex-col rounded-2xl overflow-hidden bg-[#13132a] border border-white/8 flex-1 min-w-0">
+      {/* Image area */}
+      <div className="relative bg-[#1a1a35] flex items-center justify-center" style={{ aspectRatio: '3/4' }}>
+        {src && !err ? (
+          <img
+            src={src} alt={label}
+            className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+            onError={() => setErr(true)}
           />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full">
+            <div className="w-12 h-12 rounded-full opacity-40" style={{ backgroundColor: dotColor || '#6b7280' }} />
+          </div>
         )}
       </div>
-
-      {/* Score bar */}
-      <div className="mb-3">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-[11px] text-gray-400 font-medium">Match score</span>
-          <span className={`text-[11px] font-bold ${text}`}>{pct}%</span>
-        </div>
-        <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-          <div className={`h-full ${bar} rounded-full transition-all duration-700`} style={{ width: `${pct}%` }} />
-        </div>
+      {/* Label + piece name + colour */}
+      <div className="px-3 py-2.5">
+        <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase mb-1">{label}</p>
+        {pieceName && (
+          <p className="text-sm font-bold text-white leading-tight truncate" title={pieceName}>
+            {pieceName}
+          </p>
+        )}
+        {colour && (
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <div className="w-3 h-3 rounded-full border border-white/20 flex-shrink-0"
+              style={{ backgroundColor: dotColor }} />
+            <span className="text-[10px] text-gray-400 capitalize truncate">{colour}</span>
+          </div>
+        )}
       </div>
-
-      {/* Reasons — expandable */}
-      {rec.reasons.length > 0 && (
-        <button
-          onClick={() => setExpanded(e => !e)}
-          className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-        >
-          {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-          {expanded ? 'Hide reasons' : `Why this? (${rec.reasons.length})`}
-        </button>
-      )}
-      {expanded && (
-        <ul className="mt-2 space-y-1">
-          {rec.reasons.map((r, i) => (
-            <li key={i} className="flex items-start gap-1.5 text-[11px] text-gray-500 dark:text-gray-400">
-              <span className="text-violet-400 mt-0.5">•</span>
-              <span>{r}</span>
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// Map a colour name string (e.g. 'Navy Blue', 'White') to a CSS hex for the dot
+function colourNameToHex(colour: string): string {
+  const c = colour.toLowerCase().trim();
+  const map: Record<string, string> = {
+    'white':'#FFFFFF',       'black':'#111111',       'navy blue':'#1E3A5F',
+    'navy':'#1E3A5F',        'blue':'#4169E1',        'red':'#CC2200',
+    'green':'#228B22',       'yellow':'#FFD700',      'orange':'#FF6B35',
+    'purple':'#8B008B',      'pink':'#FF69B4',        'grey':'#808080',
+    'gray':'#808080',        'brown':'#8B4513',       'beige':'#F5DEB3',
+    'khaki':'#C8A560',       'cream':'#FFFDD0',       'maroon':'#800000',
+    'olive':'#808000',       'teal':'#008080',        'coral':'#FF7F7F',
+    'gold':'#FFD700',        'silver':'#C0C0C0',      'burgundy':'#800020',
+    'camel':'#C19A6B',       'tan':'#D2B48C',         'mint':'#98FF98',
+    'lavender':'#E6E6FA',    'peach':'#FFDAB9',       'rust':'#B7410E',
+    'charcoal':'#36454F',    'mustard':'#FFDB58',     'indigo':'#4B0082',
+    'violet':'#EE82EE',      'rose':'#FF007F',        'magenta':'#FF00FF',
+    'turquoise':'#40E0D0',   'nude':'#E8C8A0',        'ivory':'#FFFFF0',
+    'denim':'#1560BD',       'off white':'#FAF9F6',
+  };
+  return map[c] || map[c.split(' ')[0]] || '#6b7280';
+}
+
+// ── Main Component ─────────────────────────────────────────────────────────────
 export default function OutfitsContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const theme = searchParams.get('theme');
+  const sp = useSearchParams();
+  const theme = sp.get('theme');
 
-  const [outfits, setOutfits] = useState<any[]>([]);
-  const [fetching, setFetching] = useState(true);
-  const [error, setError] = useState('');
+  const [outfits,      setOutfits]     = useState<Outfit[]>([]);
+  const [fetching,     setFetching]    = useState(true);
+  const [generating,   setGenerating]  = useState(false);
+  const [autoRefresh,  setAutoRefresh] = useState(false);  // silent background refresh
+  const [hasLoaded,    setHasLoaded]   = useState(false);
+  const [error,        setError]       = useState('');
+  const [mlRecs,       setMlRecs]      = useState<MLRec[]>([]);
+  const [idx,          setIdx]         = useState(0);
+  const [liked,        setLiked]       = useState(false);
+  const [saved,        setSaved]       = useState(false);
+  const [dislikedIds,  setDislikedIds] = useState<Set<string>>(new Set());
+  const [removing,     setRemoving]    = useState(false);
+  const [showFeedback, setShowFeedback]= useState(false);
+  const [feedbackShown,setFeedbackShown]=useState(false);
+  const [totalGenerated, setTotalGenerated] = useState(0); // total ever generated this session
 
-  // ML recommendations from sessionStorage (set by themes page)
-  const [mlRecs, setMlRecs] = useState<MLRecommendation[]>([]);
-  const [showAllRecs, setShowAllRecs] = useState(false);
-
-  // Feedback modal state
-  const [showFeedback, setShowFeedback] = useState(false);
-  const [feedbackShown, setFeedbackShown] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  const [saveCount, setSaveCount] = useState(0);
-  const [tryCount, setTryCount] = useState(0);
-
-  // ── Load ML recommendations from sessionStorage ─────────────────────────────
+  // Load ML recs from session
   useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem('ss_recommendations');
-      if (raw) {
-        const data = JSON.parse(raw) as MLRecommendation[];
-        setMlRecs(data);
-        // Don't clear immediately — clear when user leaves the page
-      }
-    } catch {
-      // ignore parse errors
-    }
+    try { const r = sessionStorage.getItem('ss_recommendations'); if (r) setMlRecs(JSON.parse(r)); } catch {}
   }, []);
 
-  useEffect(() => {
-    if (!loading && !user) router.push('/login');
-  }, [user, loading, router]);
+  // Auth guard
+  useEffect(() => { if (!loading && !user) router.push('/login'); }, [user, loading, router]);
+
+  // Fetch outfits
+  const fetchOutfits = useCallback(async () => {
+    setFetching(true); setError('');
+    try {
+      const url = theme ? `/api/outfits?theme=${theme}` : '/api/outfits';
+      const res = await axios.get(url);
+      const fetched = res.data.outfits ?? [];
+      setOutfits(fetched);
+      setTotalGenerated(fetched.length);
+      setIdx(0);
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { message?: string } } };
+      setError(err.response?.data?.message || 'Failed to load outfits');
+    } finally { setFetching(false); setHasLoaded(true); }
+  }, [theme]);
 
   useEffect(() => {
     if (!user) return;
-    const fetchOutfits = async () => {
-      try {
-        const url = theme ? `/api/outfits?theme=${theme}` : '/api/outfits';
-        const res = await axios.get(url);
-        setOutfits(res.data.outfits);
-      } catch (err: any) {
-        setError(err.response?.data?.message || 'Failed to fetch outfits');
-      } finally {
-        setFetching(false);
-      }
-    };
     fetchOutfits();
-  }, [theme, user]);
+  }, [theme, user, fetchOutfits]);
 
-  const handleRate = async (id: string, rating: number) => {
+  // Generate fresh outfits then reload
+  const generateMore = useCallback(async (silent = false) => {
+    if (!theme) { router.push('/themes'); return; }
+    if (!silent) setGenerating(true);
+    else setAutoRefresh(true);
+    setError('');
     try {
-      await axios.put(`/api/outfits/${id}/rate`, { rating });
-      setOutfits((prev) => prev.map((o) => (o._id === id ? { ...o, rating } : o)));
-    } catch (err) {
-      console.error('Rating failed', err);
+      await axios.post('/api/outfits/generate', { theme });
+      setDislikedIds(new Set());
+      // Append new outfits instead of resetting idx
+      const url = `/api/outfits?theme=${theme}`;
+      const res = await axios.get(url);
+      const fresh = res.data.outfits ?? [];
+      setOutfits(fresh);
+      setTotalGenerated(fresh.length);
+      if (!silent) setIdx(0);
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { message?: string } } };
+      if (!silent) setError(err.response?.data?.message || 'Failed to generate outfits');
+    } finally {
+      setGenerating(false);
+      setAutoRefresh(false);
     }
+  }, [theme, router]);
+
+  // Reset action states when outfit changes
+  useEffect(() => {
+    setLiked(false); setSaved(false);
+  }, [idx]);
+
+  const go = useCallback((dir: 1 | -1) => {
+    setIdx(i => (i + dir + outfits.length) % outfits.length);
+  }, [outfits.length]);
+
+  const handleSave = () => {
+    setSaved(v => !v);
+    if (!feedbackShown) { setShowFeedback(true); setFeedbackShown(true); }
   };
 
-  const handleCardAction = useCallback(
-    (action: 'like' | 'reject' | 'save' | 'try_on') => {
-      if (feedbackShown) return;
-      let nextLikes = likeCount;
-      let nextSaves = saveCount;
-      let nextTries = tryCount;
-      if (action === 'like')   nextLikes = likeCount + 1;
-      if (action === 'save')   nextSaves = saveCount + 1;
-      if (action === 'try_on') nextTries = tryCount + 1;
-      setLikeCount(nextLikes);
-      setSaveCount(nextSaves);
-      setTryCount(nextTries);
-      if (shouldShowFeedback(nextLikes, nextSaves, nextTries)) {
-        setShowFeedback(true);
-        setFeedbackShown(true);
-      }
-    },
-    [likeCount, saveCount, tryCount, feedbackShown]
-  );
+  // Permanently remove the current outfit — never shows again
+  const handleDislike = useCallback(() => {
+    const outfit = outfits[idx] ?? outfits[0];
+    if (!outfit || removing) return;
+    setRemoving(true);
+    const dislikedId = outfit._id;
+    setTimeout(() => {
+      setDislikedIds(prev => new Set([...prev, dislikedId]));
+      setOutfits(prev => {
+        const filtered = prev.filter(o => o._id !== dislikedId);
+        // Auto-refresh silently when only 2 outfits remain
+        if (filtered.length <= 2 && !generating && !autoRefresh) {
+          generateMore(true);
+        }
+        setIdx(i => Math.min(i, Math.max(filtered.length - 1, 0)));
+        return filtered;
+      });
+      setLiked(false); setSaved(false);
+      setRemoving(false);
+    }, 350);
+  }, [outfits, idx, removing, generating, autoRefresh, generateMore]);
 
   if (loading || !user) return null;
 
-  const visibleRecs = showAllRecs ? mlRecs : mlRecs.slice(0, 6);
+  const current   = outfits[idx] ?? outfits[0];
+  const topRec    = mlRecs[0];
+  const matchPct  = topRec ? Math.round(topRec.score * 100) : null;
+
+  // ── Keyword-based piece-name resolver (accurate for all 4 tiles) ────────────
+  // Uses category keywords to find the RIGHT piece name from clothingPieces[]
+  // instead of relying on outfit.top/outfit.bottom (which were often wrong)
+  const TILE_KEYWORDS: Record<string, string[]> = {
+    topImage: [
+      'shirt', 't-shirt', 'tshirt', 'tee', 'blouse', 'top', 'polo',
+      'kurta', 'kurti', 'sherwani', 'blazer', 'jacket', 'coat', 'suit',
+      'sweater', 'hoodie', 'sweatshirt', 'vest', 'tunic', 'cardigan',
+      'crop', 'gown', 'dress', 'saree', 'anarkali', 'choli', 'lehenga blouse',
+    ],
+    bottomImage: [
+      'jeans', 'trouser', 'pants', 'shorts', 'skirt', 'legging',
+      'chino', 'cargo', 'capri', 'palazzo', 'dhoti', 'churidar',
+      'jogger', 'trackpant', 'track pant', 'culottes', 'tights',
+    ],
+    footwearImage: [
+      'shoe', 'sneaker', 'sandal', 'heel', 'boot', 'loafer', 'flat',
+      'mule', 'jutti', 'mojari', 'espadrille', 'slipper', 'oxford',
+      'derby', 'stiletto', 'platform', 'wedge', 'pump', 'clog',
+    ],
+    accessoryImage: [
+      'tie', 'belt', 'bag', 'tote', 'clutch', 'watch', 'jewelry',
+      'jewel', 'earring', 'necklace', 'cap', 'hat', 'dupatta',
+      'cufflink', 'pendant', 'brooch', 'ring', 'bracelet', 'scarf',
+      'stole', 'safa', 'turban', 'backpack', 'wallet', 'purse',
+      'sunglasses', 'glove', 'socks', 'bandana',
+    ],
+  };
+
+  function getPieceName(outfit: Outfit, _pieceKey: string | null, tileKey: string): string {
+    const kw = TILE_KEYWORDS[tileKey] || [];
+    // Scan clothingPieces with keyword matching — most accurate
+    const found = outfit.clothingPieces.find(p =>
+      kw.some(k => p.toLowerCase().includes(k))
+    );
+    if (found) return found;
+    // Secondary: use stored top/bottom fields
+    if (tileKey === 'topImage'    && outfit.top)    return outfit.top;
+    if (tileKey === 'bottomImage' && outfit.bottom) return outfit.bottom;
+    return '';
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      {/* Header nav */}
-      <div className="flex items-center justify-between mb-8">
-        <Link
-          href="/themes"
-          className="inline-flex items-center gap-2 text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-        >
-          <ArrowLeft size={20} /> Back to Themes
-        </Link>
-        <Link
-          href="/saved"
-          className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-        >
-          My Saved Designs &rarr;
-        </Link>
-      </div>
+    <div className="min-h-screen bg-[#0a0a1a] text-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
 
-      {/* Page title */}
-      <div className="mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 text-sm font-medium mb-4">
-          <Sparkles size={16} />
-          <span>AI Stylist</span>
-        </div>
-        <h1 className="text-4xl font-extrabold tracking-tight mb-4">
-          {theme ? `${theme.charAt(0).toUpperCase() + theme.slice(1)} Outfits` : 'All Outfits'}
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400 max-w-2xl text-lg">
-          Curated exclusively for you based on your body type, color profile, and selected occasion.
-        </p>
-      </div>
-
-      {/* ── AI-Generated Outfit Images ─────────────────────────────────────── */}
-      {fetching ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-96 bg-gray-100 dark:bg-gray-800/50 rounded-3xl animate-pulse" />
-          ))}
-        </div>
-      ) : error ? (
-        <div className="flex items-center gap-3 p-6 bg-red-50 dark:bg-red-950/30 text-red-600 rounded-2xl border border-red-200">
-          <AlertCircle size={24} />
-          <p className="font-medium">{error}</p>
-        </div>
-      ) : outfits.length === 0 ? (
-        <div className="text-center py-20 bg-gray-50 dark:bg-gray-900/50 rounded-3xl border border-dashed border-gray-300 dark:border-gray-700">
-          <Sparkles size={48} className="mx-auto text-gray-300 mb-4" />
-          <h3 className="text-xl font-bold mb-2">No outfits generated yet</h3>
-          <p className="text-gray-500 mb-6">Pick a theme to generate AI outfit suggestions.</p>
-          <Link
-            href="/themes"
-            className="px-6 py-3 bg-black text-white dark:bg-white dark:text-black rounded-xl font-bold"
-          >
-            Pick a Theme
+        {/* ── Header ── */}
+        <div className="flex items-center justify-between mb-8">
+          <Link href="/themes"
+            className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-sm font-medium">
+            <ArrowLeft size={18} /> Back to Themes
           </Link>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {outfits.map((outfit: any) => (
-            <OutfitCard
-              key={outfit._id}
-              outfit={outfit}
-              onRatingChange={handleRate}
-              onAction={handleCardAction}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* ── ML Style Picks ─────────────────────────────────────────────────── */}
-      {mlRecs.length > 0 && (
-        <div className="mt-16">
-          {/* Section header */}
-          <div className="flex items-center gap-3 mb-2">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 text-sm font-medium">
-              <Brain size={15} />
-              <span>ML Engine</span>
-            </div>
-            <div className="flex items-center gap-1 text-xs text-gray-400">
-              <TrendingUp size={12} />
-              Scored from your body profile
-            </div>
+          <div className="flex items-center gap-3">
+            {theme && (
+              <span className="px-3 py-1 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-xs font-bold uppercase tracking-wider">
+                {theme}
+              </span>
+            )}
+            {/* Outfit counter pill */}
+            {!fetching && outfits.length > 0 && (
+              <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-semibold">
+                {outfits.length} outfit{outfits.length !== 1 ? 's' : ''} remaining
+              </span>
+            )}
+            {/* Silent background refresh indicator */}
+            {autoRefresh && (
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+                <span className="w-2.5 h-2.5 border border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                Loading more…
+              </span>
+            )}
+            <Link href="/saved" className="text-sm font-medium text-purple-400 hover:underline">
+              Saved →
+            </Link>
           </div>
-          <h2 className="text-2xl font-bold mb-1">AI Style Picks</h2>
-          <p className="text-sm text-gray-400 mb-6">
-            Ranked by our hybrid ML + rule engine using your skin tone, body shape, and this occasion.
-          </p>
+        </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {visibleRecs.map((rec, i) => (
-              <MLCard key={`${rec.name}-${i}`} rec={rec} rank={i + 1} />
-            ))}
+        {/* ── Loading ── */}
+        {fetching && (
+          <div className="space-y-6 animate-pulse">
+            <div className="h-6 w-48 bg-white/10 rounded-xl" />
+            <div className="flex gap-3">
+              {[0,1,2,3].map(i => <div key={i} className="flex-1 h-64 bg-white/5 rounded-2xl" />)}
+            </div>
+            <div className="h-16 bg-white/5 rounded-2xl" />
           </div>
+        )}
 
-          {mlRecs.length > 6 && (
-            <div className="text-center mt-6">
+        {/* ── Error ── */}
+        {!fetching && error && (
+          <div className="flex items-center gap-3 p-6 bg-rose-950/40 text-rose-300 rounded-2xl border border-rose-800">
+            <AlertCircle size={22} /><p className="font-medium">{error}</p>
+          </div>
+        )}
+
+        {/* ── All Caught Up / Generate More ── */}
+        {!fetching && !error && hasLoaded && outfits.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            {/* Animated ring */}
+            <div className="relative mb-8">
+              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-violet-600/20 to-pink-600/20 border border-violet-500/30 flex items-center justify-center">
+                <span className="text-5xl">✨</span>
+              </div>
+              <div className="absolute inset-0 rounded-full animate-ping bg-violet-500/10" />
+            </div>
+
+            <h2 className="text-2xl font-extrabold text-white mb-2">All caught up!</h2>
+            <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
+              You&apos;ve seen all {theme ? `${theme} ` : ''}outfits in this session.
+              Generate a fresh batch tailored just for you.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => setShowAllRecs(s => !s)}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700
-                           text-sm font-semibold text-gray-600 dark:text-gray-300 hover:border-violet-400 hover:text-violet-600
-                           dark:hover:border-violet-500 dark:hover:text-violet-400 transition-all"
+                onClick={() => generateMore()}
+                disabled={generating}
+                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl
+                           bg-gradient-to-r from-violet-600 to-pink-600
+                           text-white font-bold text-sm shadow-lg shadow-violet-500/25
+                           hover:opacity-90 hover:scale-[1.02] disabled:opacity-60
+                           disabled:cursor-not-allowed transition-all duration-200"
               >
-                {showAllRecs ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                {showAllRecs ? 'Show less' : `Show all ${mlRecs.length} picks`}
+                {generating ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    Generating…
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={16} /> Generate More Outfits
+                  </>
+                )}
+              </button>
+
+              <Link
+                href="/themes"
+                className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl
+                           border-2 border-white/15 text-gray-400 font-bold text-sm
+                           hover:border-white/30 hover:text-white transition-all duration-200"
+              >
+                <ArrowLeft size={15} /> Change Theme
+              </Link>
+            </div>
+
+            {error && (
+              <div className="mt-4 flex items-center gap-2 text-rose-400 text-sm">
+                <AlertCircle size={14} /> {error}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── First-time Empty (never fetched any outfits) ── */}
+        {!fetching && !error && outfits.length === 0 && (
+          <div className="text-center py-24 rounded-3xl border border-dashed border-white/10">
+            <Sparkles size={48} className="mx-auto text-gray-600 mb-4" />
+            <h3 className="text-xl font-bold mb-2">No outfits yet</h3>
+            <p className="text-gray-500 mb-6">Pick a theme to generate AI outfit suggestions.</p>
+            <Link href="/themes"
+              className="px-6 py-3 bg-gradient-to-r from-violet-600 to-pink-600 text-white rounded-xl font-bold">
+              Pick a Theme
+            </Link>
+          </div>
+        )}
+
+        {/* ── Main Outfit Card ── */}
+        {!fetching && !error && current && (
+          <div className="space-y-5">
+
+            {/* Outfit header row */}
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                {/* Tags */}
+                <div className="flex items-center gap-2 mb-3">
+                  {theme && (
+                    <span className="flex items-center gap-1 text-xs font-semibold text-gray-400 border border-white/10 px-2.5 py-1 rounded-full">
+                      🗓 {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                    </span>
+                  )}
+                  {current.style && (
+                    <span className="flex items-center gap-1 text-xs font-semibold text-gray-400 border border-white/10 px-2.5 py-1 rounded-full">
+                      ⭐ {current.style.charAt(0).toUpperCase() + current.style.slice(1)}
+                    </span>
+                  )}
+                </div>
+                <h1 className="text-2xl font-extrabold text-white">{current.outfitName}</h1>
+                <p className="text-sm text-gray-400 mt-1 max-w-xl leading-relaxed">{current.description}</p>
+              </div>
+
+              {/* Match score */}
+              {matchPct !== null && (
+                <div className="flex-shrink-0 text-right">
+                  <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase flex items-center gap-1 justify-end mb-1">
+                    <Zap size={9} /> Match Score
+                  </p>
+                  <div className="w-36 h-2 bg-white/10 rounded-full overflow-hidden mb-1">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-violet-500 to-pink-500 transition-all duration-700"
+                      style={{ width: `${matchPct}%` }}
+                    />
+                  </div>
+                  <p className="text-xl font-extrabold bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">
+                    {matchPct}%
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* ── 4 Category Image Tiles ── */}
+            <div className={`flex gap-3 transition-all duration-400 ${removing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+              {TILES.map(tile => (
+                <ImageTile
+                  key={tile.key}
+                  label={tile.label}
+                  src={current[tile.key as keyof Outfit] as string}
+                  pieceName={getPieceName(current, tile.pieceKey, tile.key)}
+                  colour={(current[tile.colourKey as keyof Outfit] as string) || ''}
+                />
+              ))}
+            </div>
+
+            {/* ── Color Palette ── */}
+            {current.colors.length > 0 && (
+              <div className="flex items-center gap-3">
+                <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Color Palette</p>
+                <div className="flex gap-2">
+                  {current.colors.slice(0, 5).map((col, i) => (
+                    <div key={i} className="flex items-center gap-1.5">
+                      <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: col }} />
+                      <span className="text-[10px] text-gray-400">{colourNameToHex(col) !== '#6b7280' ? col : 'Custom'}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── ML Reason ── */}
+            {topRec?.reason && (
+              <div className="flex items-start gap-3 p-4 rounded-2xl bg-violet-950/40 border border-violet-800/40">
+                <Brain size={16} className="text-violet-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-violet-300 leading-relaxed">{topRec.reason}</p>
+              </div>
+            )}
+
+            {/* ── 4 Action Buttons ── */}
+            <div className="grid grid-cols-4 gap-3 pt-1">
+
+              {/* Dislike — removes outfit permanently */}
+              <button
+                onClick={handleDislike}
+                disabled={removing || outfits.length <= 1}
+                className="flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2
+                           border-rose-500/40 text-rose-400 font-bold text-sm
+                           hover:bg-rose-500/15 hover:border-rose-500
+                           disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+              >
+                <ThumbsDown size={16} /> Dislike
+              </button>
+
+              {/* Like */}
+              <button
+                onClick={() => setLiked(v => !v)}
+                className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-bold text-sm transition-all
+                  ${liked
+                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
+                    : 'border-white/15 text-gray-400 hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/10'
+                  }`}
+              >
+                <ThumbsUp size={16} fill={liked ? 'currentColor' : 'none'} /> Like
+              </button>
+
+              {/* Save */}
+              <button
+                onClick={handleSave}
+                className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm transition-all
+                  ${saved
+                    ? 'bg-gradient-to-r from-violet-600 to-pink-600 text-white border-2 border-transparent'
+                    : 'bg-gradient-to-r from-violet-600 to-pink-600 text-white border-2 border-transparent hover:opacity-90'
+                  }`}
+              >
+                <Bookmark size={16} fill={saved ? 'currentColor' : 'none'} />
+                {saved ? 'Saved!' : 'Save'}
+              </button>
+
+              {/* Visit Store */}
+              <button
+                onClick={() => router.push('/stores')}
+                className="flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2
+                           border-emerald-500/40 text-emerald-400 font-bold text-sm
+                           hover:bg-emerald-500/15 hover:border-emerald-500 transition-all"
+              >
+                <MapPin size={16} /> Visit Store
               </button>
             </div>
-          )}
-        </div>
-      )}
 
-      {/* Feedback Modal */}
-      {showFeedback && (
-        <FeedbackModal onClose={() => setShowFeedback(false)} />
-      )}
+            {/* ── Navigation ── */}
+            {outfits.length > 1 && (
+              <div className="flex items-center justify-between pt-2">
+                <button onClick={() => go(-1)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10
+                             text-sm font-medium text-gray-400 hover:text-white hover:border-white/30 transition-all">
+                  <ChevronLeft size={16} /> Previous
+                </button>
+
+                {/* Dots */}
+                <div className="flex gap-2">
+                  {outfits.map((_, i) => (
+                    <button key={i} onClick={() => setIdx(i)}
+                      className={`h-1.5 rounded-full transition-all duration-300
+                        ${i === idx ? 'w-8 bg-violet-500' : 'w-2 bg-white/20 hover:bg-white/40'}`} />
+                  ))}
+                </div>
+
+                <button onClick={() => go(1)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10
+                             text-sm font-medium text-gray-400 hover:text-white hover:border-white/30 transition-all">
+                  <RefreshCw size={14} /> Next <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+
+            {/* ── ML Score breakdown ── */}
+            {mlRecs.length > 1 && (
+              <div className="mt-6 border-t border-white/8 pt-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/25 text-violet-400 text-xs font-semibold">
+                    <Brain size={11} /> ML Picks
+                  </div>
+                  <span className="text-xs text-gray-500">More styles scored for you</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {mlRecs.slice(0, 6).map((rec, i) => {
+                    const pct = Math.round(rec.score * 100);
+                    const bar = pct >= 80 ? 'bg-emerald-500' : pct >= 60 ? 'bg-violet-500' : 'bg-amber-500';
+                    return (
+                      <div key={i} className="bg-white/4 rounded-xl border border-white/8 p-4">
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div>
+                            <p className="text-sm font-bold text-white leading-tight">{rec.name}</p>
+                            <p className="text-[11px] text-gray-500 mt-0.5">{rec.type} · {rec.usage}</p>
+                          </div>
+                          <span className="text-[11px] font-bold text-gray-400 flex-shrink-0">{pct}%</span>
+                        </div>
+                        <div className="h-1 bg-white/10 rounded-full overflow-hidden mb-2">
+                          <div className={`h-full ${bar} rounded-full`} style={{ width: `${pct}%` }} />
+                        </div>
+                        {rec.reason && <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">✦ {rec.reason}</p>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
     </div>
   );
 }

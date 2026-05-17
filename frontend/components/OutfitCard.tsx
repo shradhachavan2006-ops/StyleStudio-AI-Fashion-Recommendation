@@ -38,7 +38,7 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
   const cardRef = useRef<HTMLDivElement>(null);
   const viewedRef = useRef(false); // prevents duplicate view events
 
-  const [imgError, setImgError] = useState(false);
+  const [imgError, setImgError] = useState(!outfit.imageUrl || outfit.imageUrl.trim() === '');
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -116,7 +116,7 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
     >
       {/* Image */}
       <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-800">
-        {!imgError ? (
+        {!imgError && outfit.imageUrl ? (
           <img
             src={outfit.imageUrl}
             alt={outfit.outfitName}

@@ -195,7 +195,7 @@ export default function Dashboard() {
 
               <div className="flex items-start justify-between mb-2">
                 <h3 className="font-bold text-lg leading-tight">{s.step !== '★' ? `${s.step}. ` : ''}{s.label}</h3>
-                {s.done && (
+                  {s.done && (
                   <span className="text-xs font-semibold text-green-600 bg-green-100 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-full ml-2 shrink-0">
                     Done
                   </span>

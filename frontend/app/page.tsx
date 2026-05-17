@@ -51,18 +51,9 @@ export default function HomePage() {
                              text-white rounded-xl font-bold text-lg hover:opacity-90 transition-opacity
                              shadow-lg shadow-violet-500/30 flex items-center justify-center gap-2"
                 >
-                  <Sparkles size={20} /> Get Recommendations
+                  <Sparkles size={20} /> Get Started
                 </Link>
-                <Link
-                  href="/themes"
-                  className="w-full sm:w-auto px-8 py-4 bg-white text-black
-                             dark:bg-gray-900 dark:text-white
-                             border-2 border-gray-200 dark:border-gray-800 rounded-xl font-bold text-lg
-                             hover:border-violet-300 dark:hover:border-violet-700 transition-colors
-                             flex items-center justify-center gap-2"
-                >
-                  Choose Occasion →
-                </Link>
+
               </>
             ) : (
               <>
