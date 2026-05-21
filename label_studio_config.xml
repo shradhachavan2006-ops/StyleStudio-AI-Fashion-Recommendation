@@ -1,0 +1,87 @@
+<View>
+  <Style>
+    .meta {
+      margin: 0 0 16px;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .section-title {
+      margin: 18px 0 8px;
+      font-weight: 700;
+    }
+  </Style>
+
+  <Header value="StyleStudio Label Review"/>
+  <View className="meta">
+    <Text name="productName" value="$productDisplayName"/>
+    <Text name="currentLabels" value="$currentLabels"/>
+  </View>
+
+  <Image name="image" value="$image"/>
+
+  <Header className="section-title" value="Article Type"/>
+  <Choices name="articleType" toName="image" choice="single" showInline="true" required="true">
+    <Choice value="Lehenga Choli"/>
+    <Choice value="Sarees"/>
+    <Choice value="Kurta Sets"/>
+    <Choice value="Kurtas"/>
+    <Choice value="Dresses"/>
+    <Choice value="Blazers"/>
+    <Choice value="Jackets"/>
+    <Choice value="Tshirts"/>
+    <Choice value="Shirts"/>
+    <Choice value="Tops"/>
+    <Choice value="Trousers"/>
+    <Choice value="Skirts"/>
+    <Choice value="Traditional Dress"/>
+  </Choices>
+
+  <Header className="section-title" value="Gender"/>
+  <Choices name="gender" toName="image" choice="single" showInline="true" required="true">
+    <Choice value="Men"/>
+    <Choice value="Women"/>
+    <Choice value="Boys"/>
+    <Choice value="Girls"/>
+    <Choice value="Unisex"/>
+  </Choices>
+
+  <Header className="section-title" value="Base Colour"/>
+  <Choices name="baseColour" toName="image" choice="single" showInline="true" required="true">
+    <Choice value="Navy Blue"/>
+    <Choice value="Off-White"/>
+    <Choice value="Sea Green"/>
+    <Choice value="Lime Green"/>
+    <Choice value="Olive Green"/>
+    <Choice value="Mustard"/>
+    <Choice value="Maroon"/>
+    <Choice value="Burgundy"/>
+    <Choice value="Orange"/>
+    <Choice value="Yellow"/>
+    <Choice value="Green"/>
+    <Choice value="Purple"/>
+    <Choice value="Violet"/>
+    <Choice value="Lavender"/>
+    <Choice value="Pink"/>
+    <Choice value="Beige"/>
+    <Choice value="Cream"/>
+    <Choice value="Brown"/>
+    <Choice value="Black"/>
+    <Choice value="White"/>
+    <Choice value="Grey"/>
+    <Choice value="Silver"/>
+    <Choice value="Gold"/>
+    <Choice value="Blue"/>
+    <Choice value="Red"/>
+    <Choice value="Teal"/>
+    <Choice value="Peach"/>
+    <Choice value="Coral"/>
+    <Choice value="Mauve"/>
+    <Choice value="Khaki"/>
+    <Choice value="Tan"/>
+    <Choice value="Unknown"/>
+  </Choices>
+</View>

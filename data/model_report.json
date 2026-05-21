@@ -1,0 +1,30 @@
+{
+  "trained_at": "2026-05-20T15:42:56.762289",
+  "samples": 12,
+  "features": 79,
+  "accuracy": 0.6667,
+  "auc": 0.5,
+  "positive_rate": 0.8333333333333334,
+  "top_features": {
+    "body_hourglass": 0.0,
+    "body_pear": 0.0,
+    "body_apple": 0.0,
+    "body_rectangle": 0.0,
+    "body_inverted-triangle": 0.0,
+    "body_ectomorph": 0.0,
+    "body_mesomorph": 0.0,
+    "body_endomorph": 0.0,
+    "skin_very-fair": 0.0,
+    "skin_fair": 0.0,
+    "skin_light": 0.0,
+    "skin_medium": 0.0,
+    "skin_olive": 0.0,
+    "skin_tan": 0.0,
+    "skin_brown": 0.0,
+    "skin_dark-brown": 0.0,
+    "skin_deep": 0.0,
+    "gender_male": 0.0,
+    "gender_female": 0.0,
+    "gender_non-binary": 0.0
+  }
+}

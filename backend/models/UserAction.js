@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const ACTION_WEIGHTS = {
+  view: 1,
+  like: 3,
+  save: 4,
+  reject: -2,
+  rating: null,
+};
+
 const userActionSchema = new mongoose.Schema(
   {
     user_id: {
@@ -16,8 +24,22 @@ const userActionSchema = new mongoose.Schema(
     },
     action_type: {
       type: String,
-      enum: ['view', 'like', 'save', 'reject', 'try_on'],
+      enum: ['view', 'like', 'save', 'reject', 'rating'],
       required: true,
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: null,
+    },
+    weight: {
+      type: Number,
+      default: 1,
+    },
+    metadata: {
+      type: mongoose.Schema.Types.Mixed,
+      default: null,
     },
     timestamp: {
       type: Date,
@@ -27,7 +49,8 @@ const userActionSchema = new mongoose.Schema(
   { timestamps: false }
 );
 
-// Compound index for efficient ML queries
 userActionSchema.index({ user_id: 1, outfit_id: 1, action_type: 1 });
+userActionSchema.index({ user_id: 1, action_type: 1, timestamp: -1 });
 
 module.exports = mongoose.model('UserAction', userActionSchema);
+module.exports.ACTION_WEIGHTS = ACTION_WEIGHTS;

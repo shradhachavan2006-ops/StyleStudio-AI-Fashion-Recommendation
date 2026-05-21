@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
-    avatarUrl: { type: String, default: '' },
 
     gender: {
       type: String,
@@ -99,6 +98,24 @@ const userSchema = new mongoose.Schema(
         enum: ['urban', 'rural', 'semi-urban'],
         default: null
       }
+    },
+
+    // ── Personalisation (Phase 1 additions) ───────────────
+    season: {
+      type: String,
+      enum: ['spring', 'summer', 'autumn', 'winter', 'all'],
+      default: 'all'
+    },
+    personality: {
+      type: String,
+      enum: ['classic', 'trendy', 'bohemian', 'minimalist', 'bold', 'athletic', 'traditional'],
+      default: null
+    },
+    // lifestyle stored here (simpler path for personalisation engine)
+    lifestyleType: {
+      type: String,
+      enum: ['urban', 'suburban', 'rural'],
+      default: 'urban'
     }
   },
   { timestamps: true }

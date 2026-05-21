@@ -29,6 +29,10 @@ exports.updateBodyProfile = async (req, res) => {
             lifestyle,
             weather_preference,
             location_type,
+            // Phase 1 personalisation
+            season,
+            personality,
+            lifestyleType,
         } = req.body;
 
         const update = {
@@ -72,6 +76,11 @@ exports.updateBodyProfile = async (req, res) => {
 
         if (clean(location_type))
             update['stylePreferences.location_type'] = location_type;
+
+        // -------- PERSONALISATION (Phase 1) --------
+        if (clean(season))        update.season        = season;
+        if (clean(personality))   update.personality   = personality;
+        if (clean(lifestyleType)) update.lifestyleType = lifestyleType;
 
         // -------- UPDATE --------
         const user = await User.findByIdAndUpdate(

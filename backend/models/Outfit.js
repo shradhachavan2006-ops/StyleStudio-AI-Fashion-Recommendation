@@ -21,7 +21,6 @@ const outfitSchema = new mongoose.Schema({
   style: { type: String, default: '' },      // minimal | bold | elegant | trendy | sporty | streetwear
   occasion: { type: String, default: '' },
 
-  clothingModelUrl: { type: String, default: '/models/casual_outfit.glb' },
   imageUrl: { type: String, default: '' },
 
   rating: { type: Number, default: 0, min: 0, max: 5 },

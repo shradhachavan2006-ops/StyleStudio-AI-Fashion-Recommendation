@@ -1,0 +1,81 @@
+{
+  "sourceCsv": "D:\\Data\\VIT\\4th sem\\edi1\\style_anti\\New Images\\New Images\\images.csv",
+  "sourceImageDir": "D:\\Data\\VIT\\4th sem\\edi1\\style_anti\\New Images\\New Images",
+  "outputCsv": "D:\\Data\\VIT\\4th sem\\edi1\\style_anti\\data\\new_images_styles.csv",
+  "themeMetadataCsv": "D:\\Data\\VIT\\4th sem\\edi1\\style_anti\\data\\new_images_theme_metadata.csv",
+  "totalCsvRows": 12305,
+  "usableRows": 12304,
+  "imageFiles": 12512,
+  "skippedMissingImage": [
+    "35"
+  ],
+  "extraImageFilesNotInCsv": 208,
+  "themeCounts": {
+    "traditional": 6116,
+    "casual": 4416,
+    "office": 882,
+    "wedding": 858,
+    "party": 32
+  },
+  "usageCounts": {
+    "Ethnic": 6974,
+    "Casual": 4416,
+    "Formal": 882,
+    "Party": 32
+  },
+  "articleTypeCounts": {
+    "Sarees": 2491,
+    "Kurtas": 1901,
+    "Shirts": 1842,
+    "Kurta Sets": 1584,
+    "Tshirts": 1081,
+    "Lehenga Choli": 937,
+    "Jackets": 933,
+    "Dresses": 879,
+    "Tops": 490,
+    "Trousers": 94,
+    "Traditional Dress": 72
+  },
+  "genderCounts": {
+    "Men": 6036,
+    "Women": 5797,
+    "Unisex": 266,
+    "Girls": 165,
+    "Boys": 40
+  },
+  "colourCounts": {
+    "Black": 1225,
+    "Navy Blue": 1189,
+    "Green": 979,
+    "Blue": 962,
+    "White": 954,
+    "Pink": 878,
+    "Red": 653,
+    "Maroon": 650,
+    "Yellow": 530,
+    "Off-White": 522,
+    "Beige": 505,
+    "Gold": 476,
+    "Grey": 467,
+    "Orange": 442,
+    "Mustard": 419,
+    "Brown": 234,
+    "Purple": 225,
+    "Unknown": 201,
+    "Cream": 196,
+    "Olive Green": 183,
+    "Burgundy": 118,
+    "Sea Green": 105,
+    "Lime Green": 47,
+    "Lavender": 28,
+    "Silver": 22,
+    "Teal": 22,
+    "Khaki": 22,
+    "Coral": 14,
+    "Mauve": 12,
+    "Off White": 12,
+    "Peach": 6,
+    "Violet": 5,
+    "Tan": 1
+  }
+}

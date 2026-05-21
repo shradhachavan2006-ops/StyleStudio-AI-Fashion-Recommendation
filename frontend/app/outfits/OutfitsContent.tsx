@@ -1,14 +1,27 @@
 'use client';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import axios from '@/lib/api';
 import FeedbackModal from '@/components/FeedbackModal';
 import {
-  ArrowLeft, Sparkles, AlertCircle, Brain, ThumbsDown, ThumbsUp,
-  Bookmark, MapPin, ChevronLeft, ChevronRight, RefreshCw, Zap,
+  ArrowLeft, Sparkles, AlertCircle, ThumbsDown, ThumbsUp,
+  Bookmark, MapPin, ChevronLeft, ChevronRight, RefreshCw,
 } from 'lucide-react';
+
+// ── Fire-and-forget action logger ─────────────────────────────────────────────
+async function postAction(outfit_id: string, action_type: string, rating?: number) {
+  try {
+    await axios.post('/api/actions', {
+      outfit_id,
+      action_type,
+      ...(rating !== undefined && { rating }),
+    });
+  } catch (err) {
+    console.error(`[postAction] failed to log ${action_type}:`, err);
+  }
+}
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Outfit {
@@ -35,16 +48,29 @@ interface Outfit {
   accessoryImage?:  string;
   accessoryColour?: string;
   accessoryArticle?:string;
+  personalScore?:   number;
+  behaviorScore?:   number;
+  finalScore?:      number;
+  personalReasons?: string[];
+  behaviorReasons?: string[];
+  behaviorSamples?: number;
 }
-interface MLRec { name:string; type:string; usage:string; color?:string; score:number; reason:string; }
+
 
 // ── Category tile config ───────────────────────────────────────────────────────
 const TILES = [
-  { key: 'topImage',       colourKey: 'topColour',       label: 'TOP WEAR',    pieceKey: 'top' },
-  { key: 'bottomImage',    colourKey: 'bottomColour',    label: 'BOTTOM WEAR', pieceKey: 'bottom' },
-  { key: 'footwearImage',  colourKey: 'footwearColour',  label: 'FOOTWEAR',    pieceKey: null },
-  { key: 'accessoryImage', colourKey: 'accessoryColour', label: 'ACCESSORY',   pieceKey: null },
+  { key: 'topImage',       colourKey: 'topColour',       articleKey: 'topArticle',       label: 'TOP WEAR',    pieceKey: 'top' },
+  { key: 'bottomImage',    colourKey: 'bottomColour',    articleKey: 'bottomArticle',    label: 'BOTTOM WEAR', pieceKey: 'bottom' },
+  { key: 'footwearImage',  colourKey: 'footwearColour',  articleKey: 'footwearArticle',  label: 'FOOTWEAR',    pieceKey: null },
+  { key: 'accessoryImage', colourKey: 'accessoryColour', articleKey: 'accessoryArticle', label: 'ACCESSORY',   pieceKey: null },
 ] as const;
+
+// Full-length outfits (saree, gown, anarkali, etc.) don't have separate bottom wear
+const FULL_LENGTH_KW = ['saree', 'sari', 'gown', 'anarkali', 'lehenga', 'jumpsuit', 'maxi dress', 'sherwani'];
+function isFullLength(outfit: Outfit): boolean {
+  const all = [...(outfit.clothingPieces || []), outfit.outfitName, outfit.description].join(' ').toLowerCase();
+  return FULL_LENGTH_KW.some(k => all.includes(k));
+}
 
 // ── Image tile ─────────────────────────────────────────────────────────────────
 function ImageTile({ label, src, pieceName, colour }: {
@@ -55,11 +81,11 @@ function ImageTile({ label, src, pieceName, colour }: {
 
   return (
     <div className="flex flex-col rounded-2xl overflow-hidden bg-[#13132a] border border-white/8 flex-1 min-w-0">
-      <div className="relative bg-[#1a1a35] flex items-center justify-center" style={{ aspectRatio: '3/4' }}>
+      <div className="relative bg-gradient-to-b from-[#1a1a35] to-[#0f0f20] flex items-center justify-center" style={{ aspectRatio: '3/4' }}>
         {src && !err ? (
           <img
             src={src} alt={label}
-            className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-contain hover:scale-105 transition-transform duration-500"
             onError={() => setErr(true)}
           />
         ) : (
@@ -122,19 +148,18 @@ export default function OutfitsContent() {
   const [autoRefresh,   setAutoRefresh]  = useState(false);
   const [hasLoaded,     setHasLoaded]    = useState(false);
   const [error,         setError]        = useState('');
-  const [mlRecs,        setMlRecs]       = useState<MLRec[]>([]);
   const [idx,           setIdx]          = useState(0);
   const [liked,         setLiked]        = useState(false);
   const [saved,         setSaved]        = useState(false);
+  const [savedOutfitId, setSavedOutfitId]= useState<string | null>(null); // id in saved_outfits
+  const [savedIds,      setSavedIds]     = useState<Set<string>>(new Set());
   const [dislikedIds,   setDislikedIds]  = useState<Set<string>>(new Set());
   const [removing,      setRemoving]     = useState(false);
   const [showFeedback,  setShowFeedback] = useState(false);
   const [feedbackShown, setFeedbackShown]= useState(false);
+  const viewedIdsRef = useRef<Set<string>>(new Set());
 
-  // Load ML recs from session
-  useEffect(() => {
-    try { const r = sessionStorage.getItem('ss_recommendations'); if (r) setMlRecs(JSON.parse(r)); } catch {}
-  }, []);
+
 
   // Auth guard
   useEffect(() => { if (!loading && !user) router.push('/login'); }, [user, loading, router]);
@@ -156,6 +181,10 @@ export default function OutfitsContent() {
   useEffect(() => {
     if (!user) return;
     fetchOutfits();
+    // Load already-saved outfit IDs for this user
+    axios.get('/api/saved-outfits/ids')
+      .then(r => setSavedIds(new Set(r.data.savedIds || [])))
+      .catch(() => {});
   }, [theme, user, fetchOutfits]);
 
   // Generate fresh outfits
@@ -180,16 +209,81 @@ export default function OutfitsContent() {
     }
   }, [theme, router]);
 
-  // Reset action states when outfit changes
-  useEffect(() => { setLiked(false); setSaved(false); }, [idx]);
+  // Sync saved state when outfit index changes
+  useEffect(() => {
+    const outfit = outfits[idx] ?? outfits[0];
+    setLiked(false);
+    if (outfit) {
+      setSaved(savedIds.has(outfit._id));
+    } else {
+      setSaved(false);
+    }
+    setSavedOutfitId(null);
+  }, [idx, outfits, savedIds]);
 
   const go = useCallback((dir: 1 | -1) => {
     setIdx(i => (i + dir + outfits.length) % outfits.length);
   }, [outfits.length]);
 
-  const handleSave = () => {
-    setSaved(v => !v);
+  useEffect(() => {
+    const outfit = outfits[idx] ?? outfits[0];
+    if (!outfit || viewedIdsRef.current.has(outfit._id)) return;
+    viewedIdsRef.current.add(outfit._id);
+    postAction(outfit._id, 'view');
+  }, [idx, outfits]);
+
+  const handleSave = async () => {
+    const outfit = outfits[idx] ?? outfits[0];
+    if (!outfit) return;
+
+    if (saved) {
+      // Unsave
+      setSaved(false);
+      setSavedIds(prev => { const n = new Set(prev); n.delete(outfit._id); return n; });
+      try {
+        await axios.delete(`/api/saved-outfits/${outfit._id}`);
+      } catch { /* ignore */ }
+      return;
+    }
+
+    // Save — persist to saved_outfits collection
+    setSaved(true);
+    setSavedIds(prev => new Set([...prev, outfit._id]));
+    try {
+      const res = await axios.post('/api/saved-outfits', {
+        outfitId: outfit._id,
+        snapshot: {
+          outfitName:     outfit.outfitName,
+          description:    outfit.description,
+          theme:          outfit.theme,
+          colors:         outfit.colors,
+          clothingPieces: outfit.clothingPieces,
+          topImage:       outfit.topImage,
+          bottomImage:    outfit.bottomImage,
+          footwearImage:  outfit.footwearImage,
+          accessoryImage: outfit.accessoryImage,
+          imageUrl:       outfit.imageUrl,
+        },
+      });
+      setSavedOutfitId(res.data.savedOutfit?._id ?? null);
+    } catch (err) {
+      console.error('[handleSave] failed:', err);
+    }
+    // Also log as ML signal
+    postAction(outfit._id, 'save');
     if (!feedbackShown) { setShowFeedback(true); setFeedbackShown(true); }
+  };
+
+  // Like button handler
+  const handleLike = () => {
+    const outfit = outfits[idx] ?? outfits[0];
+    if (!outfit) return;
+    const newLiked = !liked;
+    setLiked(newLiked);
+    if (newLiked) {
+      postAction(outfit._id, 'like');  // ✅ stored in MongoDB
+    }
+    // un-liking: no action logged (avoids polluting view count)
   };
 
   // Dislike: remove current outfit; auto-refresh when ≤2 remain
@@ -198,6 +292,7 @@ export default function OutfitsContent() {
     if (!outfit || removing) return;
     setRemoving(true);
     const dislikedId = outfit._id;
+    postAction(dislikedId, 'reject');  // ✅ stored in MongoDB
     setTimeout(() => {
       setDislikedIds(prev => new Set([...prev, dislikedId]));
       setOutfits(prev => {
@@ -216,8 +311,6 @@ export default function OutfitsContent() {
   if (loading || !user) return null;
 
   const current  = outfits[idx] ?? outfits[0];
-  const topRec   = mlRecs[0];
-  const matchPct = topRec ? Math.round(topRec.score * 100) : null;
 
   // ── Keyword-based piece-name resolver ─────────────────────────────────────
   const TILE_KEYWORDS: Record<string, string[]> = {
@@ -253,6 +346,22 @@ export default function OutfitsContent() {
     if (tileKey === 'topImage'    && outfit.top)    return outfit.top;
     if (tileKey === 'bottomImage' && outfit.bottom) return outfit.bottom;
     return '';
+  }
+
+  function getTileLabel(outfit: Outfit, tileKey: string, article?: string, colour?: string): string {
+    const generated = getPieceName(outfit, null, tileKey);
+    if (!article) return generated;
+
+    const articleText = article.replace(/\s+/g, ' ').trim();
+    if (!generated) return [colour, articleText].filter(Boolean).join(' ');
+
+    const generatedLower = generated.toLowerCase();
+    const articleLower = articleText.toLowerCase();
+    if (generatedLower.includes(articleLower) || articleLower.includes(generatedLower.split(' ')[0])) {
+      return generated;
+    }
+
+    return [colour, articleText].filter(Boolean).join(' ');
   }
 
   return (
@@ -371,37 +480,56 @@ export default function OutfitsContent() {
                     </span>
                   )}
                 </div>
-                <h1 className="text-2xl font-extrabold text-white">{current.outfitName}</h1>
-                <p className="text-sm text-gray-400 mt-1 max-w-xl leading-relaxed">{current.description}</p>
+            <h1 className="text-2xl font-extrabold text-white">{current.outfitName}</h1>
+            <p className="text-sm text-gray-400 mt-1 max-w-xl leading-relaxed">{current.description}</p>
+            {current.finalScore !== undefined && (
+              <div className="flex flex-wrap items-center gap-2 mt-3">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
+                  {current.finalScore}% recommended
+                </span>
+                {current.behaviorSamples !== undefined && current.behaviorSamples > 0 && (
+                  <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-semibold">
+                    Based on {current.behaviorSamples} action{current.behaviorSamples !== 1 ? 's' : ''}
+                  </span>
+                )}
+                {(current.personalReasons || current.behaviorReasons || []).slice(0, 3).map((reason, i) => (
+                  <span key={i} className="px-2.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-semibold">
+                    {reason}
+                  </span>
+                ))}
               </div>
-              {matchPct !== null && (
-                <div className="flex-shrink-0 text-right">
-                  <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase flex items-center gap-1 justify-end mb-1">
-                    <Zap size={9} /> Match Score
-                  </p>
-                  <div className="w-36 h-2 bg-white/10 rounded-full overflow-hidden mb-1">
-                    <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-pink-500 transition-all duration-700"
-                      style={{ width: `${matchPct}%` }} />
-                  </div>
-                  <p className="text-xl font-extrabold bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">
-                    {matchPct}%
-                  </p>
-                </div>
-              )}
+            )}
+          </div>
+
             </div>
 
-            {/* 4 Category Image Tiles */}
-            <div className={`flex gap-3 transition-all duration-400 ${removing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-              {TILES.map(tile => (
-                <ImageTile
-                  key={tile.key}
-                  label={tile.label}
-                  src={current[tile.key as keyof Outfit] as string}
-                  pieceName={getPieceName(current, tile.pieceKey, tile.key)}
-                  colour={(current[tile.colourKey as keyof Outfit] as string) || ''}
-                />
-              ))}
-            </div>
+            {/* 4 (or 3) Category Image Tiles — bottomwear hidden for full-length outfits */}
+            {(() => {
+              const fullLength = isFullLength(current);
+              const visibleTiles = TILES.filter(t =>
+                !(t.key === 'bottomImage' && fullLength) &&
+                Boolean(current[t.key as keyof Outfit])
+              );
+              return (
+                <div className={`grid gap-3 transition-all duration-400 ${removing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+                  style={{ gridTemplateColumns: `repeat(${visibleTiles.length}, minmax(0, 1fr))` }}>
+                  {visibleTiles.map(tile => (
+                    <ImageTile
+                      key={tile.key}
+                      label={tile.label}
+                      src={current[tile.key as keyof Outfit] as string}
+                      pieceName={getTileLabel(
+                        current,
+                        tile.key,
+                        current[tile.articleKey as keyof Outfit] as string,
+                        current[tile.colourKey as keyof Outfit] as string
+                      )}
+                      colour={(current[tile.colourKey as keyof Outfit] as string) || ''}
+                    />
+                  ))}
+                </div>
+              );
+            })()}
 
             {/* Color Palette */}
             {current.colors.length > 0 && (
@@ -418,13 +546,7 @@ export default function OutfitsContent() {
               </div>
             )}
 
-            {/* ML Reason */}
-            {topRec?.reason && (
-              <div className="flex items-start gap-3 p-4 rounded-2xl bg-violet-950/40 border border-violet-800/40">
-                <Brain size={16} className="text-violet-400 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-violet-300 leading-relaxed">{topRec.reason}</p>
-              </div>
-            )}
+
 
             {/* 4 Action Buttons */}
             <div className="grid grid-cols-4 gap-3 pt-1">
@@ -438,7 +560,7 @@ export default function OutfitsContent() {
                 <ThumbsDown size={16} /> Dislike
               </button>
               <button
-                onClick={() => setLiked(v => !v)}
+                onClick={handleLike}
                 className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 font-bold text-sm transition-all
                   ${liked
                     ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
@@ -486,43 +608,17 @@ export default function OutfitsContent() {
               </div>
             )}
 
-            {/* ML Score breakdown */}
-            {mlRecs.length > 1 && (
-              <div className="mt-6 border-t border-white/8 pt-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-500/15 border border-violet-500/25 text-violet-400 text-xs font-semibold">
-                    <Brain size={11} /> ML Picks
-                  </div>
-                  <span className="text-xs text-gray-500">More styles scored for you</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {mlRecs.slice(0, 6).map((rec, i) => {
-                    const pct = Math.round(rec.score * 100);
-                    const bar = pct >= 80 ? 'bg-emerald-500' : pct >= 60 ? 'bg-violet-500' : 'bg-amber-500';
-                    return (
-                      <div key={i} className="bg-white/4 rounded-xl border border-white/8 p-4">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <div>
-                            <p className="text-sm font-bold text-white leading-tight">{rec.name}</p>
-                            <p className="text-[11px] text-gray-500 mt-0.5">{rec.type} · {rec.usage}</p>
-                          </div>
-                          <span className="text-[11px] font-bold text-gray-400 flex-shrink-0">{pct}%</span>
-                        </div>
-                        <div className="h-1 bg-white/10 rounded-full overflow-hidden mb-2">
-                          <div className={`h-full ${bar} rounded-full`} style={{ width: `${pct}%` }} />
-                        </div>
-                        {rec.reason && <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">✦ {rec.reason}</p>}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+
           </div>
         )}
       </div>
 
-      {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+      {showFeedback && (
+        <FeedbackModal
+          outfitId={current?._id}
+          onClose={() => setShowFeedback(false)}
+        />
+      )}
     </div>
   );
 }

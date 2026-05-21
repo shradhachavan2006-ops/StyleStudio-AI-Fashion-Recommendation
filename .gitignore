@@ -74,4 +74,21 @@ Thumbs.db
 *.log
 .idea/
 .vscode/
+
+# ========================
+# Local app state
+# ========================
+.label-studio-data/
+
+# ========================
+# Datasets
+# ========================
+# Old/backup image dataset. The active dataset is New Images/New Images.
 data/images/
+data/images_backup/
+images_backup/
+data1/
+
+# Keep the active dataset trackable.
+!New Images/
+!New Images/**

@@ -93,12 +93,12 @@ export default function StoresContent() {
 
         {/* Back link */}
         <Link
-          href="/recommend"
+          href="/dashboard"
           className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white
                      transition-colors mb-8 group"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          Back to Recommendations
+          Back to Dashboard
         </Link>
 
         {/* Header */}

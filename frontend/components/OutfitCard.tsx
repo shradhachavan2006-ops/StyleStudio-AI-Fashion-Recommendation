@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { ThumbsUp, ThumbsDown, Bookmark, Shirt } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Bookmark } from 'lucide-react';
 import API from '@/lib/api';
 
 interface Outfit {
@@ -17,28 +16,38 @@ interface Outfit {
   style?: string;
   occasion?: string;
   rating?: number;
+  // CLIP-picked category images from getOutfits
+  topImage?:        string;
+  topColour?:       string;
+  bottomImage?:     string;
+  footwearImage?:   string;
+  accessoryImage?:  string;
+  // Phase 2: personalisation score & reasons
+  personalScore?:   number;
+  personalReasons?: string[];
 }
 
 interface OutfitCardProps {
   outfit: Outfit;
   onRatingChange?: (id: string, rating: number) => void;
-  onAction?: (action: 'like' | 'reject' | 'save' | 'try_on') => void;
+  onAction?: (action: 'like' | 'reject' | 'save') => void;
 }
 
-async function postAction(outfit_id: string, action_type: string) {
+async function postAction(outfit_id: string, action_type: string, rating?: number) {
   try {
-    await API.post('/api/actions', { outfit_id, action_type });
+    await API.post('/api/actions', { outfit_id, action_type, ...(rating !== undefined && { rating }) });
   } catch (err) {
     console.error(`Failed to log action [${action_type}]:`, err);
   }
 }
 
 export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitCardProps) {
-  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const viewedRef = useRef(false); // prevents duplicate view events
 
-  const [imgError, setImgError] = useState(!outfit.imageUrl || outfit.imageUrl.trim() === '');
+  // Prefer CLIP-picked topImage; fall back to old imageUrl
+  const displayImg = outfit.topImage || outfit.imageUrl || '';
+  const [imgError, setImgError] = useState(!displayImg);
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -72,16 +81,22 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
     const newLiked = !liked;
     setLiked(newLiked);
     if (newLiked) setDisliked(false); // mutually exclusive
-    postAction(outfit._id, newLiked ? 'like' : 'view'); // re-log view on unlike (neutral)
-    if (newLiked) onAction?.('like');
+    if (newLiked) {
+      postAction(outfit._id, 'like');  // log like
+      onAction?.('like');
+    }
+    // un-liking: no action logged (avoid polluting view count)
   }, [liked, outfit._id, onAction]);
 
   const handleDislike = useCallback(() => {
     const newDisliked = !disliked;
     setDisliked(newDisliked);
     if (newDisliked) setLiked(false);
-    postAction(outfit._id, newDisliked ? 'reject' : 'view');
-    if (newDisliked) onAction?.('reject');
+    if (newDisliked) {
+      postAction(outfit._id, 'reject');  // log reject
+      onAction?.('reject');
+    }
+    // un-rejecting: no action logged
   }, [disliked, outfit._id, onAction]);
 
   const handleSave = useCallback(() => {
@@ -93,17 +108,14 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
     }
   }, [saved, outfit._id, onAction]);
 
-  const handleTryOn = useCallback(() => {
-    postAction(outfit._id, 'try_on');
-    onAction?.('try_on');
-    router.push(`/tryon?outfitId=${outfit._id}&theme=${outfit.theme}`);
-  }, [outfit._id, outfit.theme, router, onAction]);
-
   async function handleRate(r: number) {
     setRating(r);
     try {
+      // Update outfit rating field (display)
       await API.put(`/api/outfits/${outfit._id}/rate`, { rating: r });
       onRatingChange?.(outfit._id, r);
+      // Also store as UserAction for ML training (strong signal)
+      postAction(outfit._id, 'rating', r);
     } catch (err) {
       console.error('Rating failed:', err);
     }
@@ -114,13 +126,13 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
       ref={cardRef}
       className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
     >
-      {/* Image */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-800">
-        {!imgError && outfit.imageUrl ? (
+      {/* Image — CLIP-picked topImage preferred over old imageUrl */}
+      <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+        {!imgError && displayImg ? (
           <img
-            src={outfit.imageUrl}
+            src={displayImg}
             alt={outfit.outfitName}
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-contain hover:scale-105 transition-transform duration-500"
             onError={() => setImgError(true)}
           />
         ) : (
@@ -165,6 +177,33 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
             {outfit.description}
           </p>
         </div>
+
+        {/* Phase 5 — Personalisation transparency */}
+        {outfit.personalScore !== undefined && (
+          <div className="bg-violet-50 dark:bg-violet-950/20 border border-violet-200/60 dark:border-violet-800/40 rounded-xl p-2.5">
+            {/* Score bar */}
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider">Match Score</span>
+              <span className="text-[11px] font-extrabold text-violet-700 dark:text-violet-300">{outfit.personalScore}%</span>
+            </div>
+            <div className="h-1.5 bg-violet-100 dark:bg-violet-900/40 rounded-full overflow-hidden mb-2">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-pink-500 transition-all duration-700"
+                style={{ width: `${outfit.personalScore}%` }}
+              />
+            </div>
+            {/* Why recommended */}
+            {outfit.personalReasons && outfit.personalReasons.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {outfit.personalReasons.slice(0, 3).map((reason, i) => (
+                  <span key={i} className="inline-flex items-center gap-0.5 text-[9px] font-semibold text-violet-600 dark:text-violet-300 bg-violet-100 dark:bg-violet-900/30 px-1.5 py-0.5 rounded-full">
+                    ✓ {reason}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Structured pieces (top + bottom) */}
         {(outfit.top || outfit.bottom) && (
@@ -244,8 +283,8 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
           )}
         </div>
 
-        {/* ── Action Buttons ─────────────────────────────────────────────── */}
-        <div className="grid grid-cols-4 gap-2 mt-1">
+        {/* Action Buttons */}
+        <div className="grid grid-cols-3 gap-2 mt-1">
           {/* Like */}
           <button
             onClick={handleLike}
@@ -289,17 +328,6 @@ export default function OutfitCard({ outfit, onRatingChange, onAction }: OutfitC
           >
             <Bookmark size={15} fill={saved ? 'currentColor' : 'none'} />
             <span>Save</span>
-          </button>
-
-          {/* Try-On */}
-          <button
-            onClick={handleTryOn}
-            title="Virtual Try-On"
-            aria-label="Virtual try-on"
-            className="flex flex-col items-center gap-1 py-2 rounded-xl border-2 border-gray-200 dark:border-gray-700 text-gray-500 hover:border-pink-300 hover:text-pink-600 hover:bg-pink-50 dark:hover:bg-pink-900/10 transition-all duration-200 text-xs font-semibold"
-          >
-            <Shirt size={15} />
-            <span>Try-On</span>
           </button>
         </div>
       </div>

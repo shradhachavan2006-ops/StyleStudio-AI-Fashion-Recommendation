@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
-import { LogOut, Sparkles } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 
 // Pages that have their own navigation — hide the global Navbar on these
@@ -60,20 +60,6 @@ export default function Navbar() {
             {navLink('/themes',     'Themes')}
             {navLink('/outfits',    'Outfits')}
             {navLink('/stores',     '🗺️ Stores')}
-
-            {/* Recommend — highlighted */}
-            <Link
-              href="/recommend"
-              className={`flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-full
-                          transition-all border
-                ${pathname === '/recommend'
-                  ? 'bg-violet-600 text-white border-violet-600 shadow-md shadow-violet-500/30'
-                  : 'border-violet-400/50 text-violet-500 hover:bg-violet-500/10 dark:border-violet-500/40'
-                }`}
-            >
-              <Sparkles size={13} />
-              Recommend
-            </Link>
 
             {/* User / Logout */}
             <div className="flex items-center gap-2 border-l pl-4 dark:border-gray-800">

@@ -3,7 +3,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Briefcase, Coffee, Music, Gem, PartyPopper, Star, GraduationCap, Monitor, Plane } from 'lucide-react';
+import { ArrowLeft, Briefcase, Coffee, Gem, PartyPopper, Star, Monitor, Plane } from 'lucide-react';
 import axios from '@/lib/api';
 
 const THEMES = [
@@ -12,8 +12,6 @@ const THEMES = [
   { id: 'traditional', name: 'Traditional',   icon: Gem,            color: 'bg-red-500',    bg: 'bg-red-50 dark:bg-red-950/20',      usage: 'ethnic'  },
   { id: 'wedding',     name: 'Wedding',       icon: Star,           color: 'bg-amber-500',  bg: 'bg-amber-50 dark:bg-amber-950/20',  usage: 'formal'  },
   { id: 'party',       name: 'Party Night',   icon: PartyPopper,    color: 'bg-pink-500',   bg: 'bg-pink-50 dark:bg-pink-950/20',    usage: 'party'   },
-  { id: 'event',       name: 'Special Event', icon: Music,          color: 'bg-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/20',usage: 'party'   },
-  { id: 'college',     name: 'College',       icon: GraduationCap,  color: 'bg-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-950/20',usage: 'casual'  },
   { id: 'office',      name: 'Office',        icon: Monitor,        color: 'bg-teal-500',   bg: 'bg-teal-50 dark:bg-teal-950/20',    usage: 'formal'  },
   { id: 'travel',      name: 'Travel',        icon: Plane,          color: 'bg-sky-500',    bg: 'bg-sky-50 dark:bg-sky-950/20',      usage: 'casual'  },
 ];

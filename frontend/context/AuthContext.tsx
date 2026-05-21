@@ -6,7 +6,6 @@
 //   id: string;
 //   name: string;
 //   email: string;
-//   avatarUrl?: string;
 //   bodyCharacteristics?: {
 //     bodyType: string;
 //     skinTone: string;
@@ -127,7 +126,6 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  avatarUrl?: string;
   gender?: string;
   bodyCharacteristics?: Partial<BodyCharacteristics>;
   stylePreferences?: Partial<StylePreferences>;
@@ -177,7 +175,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id:                  doc._id ?? doc.id,
         name:                doc.name,
         email:               doc.email,
-        avatarUrl:           doc.avatarUrl,
         gender:              doc.gender,
         bodyCharacteristics: doc.bodyCharacteristics,
         stylePreferences:    doc.stylePreferences,

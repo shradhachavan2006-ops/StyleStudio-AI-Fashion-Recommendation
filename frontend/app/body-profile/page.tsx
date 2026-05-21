@@ -229,6 +229,10 @@ interface FormData {
     lifestyle: string;
     weather_preference: string;
     location_type: string;
+    // Phase 1 — Personalisation
+    season: string;
+    personality: string;
+    lifestyleType: string;
 }
 
 const INITIAL: FormData = {
@@ -237,6 +241,7 @@ const INITIAL: FormData = {
     hairColor: '', hairType: '', hairLength: '', eyeColor: '',
     colorPreferences: [], additionalNotes: '',
     style_preference: '', lifestyle: '', weather_preference: '', location_type: '',
+    season: '', personality: '', lifestyleType: '',
 };
 
 // ─── Style & Lifestyle option data ────────────────────────────────────────────
@@ -270,6 +275,31 @@ const LOCATION_TYPES = [
     { value: 'urban',      label: 'Urban',      desc: 'City life, metro vibes', emoji: '🏙️' },
     { value: 'rural',      label: 'Rural',      desc: 'Open spaces, natural settings', emoji: '🌾' },
     { value: 'semi-urban', label: 'Semi-Urban', desc: 'Best of both worlds', emoji: '🏘️' },
+];
+
+// Phase 1 — Season & Personality options
+const SEASON_OPTS = [
+    { value: 'summer',  label: 'Summer',   desc: 'Light fabrics, bright colours', emoji: '☀️' },
+    { value: 'winter',  label: 'Winter',   desc: 'Layers, dark rich tones', emoji: '❄️' },
+    { value: 'spring',  label: 'Spring',   desc: 'Pastels, florals, fresh looks', emoji: '🌸' },
+    { value: 'autumn',  label: 'Autumn',   desc: 'Earthy tones, rust, olive', emoji: '🍂' },
+    { value: 'all',     label: 'All Year', desc: 'Versatile, season-independent', emoji: '🌐' },
+];
+
+const PERSONALITY_OPTS = [
+    { value: 'classic',     label: 'Classic',     desc: 'Timeless, structured elegance', emoji: '👔' },
+    { value: 'trendy',      label: 'Trendy',      desc: 'Latest styles, always current', emoji: '🔥' },
+    { value: 'bohemian',    label: 'Bohemian',    desc: 'Free spirit, earthy & flowing', emoji: '🌸' },
+    { value: 'minimalist',  label: 'Minimalist',  desc: 'Clean lines, quiet luxury', emoji: '⬜' },
+    { value: 'bold',        label: 'Bold',        desc: 'Statement pieces, high contrast', emoji: '💥' },
+    { value: 'athletic',    label: 'Athletic',    desc: 'Active, sporty, performance', emoji: '🏃' },
+    { value: 'traditional', label: 'Traditional', desc: 'Cultural roots, ethnic heritage', emoji: '🪔' },
+];
+
+const LIFESTYLE_SIMPLE = [
+    { value: 'urban',    label: 'Urban',    desc: 'City life, trends matter', emoji: '🏙️' },
+    { value: 'suburban', label: 'Suburban', desc: 'Mix of city & comfort', emoji: '🏘️' },
+    { value: 'rural',    label: 'Rural',    desc: 'Practical, traditional, comfort first', emoji: '🌾' },
 ];
 
 const STEPS = [
@@ -373,6 +403,9 @@ export default function BodyProfilePage() {
             lifestyle: sp.lifestyle ?? '',
             weather_preference: sp.weather_preference ?? '',
             location_type: sp.location_type ?? '',
+            season:        (user as any).season        ?? '',
+            personality:   (user as any).personality   ?? '',
+            lifestyleType: (user as any).lifestyleType ?? '',
         });
     }, [user]);
 
@@ -410,6 +443,10 @@ export default function BodyProfilePage() {
                 lifestyle: form.lifestyle,
                 weather_preference: form.weather_preference,
                 location_type: form.location_type,
+                // Phase 1 personalisation fields
+                season:        form.season,
+                personality:   form.personality,
+                lifestyleType: form.lifestyleType || (form.location_type === 'semi-urban' ? 'suburban' : form.location_type) || 'urban',
             });
             await refreshUser();
             router.push('/themes');
@@ -687,6 +724,69 @@ export default function BodyProfilePage() {
                         <LifestyleSection title="Your lifestyle" items={LIFESTYLES} field="lifestyle" />
                         <LifestyleSection title="Weather you usually dress for" items={WEATHER_PREFS} field="weather_preference" />
                         <LifestyleSection title="Where you live" items={LOCATION_TYPES} field="location_type" />
+
+                        {/* Phase 1 — Season */}
+                        <div className="space-y-3">
+                            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Season you dress for</p>
+                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                {SEASON_OPTS.map(item => {
+                                    const sel = form.season === item.value;
+                                    return (
+                                        <button key={item.value} type="button" onClick={() => set('season', sel ? '' : item.value)}
+                                            className={`relative flex flex-col items-center gap-1 p-3 rounded-2xl border-2 text-center transition-all duration-200
+                                            ${sel ? 'border-violet-500 bg-violet-50 dark:bg-violet-950/30 scale-[1.02]'
+                                                : 'border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-violet-200 dark:hover:border-violet-800'}`}>
+                                            {sel && <CheckIcon />}
+                                            <span className="text-2xl">{item.emoji}</span>
+                                            <p className={`text-xs font-bold ${sel ? 'text-violet-700 dark:text-violet-300' : 'text-gray-700 dark:text-gray-300'}`}>{item.label}</p>
+                                            <p className="text-[9px] text-gray-400 leading-tight">{item.desc}</p>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Phase 1 — Personality */}
+                        <div className="space-y-3">
+                            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Style personality</p>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                {PERSONALITY_OPTS.map(item => {
+                                    const sel = form.personality === item.value;
+                                    return (
+                                        <button key={item.value} type="button" onClick={() => set('personality', sel ? '' : item.value)}
+                                            className={`relative flex flex-col items-start gap-1 p-3 rounded-2xl border-2 text-left transition-all duration-200
+                                            ${sel ? 'border-violet-500 bg-violet-50 dark:bg-violet-950/30 scale-[1.02]'
+                                                : 'border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-violet-200 dark:hover:border-violet-800'}`}>
+                                            {sel && <CheckIcon />}
+                                            <span className="text-xl">{item.emoji}</span>
+                                            <p className={`text-xs font-bold ${sel ? 'text-violet-700 dark:text-violet-300' : 'text-gray-700 dark:text-gray-300'}`}>{item.label}</p>
+                                            <p className="text-[10px] text-gray-400 leading-tight">{item.desc}</p>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Phase 1 — Urban/Rural/Suburban */}
+                        <div className="space-y-3">
+                            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Environment</p>
+                            <div className="grid grid-cols-3 gap-2">
+                                {LIFESTYLE_SIMPLE.map(item => {
+                                    const sel = form.lifestyleType === item.value;
+                                    return (
+                                        <button key={item.value} type="button" onClick={() => set('lifestyleType', sel ? '' : item.value)}
+                                            className={`relative flex flex-col items-center gap-1 p-3 rounded-2xl border-2 text-center transition-all duration-200
+                                            ${sel ? 'border-violet-500 bg-violet-50 dark:bg-violet-950/30 scale-[1.02]'
+                                                : 'border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-violet-200 dark:hover:border-violet-800'}`}>
+                                            {sel && <CheckIcon />}
+                                            <span className="text-2xl">{item.emoji}</span>
+                                            <p className={`text-xs font-bold ${sel ? 'text-violet-700 dark:text-violet-300' : 'text-gray-700 dark:text-gray-300'}`}>{item.label}</p>
+                                            <p className="text-[10px] text-gray-400 leading-tight">{item.desc}</p>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 );
             }
@@ -732,13 +832,16 @@ export default function BodyProfilePage() {
                         </div>
 
                         {/* Style & Lifestyle summary */}
-                        {(form.style_preference || form.lifestyle || form.weather_preference || form.location_type) && (
+                        {(form.style_preference || form.lifestyle || form.weather_preference || form.location_type || form.season || form.personality || form.lifestyleType) && (
                             <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
                                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Style & Lifestyle</p>
                                 {form.style_preference && <ReviewRow label="Style preference" value={STYLE_PREFS.find(s => s.value === form.style_preference)?.label ?? form.style_preference} />}
                                 {form.lifestyle && <ReviewRow label="Lifestyle" value={LIFESTYLES.find(l => l.value === form.lifestyle)?.label ?? form.lifestyle} />}
                                 {form.weather_preference && <ReviewRow label="Weather" value={WEATHER_PREFS.find(w => w.value === form.weather_preference)?.label ?? form.weather_preference} />}
                                 {form.location_type && <ReviewRow label="Location" value={LOCATION_TYPES.find(l => l.value === form.location_type)?.label ?? form.location_type} />}
+                                {form.season && <ReviewRow label="Season" value={SEASON_OPTS.find(s => s.value === form.season)?.label ?? form.season} />}
+                                {form.personality && <ReviewRow label="Personality" value={PERSONALITY_OPTS.find(p => p.value === form.personality)?.label ?? form.personality} />}
+                                {form.lifestyleType && <ReviewRow label="Environment" value={LIFESTYLE_SIMPLE.find(l => l.value === form.lifestyleType)?.label ?? form.lifestyleType} />}
                             </div>
                         )}
                         {error && (

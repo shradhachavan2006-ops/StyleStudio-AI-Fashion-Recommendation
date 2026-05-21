@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 🔥 ADD THIS (YOUR FIX)
-app.use('/images', express.static(path.join(__dirname, '../data/images')));
+app.use('/images', express.static(path.join(__dirname, '../New Images/New Images')));
 
 // ⚠️ If above doesn't work, try this instead:
 // app.use('/images', express.static(path.join(__dirname, 'data/images')));
@@ -46,14 +46,14 @@ app.use('/images', express.static(path.join(__dirname, '../data/images')));
 // ✅ ROUTES
 // =============================
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/avatar', require('./routes/avatar'));
 app.use('/api/upload', require('./routes/upload'));
 app.use('/api/outfits', require('./routes/outfit'));
-app.use('/api/saved-designs', require('./routes/savedDesign'));
+app.use('/api/saved-outfits', require('./routes/savedOutfit'));   // outfit bookmarks
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/actions', require('./routes/actions'));
 app.use('/api/feedback', require('./routes/feedback'));
 app.use('/api/recommend', recommendationRoutes);
+app.use('/api/dataset', require('./routes/dataset'));  // Dataset inspection tool
 
 
 // =============================

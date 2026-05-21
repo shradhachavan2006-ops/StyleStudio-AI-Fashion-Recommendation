@@ -8,7 +8,6 @@ const THEME_FALLBACKS = {
   traditional: 'https://images.unsplash.com/photo-1583301286816-f4f03018d0c5?auto=format&fit=crop&q=80',
   wedding: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80',
   party: 'https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?auto=format&fit=crop&q=80',
-  event: 'https://images.unsplash.com/photo-1539109132314-d49c02d82267?auto=format&fit=crop&q=80',
 };
 
 async function migrate() {

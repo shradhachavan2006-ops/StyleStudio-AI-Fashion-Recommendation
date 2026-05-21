@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'StyleStudio - AI Fashion Designer',
-  description: 'AI-powered fashion recommendations and virtual try-on',
+  description: 'AI-powered fashion recommendations',
 };
 
 export default function RootLayout({

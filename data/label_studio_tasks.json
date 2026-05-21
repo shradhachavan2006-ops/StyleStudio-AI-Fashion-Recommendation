@@ -1,0 +1,5002 @@
+[
+  {
+    "id": "new_1",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/1.jpg",
+      "productDisplayName": "Jaipur Kurti Women Navy Blue Yoke Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_1",
+      "sourceImage": "1.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_10",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/10.jpg",
+      "productDisplayName": "Aayna Women Beige Self Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Beige"
+    },
+    "meta": {
+      "styleStudioId": "new_10",
+      "sourceImage": "10.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Beige"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_34",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/34.jpg",
+      "productDisplayName": "ZIYAA Women Black & Green Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Green"
+    },
+    "meta": {
+      "styleStudioId": "new_34",
+      "sourceImage": "34.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_54",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/54.jpg",
+      "productDisplayName": "Libas Women Maroon Solid A-Line Kurta with Printed Longline Ethnic Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Maroon"
+    },
+    "meta": {
+      "styleStudioId": "new_54",
+      "sourceImage": "54.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Maroon"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_70",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/70.jpg",
+      "productDisplayName": "Sringam Women Blue & White Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: White"
+    },
+    "meta": {
+      "styleStudioId": "new_70",
+      "sourceImage": "70.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_112",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/112.jpg",
+      "productDisplayName": "ZIYAA Women Cream-Coloured Solid Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Cream"
+    },
+    "meta": {
+      "styleStudioId": "new_112",
+      "sourceImage": "112.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Cream"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_120",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/120.jpg",
+      "productDisplayName": "Nayo Women Navy Blue & Maroon Printed Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_120",
+      "sourceImage": "120.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_129",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/129.jpg",
+      "productDisplayName": "RANGMAYEE Women Black & Maroon Solid A-Line Kurta with Printed Layer",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Maroon"
+    },
+    "meta": {
+      "styleStudioId": "new_129",
+      "sourceImage": "129.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Maroon"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_130",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/130.jpg",
+      "productDisplayName": "Vishudh Women Green & Gold-Toned Solid Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_130",
+      "sourceImage": "130.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_135",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/135.jpg",
+      "productDisplayName": "Anouk Women Black Printed High-Slit A-line Kurta with Straight Pants",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Black"
+    },
+    "meta": {
+      "styleStudioId": "new_135",
+      "sourceImage": "135.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Black"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_143",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/143.jpg",
+      "productDisplayName": "Anouk Women Brown & Beige Solid Kurta with Trousers & Embroidered Detailing",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Beige"
+    },
+    "meta": {
+      "styleStudioId": "new_143",
+      "sourceImage": "143.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Beige"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_148",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/148.jpg",
+      "productDisplayName": "Shakumbhari Women Maroon Embroidered Kurti with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Maroon"
+    },
+    "meta": {
+      "styleStudioId": "new_148",
+      "sourceImage": "148.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Maroon"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_161",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/161.jpg",
+      "productDisplayName": "Bitterlime Women Burgundy & Peach-Coloured Block Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Burgundy"
+    },
+    "meta": {
+      "styleStudioId": "new_161",
+      "sourceImage": "161.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Burgundy"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_167",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/167.jpg",
+      "productDisplayName": "Indo Era Women Green & Sea Green Embroidered Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Sea Green"
+    },
+    "meta": {
+      "styleStudioId": "new_167",
+      "sourceImage": "167.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Sea Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_178",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/178.jpg",
+      "productDisplayName": "ZIYAA Women Cream-Coloured Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Cream"
+    },
+    "meta": {
+      "styleStudioId": "new_178",
+      "sourceImage": "178.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Cream"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_181",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/181.jpg",
+      "productDisplayName": "Azira Women Black Solid Straight Kurta with Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Black"
+    },
+    "meta": {
+      "styleStudioId": "new_181",
+      "sourceImage": "181.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Black"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_187",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/187.jpg",
+      "productDisplayName": "Anouk Women Pink & Gold-Toned Self Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_187",
+      "sourceImage": "187.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_192",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/192.jpg",
+      "productDisplayName": "Libas Women Peach-Coloured & Golden Woven Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_192",
+      "sourceImage": "192.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_193",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/193.jpg",
+      "productDisplayName": "SASSAFRAS Women Mustard Yellow & Green Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Mustard"
+    },
+    "meta": {
+      "styleStudioId": "new_193",
+      "sourceImage": "193.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Mustard"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_205",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/205.jpg",
+      "productDisplayName": "ZIYAA Women Pink & Blue Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_205",
+      "sourceImage": "205.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_206",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/206.jpg",
+      "productDisplayName": "Libas Women Red & Golden Block Print Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_206",
+      "sourceImage": "206.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_212",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/212.jpg",
+      "productDisplayName": "Libas Women Pink & Black Block Print Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_212",
+      "sourceImage": "212.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_228",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/228.jpg",
+      "productDisplayName": "AKS Women Cream-Coloured & Pink Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_228",
+      "sourceImage": "228.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_233",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/233.jpg",
+      "productDisplayName": "Taavi Women Off-White & Grey Woven Legacy A-Line Kurta with Pockets",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_233",
+      "sourceImage": "233.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_234",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/234.jpg",
+      "productDisplayName": "Jaipur Kurti Women Navy Blue & Black Striped Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_234",
+      "sourceImage": "234.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_249",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/249.jpg",
+      "productDisplayName": "Nayo Women Black & Maroon Printed Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Maroon"
+    },
+    "meta": {
+      "styleStudioId": "new_249",
+      "sourceImage": "249.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Maroon"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_252",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/252.jpg",
+      "productDisplayName": "Nayo Women Navy Blue & Mustard Yellow Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_252",
+      "sourceImage": "252.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_271",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/271.jpg",
+      "productDisplayName": "Varanga Women Blue & Grey Solid Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Grey"
+    },
+    "meta": {
+      "styleStudioId": "new_271",
+      "sourceImage": "271.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Grey"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_283",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/283.jpg",
+      "productDisplayName": "Anouk Women Off-White & Red Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_283",
+      "sourceImage": "283.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_285",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/285.jpg",
+      "productDisplayName": "Nayo Women Red & White Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: White"
+    },
+    "meta": {
+      "styleStudioId": "new_285",
+      "sourceImage": "285.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_300",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/300.jpg",
+      "productDisplayName": "Libas Women Yellow & Golden Self Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Yellow"
+    },
+    "meta": {
+      "styleStudioId": "new_300",
+      "sourceImage": "300.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Yellow"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_315",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/315.jpg",
+      "productDisplayName": "Jaipur Kurti Women Maroon & Grey Self Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Maroon"
+    },
+    "meta": {
+      "styleStudioId": "new_315",
+      "sourceImage": "315.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Maroon"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_333",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/333.jpg",
+      "productDisplayName": "Libas Women Grey Yoke Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Grey"
+    },
+    "meta": {
+      "styleStudioId": "new_333",
+      "sourceImage": "333.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Grey"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_334",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/334.jpg",
+      "productDisplayName": "Azira Women Pink & White Printed Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_334",
+      "sourceImage": "334.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_342",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/342.jpg",
+      "productDisplayName": "GERUA Women Lime Green & Golden Block Print Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Lime Green"
+    },
+    "meta": {
+      "styleStudioId": "new_342",
+      "sourceImage": "342.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Lime Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_371",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/371.jpg",
+      "productDisplayName": "Ishin Women Red & White Printed Bandhani Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: White"
+    },
+    "meta": {
+      "styleStudioId": "new_371",
+      "sourceImage": "371.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_377",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/377.jpg",
+      "productDisplayName": "GERUA Women Peach-Coloured & Red Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Red"
+    },
+    "meta": {
+      "styleStudioId": "new_377",
+      "sourceImage": "377.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Red"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_378",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/378.jpg",
+      "productDisplayName": "Anouk Women Mustard Yellow & Green Printed Straight Kurta With Tassels Detail",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Mustard"
+    },
+    "meta": {
+      "styleStudioId": "new_378",
+      "sourceImage": "378.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Mustard"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_385",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/385.jpg",
+      "productDisplayName": "ZIYAA Women Mauve & Brown Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Brown"
+    },
+    "meta": {
+      "styleStudioId": "new_385",
+      "sourceImage": "385.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Brown"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_394",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/394.jpg",
+      "productDisplayName": "Idalia Women Navy Blue & Golden Printed Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_394",
+      "sourceImage": "394.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_405",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/405.jpg",
+      "productDisplayName": "Anouk Women Mustard Yellow & Maroon Printed Kurta With Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Mustard"
+    },
+    "meta": {
+      "styleStudioId": "new_405",
+      "sourceImage": "405.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Mustard"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_418",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/418.jpg",
+      "productDisplayName": "Varanga Women Pink & Grey Solid Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_418",
+      "sourceImage": "418.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_425",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/425.jpg",
+      "productDisplayName": "Bollywood Vogue Women Blue & White Printed Made to Measure Kurta with Churidar",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: White"
+    },
+    "meta": {
+      "styleStudioId": "new_425",
+      "sourceImage": "425.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_442",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/442.jpg",
+      "productDisplayName": "Libas Women Navy Blue & Coral Pink Solid Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_442",
+      "sourceImage": "442.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_445",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/445.jpg",
+      "productDisplayName": "Yufta Women Off-White Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_445",
+      "sourceImage": "445.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_452",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/452.jpg",
+      "productDisplayName": "Nayo Women Pink & Black Printed Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_452",
+      "sourceImage": "452.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_453",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/453.jpg",
+      "productDisplayName": "Vishudh Women White\u00a0Yarn Dyed\u00a0Kurta With Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: White"
+    },
+    "meta": {
+      "styleStudioId": "new_453",
+      "sourceImage": "453.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_455",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/455.jpg",
+      "productDisplayName": "Tissu Women Black & Maroon Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Maroon"
+    },
+    "meta": {
+      "styleStudioId": "new_455",
+      "sourceImage": "455.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Maroon"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_456",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/456.jpg",
+      "productDisplayName": "Sangria Women Green & Blue Embroidered Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Green"
+    },
+    "meta": {
+      "styleStudioId": "new_456",
+      "sourceImage": "456.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_479",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/479.jpg",
+      "productDisplayName": "ZIYAA Women Pink Printed Kurti with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_479",
+      "sourceImage": "479.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_480",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/480.jpg",
+      "productDisplayName": "Alena Women Navy Blue Solid Straight Kurta With Embroidered Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_480",
+      "sourceImage": "480.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_487",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/487.jpg",
+      "productDisplayName": "Libas Women Yellow & Orange Block Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Orange"
+    },
+    "meta": {
+      "styleStudioId": "new_487",
+      "sourceImage": "487.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Orange"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_492",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/492.jpg",
+      "productDisplayName": "GERUA Women Green & Pink Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Green"
+    },
+    "meta": {
+      "styleStudioId": "new_492",
+      "sourceImage": "492.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_511",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/511.jpg",
+      "productDisplayName": "Alena Women Mustard Yellow Solid Straight Kurta With Embroidered Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Mustard"
+    },
+    "meta": {
+      "styleStudioId": "new_511",
+      "sourceImage": "511.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Mustard"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_513",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/513.jpg",
+      "productDisplayName": "Vishudh Women Beige & Gold-Toned Self Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_513",
+      "sourceImage": "513.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_519",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/519.jpg",
+      "productDisplayName": "Taavi Women Green & Pink Hand Block Print Legacy Straight Kurta with Tie-Ups",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Green"
+    },
+    "meta": {
+      "styleStudioId": "new_519",
+      "sourceImage": "519.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_526",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/526.jpg",
+      "productDisplayName": "Ritu Kumar Women Blue & Beige Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Beige"
+    },
+    "meta": {
+      "styleStudioId": "new_526",
+      "sourceImage": "526.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Beige"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_529",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/529.jpg",
+      "productDisplayName": "IMARA Women Mustard Yellow Solid Kurta With Embroidered Detailing",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Mustard"
+    },
+    "meta": {
+      "styleStudioId": "new_529",
+      "sourceImage": "529.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Mustard"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_552",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/552.jpg",
+      "productDisplayName": "Jaipur Kurti Women Blue & White Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: White"
+    },
+    "meta": {
+      "styleStudioId": "new_552",
+      "sourceImage": "552.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_563",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/563.jpg",
+      "productDisplayName": "Libas Women Blue & Orange Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Orange"
+    },
+    "meta": {
+      "styleStudioId": "new_563",
+      "sourceImage": "563.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Orange"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_568",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/568.jpg",
+      "productDisplayName": "IMARA Women White & Navy Blue Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_568",
+      "sourceImage": "568.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_575",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/575.jpg",
+      "productDisplayName": "Nayo Women Cream-Coloured & Rust Brown Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Cream"
+    },
+    "meta": {
+      "styleStudioId": "new_575",
+      "sourceImage": "575.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Cream"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_581",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/581.jpg",
+      "productDisplayName": "Ishin Women Purple & Golden Foil Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Purple"
+    },
+    "meta": {
+      "styleStudioId": "new_581",
+      "sourceImage": "581.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Purple"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_593",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/593.jpg",
+      "productDisplayName": "ZIYAA Women Black Solid Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Black"
+    },
+    "meta": {
+      "styleStudioId": "new_593",
+      "sourceImage": "593.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Black"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_596",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/596.jpg",
+      "productDisplayName": "GERUA Women Navy Blue & White Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_596",
+      "sourceImage": "596.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_599",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/599.jpg",
+      "productDisplayName": "IMARA Women Black Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Black"
+    },
+    "meta": {
+      "styleStudioId": "new_599",
+      "sourceImage": "599.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Black"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_637",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/637.jpg",
+      "productDisplayName": "Libas Women Beige & Navy Blue Block Print Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_637",
+      "sourceImage": "637.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_653",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/653.jpg",
+      "productDisplayName": "Jaipur Kurti Women Cream-Coloured & Red Yoke Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Cream"
+    },
+    "meta": {
+      "styleStudioId": "new_653",
+      "sourceImage": "653.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Cream"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_654",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/654.jpg",
+      "productDisplayName": "IMARA Women Black Printed Anarkali Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Black"
+    },
+    "meta": {
+      "styleStudioId": "new_654",
+      "sourceImage": "654.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Black"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_656",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/656.jpg",
+      "productDisplayName": "Vishudh Women Black & Gold-Toned Solid Kurta With Printed Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_656",
+      "sourceImage": "656.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_659",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/659.jpg",
+      "productDisplayName": "Ritu Kumar Women Red Solid A-Line Kurta With Belt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Red"
+    },
+    "meta": {
+      "styleStudioId": "new_659",
+      "sourceImage": "659.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Red"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_662",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/662.jpg",
+      "productDisplayName": "Anouk Women Rust Orange & Burgundy Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Burgundy"
+    },
+    "meta": {
+      "styleStudioId": "new_662",
+      "sourceImage": "662.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Burgundy"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_689",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/689.jpg",
+      "productDisplayName": "Libas Women Off-White & Blue Striped Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_689",
+      "sourceImage": "689.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_707",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/707.jpg",
+      "productDisplayName": "Anouk Women Maroon & Gold-Toned Embroidered Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_707",
+      "sourceImage": "707.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_715",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/715.jpg",
+      "productDisplayName": "IMARA Women White & Grey Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: White"
+    },
+    "meta": {
+      "styleStudioId": "new_715",
+      "sourceImage": "715.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_718",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/718.jpg",
+      "productDisplayName": "ZIYAA Women Pink Solid Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_718",
+      "sourceImage": "718.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_726",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/726.jpg",
+      "productDisplayName": "Nayo Women Red & Cream-Coloured Bandhani Print Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Cream"
+    },
+    "meta": {
+      "styleStudioId": "new_726",
+      "sourceImage": "726.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Cream"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_734",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/734.jpg",
+      "productDisplayName": "SASSAFRAS Women Sea Green & Golden Foil Print Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Sea Green"
+    },
+    "meta": {
+      "styleStudioId": "new_734",
+      "sourceImage": "734.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Sea Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_759",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/759.jpg",
+      "productDisplayName": "Taavi Women Green Woven Design Woven Legacy Straight Kurta with Pockets",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Green"
+    },
+    "meta": {
+      "styleStudioId": "new_759",
+      "sourceImage": "759.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_761",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/761.jpg",
+      "productDisplayName": "Anouk Women Green & Off-White Striped Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_761",
+      "sourceImage": "761.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_767",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/767.jpg",
+      "productDisplayName": "Jaipur Kurti Women Off-White & Yellow Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_767",
+      "sourceImage": "767.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_778",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/778.jpg",
+      "productDisplayName": "Taavi Women White & Mustard Yellow Hand Block Print Legacy Straight Kurta with a Hood",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Mustard"
+    },
+    "meta": {
+      "styleStudioId": "new_778",
+      "sourceImage": "778.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Mustard"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_795",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/795.jpg",
+      "productDisplayName": "ZIYAA Women Sea Green Printed Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Sea Green"
+    },
+    "meta": {
+      "styleStudioId": "new_795",
+      "sourceImage": "795.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Sea Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_799",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/799.jpg",
+      "productDisplayName": "all about you from Deepika Padukone Women Pink Woven Design Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_799",
+      "sourceImage": "799.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_812",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/812.jpg",
+      "productDisplayName": "Bitterlime Women Pink Block Print Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Pink"
+    },
+    "meta": {
+      "styleStudioId": "new_812",
+      "sourceImage": "812.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Pink"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_818",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/818.jpg",
+      "productDisplayName": "Bitterlime Women Olive Green & Yellow Block Print Kurta with Trousers",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Olive Green"
+    },
+    "meta": {
+      "styleStudioId": "new_818",
+      "sourceImage": "818.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Olive Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_838",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/838.jpg",
+      "productDisplayName": "Taavi Women Indigo Hand Block Printed A-Line Kurta With Pleats & Tassels",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Unknown"
+    },
+    "meta": {
+      "styleStudioId": "new_838",
+      "sourceImage": "838.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Unknown"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_839",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/839.jpg",
+      "productDisplayName": "Sringam Women Peach-Coloured Solid Kurta with Skirt",
+      "currentLabels": "Article: Kurta Sets | Gender: Women | Colour: Red"
+    },
+    "meta": {
+      "styleStudioId": "new_839",
+      "sourceImage": "839.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Women"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Red"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_845",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/845.jpg",
+      "productDisplayName": "KISAH Men Green & White Solid Kurta with Churidar",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Green"
+    },
+    "meta": {
+      "styleStudioId": "new_845",
+      "sourceImage": "845.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_847",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/847.jpg",
+      "productDisplayName": "Hangup Men Black Solid Pathani Kurta with Pyjama",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Black"
+    },
+    "meta": {
+      "styleStudioId": "new_847",
+      "sourceImage": "847.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Black"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_848",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/848.jpg",
+      "productDisplayName": "KISAH Men Peach & Mauve Jacquard Banarasi Kurta with Churidar & Nehru Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Peach"
+    },
+    "meta": {
+      "styleStudioId": "new_848",
+      "sourceImage": "848.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Peach"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_851",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/851.jpg",
+      "productDisplayName": "SOJANYA Men Off-White & Maroon Self Design Kurta with Churidar & Nehru Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_851",
+      "sourceImage": "851.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_852",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/852.jpg",
+      "productDisplayName": "KISAH Men Black & Green Solid Banarasi Kurta with Churidar & Nehru Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Green"
+    },
+    "meta": {
+      "styleStudioId": "new_852",
+      "sourceImage": "852.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Green"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_854",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/854.jpg",
+      "productDisplayName": "Manyavar Men Gold-Toned & Beige Self Design Kurta with Churidar",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Gold"
+    },
+    "meta": {
+      "styleStudioId": "new_854",
+      "sourceImage": "854.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Gold"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_856",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/856.jpg",
+      "productDisplayName": "KISAH Men Black & Gold-Coloured Printed Kurta with Churidar & Nehru Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Black"
+    },
+    "meta": {
+      "styleStudioId": "new_856",
+      "sourceImage": "856.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Black"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_860",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/860.jpg",
+      "productDisplayName": "DEYANN Men Navy Blue & Red Solid Kurta with Patiala",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Navy Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_860",
+      "sourceImage": "860.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Navy Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_862",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/862.jpg",
+      "productDisplayName": "DEYANN Men Blue Solid Kurta with Pyjamas & Nehru Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_862",
+      "sourceImage": "862.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_864",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/864.jpg",
+      "productDisplayName": "Taavi Men Peach-Coloured Handloom Woven Legacy Kurta with Half Button Placket",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Red"
+    },
+    "meta": {
+      "styleStudioId": "new_864",
+      "sourceImage": "864.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Red"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_865",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/865.jpg",
+      "productDisplayName": "House of Pataudi Men Pink & Off-White Solid Kurta with Churidar & Embroidered Nehru Jacket",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Off-White"
+    },
+    "meta": {
+      "styleStudioId": "new_865",
+      "sourceImage": "865.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Off-White"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "new_868",
+    "data": {
+      "image": "http://localhost:8000/New%20Images/New%20Images/868.jpg",
+      "productDisplayName": "Manyavar Men Blue Self Design Kurta with Churidar",
+      "currentLabels": "Article: Kurta Sets | Gender: Men | Colour: Blue"
+    },
+    "meta": {
+      "styleStudioId": "new_868",
+      "sourceImage": "868.jpg"
+    },
+    "predictions": [
+      {
+        "model_version": "current_csv_labels",
+        "score": 1.0,
+        "result": [
+          {
+            "from_name": "articleType",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Kurta Sets"
+              ]
+            }
+          },
+          {
+            "from_name": "gender",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Men"
+              ]
+            }
+          },
+          {
+            "from_name": "baseColour",
+            "to_name": "image",
+            "type": "choices",
+            "value": {
+              "choices": [
+                "Blue"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

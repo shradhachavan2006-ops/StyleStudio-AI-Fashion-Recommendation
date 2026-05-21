@@ -8,6 +8,12 @@ const userFeedbackSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    outfit_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Outfit',
+      default: null,
+      index: true,
+    },
     rating: {
       type: Number,
       required: true,

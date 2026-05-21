@@ -1,6 +1,54 @@
-const Outfit = require('../models/Outfit');
-const User   = require('../models/User');
+const Outfit  = require('../models/Outfit');
+const User    = require('../models/User');
+const http    = require('http');
 const { pickImage, pickImageByCategory, pickImageByPieceName, resetUsedIds, detectTopwearType, isFullLengthOutfit } = require('../services/imageMatchingService');
+const { rankOutfits } = require('../services/personalizationEngine');
+const { buildBehaviorProfile, scoreOutfitFromBehavior } = require('../services/behaviorProfileService');
+
+const ML_SCORE_URL = 'http://localhost:5002/score';
+const ML_TIMEOUT_MS = 500; // never slow the page for ML
+
+// Call XGBoost score server — returns probability 0.0-1.0 or null if offline
+async function getMlScore(outfit, user) {
+  return new Promise((resolve) => {
+    try {
+      const payload = JSON.stringify({
+        bodyType:    user?.bodyCharacteristics?.bodyType    || '',
+        skinTone:    user?.bodyCharacteristics?.skinTone    || '',
+        gender:      user?.gender                          || '',
+        lifestyle:   user?.lifestyleType                   || '',
+        personality: user?.personality                     || '',
+        season:      user?.season                          || '',
+        theme:       outfit.theme                          || '',
+        style:       outfit.style                          || '',
+        colors:      outfit.colors                         || [],
+        clothingPieces: outfit.clothingPieces              || [],
+      });
+
+      const options = {
+        hostname: 'localhost', port: 5002, path: '/score',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) },
+        timeout: ML_TIMEOUT_MS,
+      };
+
+      const req = http.request(options, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          try { resolve(JSON.parse(data).probability ?? 0.5); }
+          catch { resolve(0.5); }
+        });
+      });
+      req.on('error', () => resolve(null)); // server offline
+      req.on('timeout', () => { req.destroy(); resolve(null); });
+      req.write(payload);
+      req.end();
+    } catch {
+      resolve(null);
+    }
+  });
+}
 
 const THEME_DESCRIPTIONS = {
   formal: 'professional business environment, corporate meetings, formal gatherings',
@@ -8,10 +56,13 @@ const THEME_DESCRIPTIONS = {
   traditional: 'cultural ceremonies, festivals, heritage celebrations',
   wedding: 'wedding ceremonies and receptions, elegant celebrations',
   party: 'evening parties, nightlife, celebrations and events',
-  event: 'special events, galas, award ceremonies',
-  college: 'college campus, student life, academic and social settings',
   office: 'modern workplace, business casual, professional yet comfortable',
   travel: 'travel adventures, sightseeing, comfortable yet stylish outfits for exploring',
+};
+
+const THEME_DATA_ALIASES = {
+  formal: 'office',
+  travel: 'casual',
 };
 
 const MOCK_OUTFITS = {
@@ -65,26 +116,6 @@ const MOCK_OUTFITS = {
     { outfitName:'Glitter Queen',     description:'Silver holographic mini skirt with black crop top for ultimate glam.',colors:['#C0C0C0','#1C1C1C','#FF00FF'], clothingPieces:['Silver Mini Skirt','Black Crop Top','Platform Heels','Clutch','Hoop Earrings'] },
     { outfitName:'Emerald Evening',   description:'Rich emerald green dress with gold accents for a sophisticated look.',colors:['#008000','#D4AF37','#1C1C1C'], clothingPieces:['Emerald Green Dress','Gold Heels','Gold Clutch','Gold Earrings'] },
   ],
-  event: [
-    { outfitName:'Red Carpet Ready',   description:'Stunning floor-length gown for high-profile events.',               colors:['#8B0000','#D4AF37','#1C1C1C'], clothingPieces:['Velvet Gown','Opera Gloves','Diamond Earrings','Satin Clutch','Heels'] },
-    { outfitName:'Gala Sophistication',description:'Timeless tuxedo with bold accessories for gala events.',            colors:['#1C1C1C','#FFFFFF','#C0C0C0'], clothingPieces:['Black Tuxedo','White Dress Shirt','Bow Tie','Patent Loafers','Silver Cufflinks'] },
-    { outfitName:'Awards Night',       description:'Metallic gown with architectural details for award ceremonies.',    colors:['#D4AF37','#C0C0C0','#F5F5F5'], clothingPieces:['Gold Metallic Gown','Stole Wrap','Crystal Heels','Diamond Jewelry','Evening Bag'] },
-    { outfitName:'Navy Gala Suit',     description:'Navy tuxedo with white pocket square for events.',                  colors:['#1E3A5F','#FFFFFF','#D4AF37'], clothingPieces:['Navy Tuxedo Blazer','Navy Trousers','White Shirt','Bow Tie','Oxford Shoes'] },
-    { outfitName:'Champagne Toast',    description:'Champagne satin evening gown with pearl accessories.',               colors:['#F7E7CE','#FFFFFF','#C0C0C0'], clothingPieces:['Champagne Gown','Pearl Necklace','Satin Heels','Evening Clutch'] },
-    { outfitName:'Midnight Blue Gala', description:'Midnight blue off-shoulder gown with silver earrings.',             colors:['#191970','#C0C0C0','#FFFFFF'], clothingPieces:['Midnight Blue Gown','Silver Earrings','Silver Clutch','Stiletto Heels'] },
-    { outfitName:'Classic White Tie',  description:'White tie ensemble with tails for the most formal events.',         colors:['#FFFFFF','#1C1C1C','#D4AF37'], clothingPieces:['White Waistcoat','Black Tailcoat','Black Trousers','White Shirt','Oxford Shoes'] },
-    { outfitName:'Crimson Event',      description:'Crimson evening dress with black accessories for bold presence.',    colors:['#DC143C','#1C1C1C','#D4AF37'], clothingPieces:['Crimson Evening Dress','Black Heels','Black Clutch','Gold Earrings'] },
-  ],
-  college: [
-    { outfitName:'Campus Cool',      description:'Effortlessly stylish for college days.',                              colors:['#4169E1','#FFFFFF','#FF6B35'], clothingPieces:['Oversized Graphic Tee','Straight-Leg Jeans','White Sneakers','Mini Backpack','Baseball Cap'] },
-    { outfitName:'Study Hall Chic',  description:'Smart casual that transitions from lectures to hangouts.',           colors:['#C0C0C0','#1C1C1C','#FF69B4'], clothingPieces:['Cropped Hoodie','High-Waist Joggers','Platform Sneakers','Tote Bag','Hoop Earrings'] },
-    { outfitName:'Quad Vibes',       description:'Boho-meets-streetwear for a creative campus aesthetic.',             colors:['#E8D08A','#6B8CAE','#D4956A'], clothingPieces:['Tie-Dye Crop Top','Mom Jeans','Chunky Sandals','Layered Necklaces','Canvas Tote'] },
-    { outfitName:'Library Look',     description:'Preppy plaid blazer with jeans for the smart scholar.',              colors:['#8B0000','#1C1C1C','#FFFFFF'], clothingPieces:['Plaid Blazer','Dark Slim Jeans','White Shirt','Loafers','Leather Backpack'] },
-    { outfitName:'Freshman Fresh',   description:'Pastel hoodie with white joggers for a fresh first-year look.',     colors:['#B0E0E6','#FFFFFF','#FF69B4'], clothingPieces:['Pastel Blue Hoodie','White Jogger Pants','White Sneakers','Crossbody Bag','Cap'] },
-    { outfitName:'Lecture Layers',   description:'Neutral-toned layered look for comfortable all-day campus wear.',   colors:['#F5DEB3','#8B4513','#FFFFFF'], clothingPieces:['Beige Cardigan','White T-Shirt','Brown Chinos','Sneakers','Canvas Tote'] },
-    { outfitName:'Weekend Workshop', description:'Utility style with cargo pants and sneakers for creative labs.',    colors:['#808000','#1C1C1C','#FFFFFF'], clothingPieces:['Olive Cargo Pants','Black T-Shirt','White Sneakers','Backpack','Cap'] },
-    { outfitName:'Sunset Seminar',   description:'Warm rust tones in a relaxed co-ord set for evening classes.',      colors:['#E2725B','#F5DEB3','#FFFFFF'], clothingPieces:['Rust Oversized Shirt','Cream Trousers','Sneakers','Canvas Tote','Watch'] },
-  ],
   office: [
     { outfitName:'Business Casual Pro',description:'Polished office look commanding respect without sacrificing ease.',colors:['#4A4A4A','#F5F5F5','#1E3A5F'], clothingPieces:['Structured Blazer','Tailored Chinos','Oxford Shirt','Derby Shoes','Leather Watch'] },
     { outfitName:'Modern Workwear',   description:'Contemporary office-ready outfit balancing professionalism and style.',colors:['#1C1C1C','#D4AF37','#FFFFFF'], clothingPieces:['Fitted Turtleneck','Wide-Leg Trousers','Block Heels','Structured Handbag','Earrings'] },
@@ -119,7 +150,8 @@ exports.generateOutfits = async (req, res) => {
 
     const { bodyCharacteristics, gender } = user;
     const themeDesc = THEME_DESCRIPTIONS[normalizedTheme] || 'everyday wear';
-    let outfitsData = MOCK_OUTFITS[normalizedTheme] || MOCK_OUTFITS.casual;
+    const dataTheme = THEME_DATA_ALIASES[normalizedTheme] || normalizedTheme;
+    let outfitsData = MOCK_OUTFITS[dataTheme] || MOCK_OUTFITS.casual;
 
     // Use OpenAI if API key is available
     const apiKey = process.env.OPENAI_API_KEY;
@@ -256,23 +288,28 @@ exports.getOutfits = async (req, res) => {
     const outfits = await Outfit.find(query).sort({ createdAt: -1 });
 
     // For each outfit, pick 4 category-specific images from the dataset
-    const user = await User.findById(req.user.id);
+    const user      = await User.findById(req.user.id);
     const gender    = user?.gender || 'unisex';
     const skinTone  = user?.bodyCharacteristics?.skinTone  || '';
     const bodyShape = user?.bodyCharacteristics?.bodyType  || '';
+    // Phase 1 personalisation fields
+    const userSeason      = user?.season      || 'all';
+    const userLifestyle   = user?.lifestyleType || 'urban';
+    const userPersonality = user?.personality  || '';
 
-    const enriched = outfits.map(o => {
+    // Reset ONCE before the loop — so each outfit gets unique images, not repeats
+    resetUsedIds();
+
+    const enriched = await Promise.all(outfits.map(async o => {
       const doc = o.toObject();
       const pieces       = doc.clothingPieces || [];
       const outfitDesc   = { usage: doc.theme, color: doc.colors?.[0] || '', theme: doc.theme, clothingPieces: pieces };
-      const userDesc     = { gender, skinTone, bodyShape };
+      const userDesc     = { gender, skinTone, bodyShape, season: userSeason, lifestyle: userLifestyle, personality: userPersonality };
       const topwearType  = detectTopwearType(pieces);
       const context      = { topwearType };
       const fullLength   = isFullLengthOutfit(pieces);
 
-      resetUsedIds();
-
-      // ── Helper: find piece name by category keyword — same logic as frontend ──
+      // ── Find piece name by category keyword ───────────────────────────────────
       const TOP_KW = ['shirt','tshirt','t-shirt','tee','blouse','top','polo','kurta','kurti',
                       'sherwani','blazer','jacket','coat','suit','sweater','hoodie','sweatshirt',
                       'vest','tunic','cardigan','crop','gown','dress','saree','anarkali','choli'];
@@ -280,21 +317,28 @@ exports.getOutfits = async (req, res) => {
                       'capri','palazzo','dhoti','churidar','jogger','trackpant','culottes'];
       const FOO_KW = ['shoe','sneaker','sandal','heel','boot','loafer','flat','mule',
                       'jutti','mojari','stiletto','oxford','derby','espadrille','slipper'];
-      const ACC_KW = ['tie','belt','bag','tote','clutch','watch','jewelry','jewel','earring',
+      const ACC_KW = ['belt','bag','tote','clutch','watch','jewelry','jewel','earring',
                       'necklace','cap','hat','dupatta','cufflink','pendant','brooch','ring',
-                      'bracelet','scarf','stole','backpack','wallet','purse','sunglasses'];
+                      'bracelet','scarf','stole','backpack','wallet','purse','sunglasses','crossbody'];
 
-      const topPiece  = pieces.find(p => TOP_KW.some(k => p.toLowerCase().includes(k))) || '';
-      const botPiece  = pieces.find(p => BOT_KW.some(k => p.toLowerCase().includes(k))) || '';
-      const fooPiece  = pieces.find(p => FOO_KW.some(k => p.toLowerCase().includes(k))) || '';
-      const accPiece  = pieces.find(p => ACC_KW.some(k => p.toLowerCase().includes(k))) || '';
+      const topPiece = pieces.find(p => TOP_KW.some(k => p.toLowerCase().includes(k))) || '';
+      const botPiece = pieces.find(p => BOT_KW.some(k => p.toLowerCase().includes(k))) || '';
+      const fooPiece = pieces.find(p => FOO_KW.some(k => p.toLowerCase().includes(k))) || '';
+      const claimedPieces = new Set([topPiece, botPiece, fooPiece].filter(Boolean));
+      const accPiece = pieces.find(p =>
+        !claimedPieces.has(p) && ACC_KW.some(k => p.toLowerCase().includes(k))
+      ) || '';
+      const emptyResult = { url:'', colour:'', articleType:'' };
 
-      // ── Pick images by PIECE NAME (most accurate) then fall back to category ──
-      const topResult  = pickImageByPieceName(topPiece,  'topwear',     outfitDesc, userDesc, context);
-      const botResult  = fullLength ? { url:'', colour:'', articleType:'' }
-                       : pickImageByPieceName(botPiece,  'bottomwear',  outfitDesc, userDesc, context);
-      const fooResult  = pickImageByPieceName(fooPiece,  'footwear',    outfitDesc, userDesc, context);
-      const accResult  = pickImageByPieceName(accPiece,  'accessories', outfitDesc, userDesc, context);
+      // ── Await all 4 picks in parallel (CLIP queries run concurrently) ─────────
+      const [topResult, botResult, fooResult, accResult] = await Promise.all([
+        topPiece ? pickImageByPieceName(topPiece, 'topwear', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
+        fullLength
+          ? Promise.resolve(emptyResult)
+          : botPiece ? pickImageByPieceName(botPiece, 'bottomwear', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
+        fooPiece ? pickImageByPieceName(fooPiece, 'footwear', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
+        accPiece ? pickImageByPieceName(accPiece, 'accessories', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
+      ]);
 
       doc.topImage        = topResult.url;
       doc.topColour       = topResult.colour;
@@ -313,9 +357,47 @@ exports.getOutfits = async (req, res) => {
       doc.accessoryArticle = accResult.articleType;
 
       return doc;
-    });
+    }));
 
-    res.json({ outfits: enriched });
+    // ── Phase 2: Re-rank by rule-based personalisation score ─────────────────
+    const ranked = rankOutfits(enriched, user);
+    const behaviorProfile = await buildBehaviorProfile(req.user.id);
+
+    // ── Phase 6: Hybrid scoring — inject XGBoost ML boost ────────────────────
+    // FinalScore blends profile rules, stored user actions, optional ML, and a neutral baseline.
+    // Graceful fallback: if ML server offline, mlScore defaults to 0.5 (neutral)
+    const scoredOutfits = await Promise.all(ranked.map(async (o) => {
+      const mlProb = await getMlScore(o, user); // 0.0-1.0 or null
+      const mlOnline = mlProb !== null;
+      const behavior = scoreOutfitFromBehavior(o, behaviorProfile);
+
+      const personalPct = o.personalScore ?? 50;           // 0-100
+      const behaviorPct = behavior.behaviorScore ?? 50;    // 0-100
+      const mlPct       = (mlProb ?? 0.5) * 100;           // 0-100
+      const baseline    = 50;                               // neutral baseline
+
+      const finalScore = mlOnline
+        ? Math.round(0.35 * personalPct + 0.35 * behaviorPct + 0.20 * mlPct + 0.10 * baseline)
+        : Math.round(0.55 * personalPct + 0.35 * behaviorPct + 0.10 * baseline);
+
+      return {
+        ...o,
+        behaviorScore: behaviorPct,
+        behaviorReasons: behavior.behaviorReasons,
+        behaviorSamples: behaviorProfile.sampleCount,
+        personalReasons: [
+          ...(o.personalReasons || []),
+          ...(behavior.behaviorReasons || []),
+        ].slice(0, 4),
+        finalScore,
+        mlScore:    mlOnline ? Math.round(mlPct) : null,
+        mlOnline,
+      };
+    }));
+
+    scoredOutfits.sort((a, b) => b.finalScore - a.finalScore);
+
+    res.json({ outfits: scoredOutfits });
   } catch (err) {
     res.status(500).json({ message: 'Error fetching outfits' });
   }

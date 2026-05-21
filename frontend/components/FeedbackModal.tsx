@@ -4,9 +4,10 @@ import API from '@/lib/api';
 
 interface FeedbackModalProps {
   onClose: () => void;
+  outfitId?: string;
 }
 
-export default function FeedbackModal({ onClose }: FeedbackModalProps) {
+export default function FeedbackModal({ onClose, outfitId }: FeedbackModalProps) {
   const [rating, setRating] = useState(0);
   const [hoverStar, setHoverStar] = useState(0);
   const [comment, setComment] = useState('');
@@ -17,7 +18,7 @@ export default function FeedbackModal({ onClose }: FeedbackModalProps) {
     if (rating === 0) return;
     setSubmitting(true);
     try {
-      await API.post('/api/feedback', { rating, comment });
+      await API.post('/api/feedback', { rating, comment, outfit_id: outfitId });
       setSubmitted(true);
       setTimeout(onClose, 1800);
     } catch (err) {

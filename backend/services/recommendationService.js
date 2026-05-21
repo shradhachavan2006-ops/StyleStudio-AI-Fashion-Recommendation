@@ -79,6 +79,9 @@ function transformOutfit(doc) {
         color: colorName,
         type: (doc.style || '').toLowerCase(),
         usage: (doc.theme || '').toLowerCase(),
+        gender: (doc.gender || 'unisex').toLowerCase(),
+        articleType: (doc.clothingPieces && doc.clothingPieces[0]) || doc.top || doc.outfitName || '',
+        subCategory: '',
     };
 }
 

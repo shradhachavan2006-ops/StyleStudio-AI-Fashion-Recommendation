@@ -1,0 +1,718 @@
+{
+  "inspectedCount": 74,
+  "correctCount": 61,
+  "partialCount": 4,
+  "wrongCount": 9,
+  "accuracy": 82,
+  "lastUpdated": "2026-05-17T15:39:40.090Z",
+  "incorrectSamples": [
+    {
+      "id": "19489",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Innerwear",
+        "articleType": "Briefs",
+        "baseColour": "Grey",
+        "season": "Summer",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Levis Men Jazz Stripes Grey Brief"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "grey"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Levis Men Jazz Stripes Grey Brief grey casual fashion product",
+      "ts": "2026-05-17T15:37:20.586Z"
+    },
+    {
+      "id": "28501",
+      "verdict": "partial",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Bottomwear",
+        "articleType": "Track Pants",
+        "baseColour": "Navy Blue",
+        "season": "Summer",
+        "year": "2012",
+        "usage": "Sports",
+        "productName": "Urban Yoga Men Navy Blue Track Pants"
+      },
+      "autoTags": {
+        "detectedStyle": "athletic",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "blue",
+          "navy"
+        ],
+        "mappedUsage": "sports"
+      },
+      "generatedQuery": "Urban Yoga Men Navy Blue Track Pants blue navy sports fashion product",
+      "ts": "2026-05-17T15:36:34.224Z"
+    },
+    {
+      "id": "28132",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Innerwear",
+        "articleType": "Briefs",
+        "baseColour": "White",
+        "season": "Summer",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Jockey Modern Classic Men Pack of 2 White POCO Briefs 8035"
+      },
+      "autoTags": {
+        "detectedStyle": "trendy",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "white"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Jockey Modern Classic Men Pack of 2 White POCO Briefs 8035 white casual fashion product",
+      "ts": "2026-05-17T15:36:18.248Z"
+    },
+    {
+      "id": "14714",
+      "verdict": "partial",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Bottomwear",
+        "articleType": "Trousers",
+        "baseColour": "Navy Blue",
+        "season": "Fall",
+        "year": "2011",
+        "usage": "Formal",
+        "productName": "Genesis Men Solid Navy Blue Trousers"
+      },
+      "autoTags": {
+        "detectedStyle": "classic",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "blue",
+          "navy"
+        ],
+        "mappedUsage": "formal"
+      },
+      "generatedQuery": "Genesis Men Solid Navy Blue Trousers blue navy formal fashion product",
+      "ts": "2026-05-17T15:33:56.197Z"
+    },
+    {
+      "id": "50533",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Innerwear",
+        "articleType": "Briefs",
+        "baseColour": "Grey",
+        "season": "Summer",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Chromozome Men Charcoal Briefs"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "charcoal"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Chromozome Men Charcoal Briefs charcoal casual fashion product",
+      "ts": "2026-05-17T15:33:33.794Z"
+    },
+    {
+      "id": "19490",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Innerwear",
+        "articleType": "Briefs",
+        "baseColour": "Green",
+        "season": "Summer",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Levis Men Jazz Stripes Green Brief"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "green"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Levis Men Jazz Stripes Green Brief green casual fashion product",
+      "ts": "2026-05-17T15:33:25.964Z"
+    },
+    {
+      "id": "42983",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Innerwear",
+        "articleType": "Boxers",
+        "baseColour": "Blue",
+        "season": "Summer",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "FCUK Blue Boxers"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "blue"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "FCUK Blue Boxers blue casual fashion product",
+      "ts": "2026-05-17T15:33:20.986Z"
+    },
+    {
+      "id": "50545",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Innerwear",
+        "articleType": "Briefs",
+        "baseColour": "Black",
+        "season": "Summer",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Chromozome Men Pack of Two Briefs"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "Black"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Chromozome Men Pack of Two Briefs casual fashion product",
+      "ts": "2026-05-17T15:33:08.699Z"
+    },
+    {
+      "id": "6860",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Women",
+        "masterCategory": "Apparel",
+        "subCategory": "Bottomwear",
+        "articleType": "Skirts",
+        "baseColour": "Black",
+        "season": "Summer",
+        "year": "2011",
+        "usage": "Casual",
+        "productName": "Forever New Women's Short Black Skirt"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "black"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Forever New Women's Short Black Skirt black casual fashion product",
+      "ts": "2026-05-17T15:32:27.715Z"
+    },
+    {
+      "id": "6860",
+      "verdict": "partial",
+      "csvLabels": {
+        "gender": "Women",
+        "masterCategory": "Apparel",
+        "subCategory": "Bottomwear",
+        "articleType": "Skirts",
+        "baseColour": "Black",
+        "season": "Summer",
+        "year": "2011",
+        "usage": "Casual",
+        "productName": "Forever New Women's Short Black Skirt"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "black"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Forever New Women's Short Black Skirt black casual fashion product",
+      "ts": "2026-05-17T15:32:23.490Z"
+    },
+    {
+      "id": "50916",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Men",
+        "masterCategory": "Apparel",
+        "subCategory": "Innerwear",
+        "articleType": "Briefs",
+        "baseColour": "White",
+        "season": "Summer",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Parx Men White Briefs"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "topwear",
+        "detectedColours": [
+          "white"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Parx Men White Briefs white casual fashion product",
+      "ts": "2026-05-17T15:31:42.954Z"
+    },
+    {
+      "id": "38229",
+      "verdict": "partial",
+      "csvLabels": {
+        "gender": "Women",
+        "masterCategory": "Accessories",
+        "subCategory": "Eyewear",
+        "articleType": "Sunglasses",
+        "baseColour": "Black",
+        "season": "Winter",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Polaroid Women Sunglasses"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "accessories",
+        "detectedColours": [
+          "Black"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Polaroid Women Sunglasses casual fashion product",
+      "ts": "2026-05-17T14:46:25.260Z"
+    },
+    {
+      "id": "59269",
+      "verdict": "wrong",
+      "csvLabels": {
+        "gender": "Women",
+        "masterCategory": "Accessories",
+        "subCategory": "Watches",
+        "articleType": "Watches",
+        "baseColour": "Silver",
+        "season": "Winter",
+        "year": "2016",
+        "usage": "Casual",
+        "productName": "Titan Women Mother Of Pearl Watch"
+      },
+      "autoTags": {
+        "detectedStyle": "casual",
+        "detectedCategory": "accessories",
+        "detectedColours": [
+          "tan"
+        ],
+        "mappedUsage": "casual"
+      },
+      "generatedQuery": "Titan Women Mother Of Pearl Watch tan casual fashion product",
+      "ts": "2026-05-17T14:45:00.862Z"
+    }
+  ],
+  "commonFailures": {
+    "accessories / Watches": 1,
+    "accessories / Sunglasses": 1,
+    "topwear / Briefs": 6,
+    "topwear / Skirts": 2,
+    "topwear / Boxers": 1,
+    "topwear / Trousers": 1,
+    "topwear / Track Pants": 1
+  },
+  "sessionHistory": [
+    {
+      "id": "32494",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:39:40.089Z"
+    },
+    {
+      "id": "52180",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:39:31.728Z"
+    },
+    {
+      "id": "43149",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:39:18.590Z"
+    },
+    {
+      "id": "27795",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:39:01.085Z"
+    },
+    {
+      "id": "44130",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:56.750Z"
+    },
+    {
+      "id": "41735",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:41.357Z"
+    },
+    {
+      "id": "41735",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:39.623Z"
+    },
+    {
+      "id": "41735",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:37.485Z"
+    },
+    {
+      "id": "31327",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:27.827Z"
+    },
+    {
+      "id": "27682",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:21.827Z"
+    },
+    {
+      "id": "32203",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:18.221Z"
+    },
+    {
+      "id": "57995",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:38:04.758Z"
+    },
+    {
+      "id": "38437",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:37:50.724Z"
+    },
+    {
+      "id": "19489",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:37:20.586Z"
+    },
+    {
+      "id": "48424",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:37:04.318Z"
+    },
+    {
+      "id": "27447",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:37:01.466Z"
+    },
+    {
+      "id": "28501",
+      "verdict": "partial",
+      "ts": "2026-05-17T15:36:34.224Z"
+    },
+    {
+      "id": "28132",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:36:18.248Z"
+    },
+    {
+      "id": "45399",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:36:00.215Z"
+    },
+    {
+      "id": "34561",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:35:54.297Z"
+    },
+    {
+      "id": "16847",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:35:48.921Z"
+    },
+    {
+      "id": "28262",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:35:43.214Z"
+    },
+    {
+      "id": "25425",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:35:12.794Z"
+    },
+    {
+      "id": "45193",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:35:06.869Z"
+    },
+    {
+      "id": "43561",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:35:01.408Z"
+    },
+    {
+      "id": "53031",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:34:56.737Z"
+    },
+    {
+      "id": "16158",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:34:44.365Z"
+    },
+    {
+      "id": "47203",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:34:42.475Z"
+    },
+    {
+      "id": "38157",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:34:21.051Z"
+    },
+    {
+      "id": "9273",
+      "verdict": "correct",
+      "ts": "2026-05-17T15:34:15.774Z"
+    },
+    {
+      "id": "14714",
+      "verdict": "partial",
+      "ts": "2026-05-17T15:33:56.197Z"
+    },
+    {
+      "id": "50533",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:33:33.794Z"
+    },
+    {
+      "id": "19490",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:33:25.964Z"
+    },
+    {
+      "id": "42983",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:33:20.986Z"
+    },
+    {
+      "id": "50545",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:33:08.699Z"
+    },
+    {
+      "id": "6860",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:32:27.715Z"
+    },
+    {
+      "id": "6860",
+      "verdict": "partial",
+      "ts": "2026-05-17T15:32:23.490Z"
+    },
+    {
+      "id": "50916",
+      "verdict": "wrong",
+      "ts": "2026-05-17T15:31:42.954Z"
+    },
+    {
+      "id": "39580",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:57.280Z"
+    },
+    {
+      "id": "4068",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:55.454Z"
+    },
+    {
+      "id": "34066",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:53.539Z"
+    },
+    {
+      "id": "49849",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:44.476Z"
+    },
+    {
+      "id": "26549",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:42.590Z"
+    },
+    {
+      "id": "54386",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:40.138Z"
+    },
+    {
+      "id": "35644",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:37.136Z"
+    },
+    {
+      "id": "48612",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:50:34.234Z"
+    },
+    {
+      "id": "40740",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:55.618Z"
+    },
+    {
+      "id": "51420",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:54.193Z"
+    },
+    {
+      "id": "25268",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:51.675Z"
+    },
+    {
+      "id": "31859",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:50.743Z"
+    },
+    {
+      "id": "6590",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:47.774Z"
+    },
+    {
+      "id": "44420",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:46.434Z"
+    },
+    {
+      "id": "51760",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:45.338Z"
+    },
+    {
+      "id": "35903",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:44.290Z"
+    },
+    {
+      "id": "13440",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:49:42.526Z"
+    },
+    {
+      "id": "28854",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:48:42.532Z"
+    },
+    {
+      "id": "23097",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:48:36.574Z"
+    },
+    {
+      "id": "41260",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:48:23.657Z"
+    },
+    {
+      "id": "17211",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:48:08.752Z"
+    },
+    {
+      "id": "35213",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:47:54.585Z"
+    },
+    {
+      "id": "46212",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:47:46.655Z"
+    },
+    {
+      "id": "53560",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:47:42.293Z"
+    },
+    {
+      "id": "14572",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:47:24.842Z"
+    },
+    {
+      "id": "24408",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:47:22.063Z"
+    },
+    {
+      "id": "28111",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:47:12.261Z"
+    },
+    {
+      "id": "56292",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:47:02.378Z"
+    },
+    {
+      "id": "48536",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:46:58.509Z"
+    },
+    {
+      "id": "38229",
+      "verdict": "partial",
+      "ts": "2026-05-17T14:46:25.260Z"
+    },
+    {
+      "id": "25107",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:46:22.412Z"
+    },
+    {
+      "id": "57598",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:45:55.493Z"
+    },
+    {
+      "id": "49233",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:45:48.528Z"
+    },
+    {
+      "id": "16239",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:45:35.747Z"
+    },
+    {
+      "id": "59269",
+      "verdict": "correct",
+      "ts": "2026-05-17T14:45:05.078Z"
+    },
+    {
+      "id": "59269",
+      "verdict": "wrong",
+      "ts": "2026-05-17T14:45:00.862Z"
+    }
+  ]
+}
