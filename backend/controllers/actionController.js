@@ -2,6 +2,7 @@ const UserAction = require('../models/UserAction');
 const { ACTION_WEIGHTS } = require('../models/UserAction');
 const Outfit = require('../models/Outfit');
 const SavedOutfit = require('../models/SavedOutfit');
+const mongoose = require('mongoose');
 
 // ── Helper: compute ML weight for an action ──────────────────────────────────
 function computeWeight(action_type, rating) {
@@ -102,6 +103,82 @@ exports.getUserActions = async (req, res) => {
   } catch (err) {
     console.error('getUserActions error:', err.message);
     res.status(500).json({ message: 'Failed to fetch actions' });
+  }
+};
+
+// ── DELETE /api/actions ─────────────────────────────────────────────────────
+// Removes a user's current interaction state for a specific outfit/action.
+exports.deleteAction = async (req, res) => {
+  try {
+    const { outfit_id, action_type } = req.body;
+    const removableActions = ['like', 'save', 'reject', 'rating'];
+
+    if (!outfit_id || !action_type) {
+      return res.status(400).json({ message: 'outfit_id and action_type are required' });
+    }
+
+    if (!removableActions.includes(action_type)) {
+      return res.status(400).json({ message: `action_type must be one of: ${removableActions.join(', ')}` });
+    }
+
+    const result = await UserAction.deleteMany({
+      user_id: req.user.id,
+      outfit_id,
+      action_type,
+    });
+
+    res.json({ deleted: result.deletedCount || 0 });
+  } catch (err) {
+    console.error('deleteAction error:', err.message);
+    res.status(500).json({ message: 'Failed to delete action', error: err.message });
+  }
+};
+
+// ── GET /api/actions/summary ────────────────────────────────────────────────
+// User-specific dashboard counters. New users naturally return zeros.
+exports.getSummary = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
+    const [recommendations, savedCount, byType, recentActions] = await Promise.all([
+      Outfit.countDocuments({ userId }),
+      SavedOutfit.countDocuments({ userId }),
+      UserAction.aggregate([
+        { $match: { user_id: userObjectId } },
+        { $group: { _id: '$action_type', count: { $sum: 1 } } },
+      ]),
+      UserAction.find({ user_id: userId })
+        .sort({ timestamp: -1 })
+        .limit(5)
+        .populate('outfit_id', 'outfitName theme')
+        .lean(),
+    ]);
+
+    const counts = byType.reduce((acc, row) => {
+      acc[row._id] = row.count;
+      return acc;
+    }, {});
+
+    res.json({
+      recommendations,
+      savedOutfits: savedCount,
+      likes: counts.like || 0,
+      dislikes: counts.reject || 0,
+      views: counts.view || 0,
+      ratings: counts.rating || 0,
+      totalActions: byType.reduce((sum, row) => sum + row.count, 0),
+      recent: recentActions.map((action) => ({
+        id: action._id,
+        action: action.action_type,
+        outfitName: action.outfit_id?.outfitName || 'Outfit',
+        theme: action.outfit_id?.theme || '',
+        timestamp: action.timestamp,
+      })),
+    });
+  } catch (err) {
+    console.error('getSummary error:', err.message);
+    res.status(500).json({ message: 'Failed to fetch action summary' });
   }
 };
 

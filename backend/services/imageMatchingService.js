@@ -17,8 +17,10 @@ const http = require('http');
 
 const CSV_PATH    = path.join(__dirname, '../../data/new_images_styles.csv');
 const PARTY_CSV_PATH = path.join(__dirname, '../../data/party_images_styles.csv');
+const FORMAL_CSV_PATH = path.join(__dirname, '../../data/formal_images_styles.csv');
 const THEME_METADATA_PATH = path.join(__dirname, '../../data/new_images_theme_metadata.csv');
 const PARTY_THEME_METADATA_PATH = path.join(__dirname, '../../data/party_images_theme_metadata.csv');
+const FORMAL_THEME_METADATA_PATH = path.join(__dirname, '../../data/formal_images_theme_metadata.csv');
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
 const CLIP_URL    = process.env.CLIP_URL    || 'http://localhost:5001';
 const IMAGE_DIR   = path.join(__dirname, '../../New Images/New Images');
@@ -97,7 +99,7 @@ let IMAGE_FILE_BY_ID = new Map();
 
 function loadThemeMetadata() {
   if (IMAGE_FILE_BY_ID.size > 0) return;
-  for (const metadataPath of [THEME_METADATA_PATH, PARTY_THEME_METADATA_PATH]) {
+  for (const metadataPath of [THEME_METADATA_PATH, PARTY_THEME_METADATA_PATH, FORMAL_THEME_METADATA_PATH]) {
     try {
       if (!fs.existsSync(metadataPath)) continue;
       const raw = fs.readFileSync(metadataPath, 'utf8');
@@ -157,7 +159,8 @@ function loadCatalogue() {
     loadThemeMetadata();
     const mainCount = loadCatalogueFile(CSV_PATH);
     const partyCount = loadCatalogueFile(PARTY_CSV_PATH);
-    console.log(`[imageMatchingService] Loaded ${CATALOGUE.length} items (${mainCount} main, ${partyCount} party supplement)`);
+    const formalCount = loadCatalogueFile(FORMAL_CSV_PATH);
+    console.log(`[imageMatchingService] Loaded ${CATALOGUE.length} items (${mainCount} main, ${partyCount} party supplement, ${formalCount} formal supplement)`);
   } catch (err) {
     console.error('[imageMatchingService] Failed to load CSV:', err.message);
   }

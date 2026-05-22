@@ -150,6 +150,7 @@ export default function OutfitsContent() {
   const [saved,         setSaved]        = useState(false);
   const [savedOutfitId, setSavedOutfitId]= useState<string | null>(null); // id in saved_outfits
   const [savedIds,      setSavedIds]     = useState<Set<string>>(new Set());
+  const [likedIds,      setLikedIds]     = useState<Set<string>>(new Set());
   const [dislikedIds,   setDislikedIds]  = useState<Set<string>>(new Set());
   const [removing,      setRemoving]     = useState(false);
   const [showFeedback,  setShowFeedback] = useState(false);
@@ -182,6 +183,12 @@ export default function OutfitsContent() {
     axios.get('/api/saved-outfits/ids')
       .then(r => setSavedIds(new Set(r.data.savedIds || [])))
       .catch(() => {});
+    axios.get('/api/actions?action_type=like&limit=500')
+      .then(r => setLikedIds(new Set((r.data.actions || []).map((a: { outfit_id: string }) => String(a.outfit_id)))))
+      .catch(() => {});
+    axios.get('/api/actions?action_type=reject&limit=500')
+      .then(r => setDislikedIds(new Set((r.data.actions || []).map((a: { outfit_id: string }) => String(a.outfit_id)))))
+      .catch(() => {});
   }, [theme, user, fetchOutfits]);
 
   // Generate fresh outfits
@@ -209,14 +216,14 @@ export default function OutfitsContent() {
   // Sync saved state when outfit index changes
   useEffect(() => {
     const outfit = outfits[idx] ?? outfits[0];
-    setLiked(false);
+    setLiked(outfit ? likedIds.has(outfit._id) : false);
     if (outfit) {
       setSaved(savedIds.has(outfit._id));
     } else {
       setSaved(false);
     }
     setSavedOutfitId(null);
-  }, [idx, outfits, savedIds]);
+  }, [idx, outfits, savedIds, likedIds]);
 
   const go = useCallback((dir: 1 | -1) => {
     setIdx(i => (i + dir + outfits.length) % outfits.length);
@@ -239,6 +246,7 @@ export default function OutfitsContent() {
       setSavedIds(prev => { const n = new Set(prev); n.delete(outfit._id); return n; });
       try {
         await axios.delete(`/api/saved-outfits/${outfit._id}`);
+        await axios.delete('/api/actions', { data: { outfit_id: outfit._id, action_type: 'save' } });
       } catch { /* ignore */ }
       return;
     }
@@ -277,7 +285,12 @@ export default function OutfitsContent() {
     if (!outfit) return;
     const newLiked = !liked;
     setLiked(newLiked);
+    if (!newLiked) {
+      setLikedIds(prev => { const n = new Set(prev); n.delete(outfit._id); return n; });
+      axios.delete('/api/actions', { data: { outfit_id: outfit._id, action_type: 'like' } }).catch(() => {});
+    }
     if (newLiked) {
+      setLikedIds(prev => new Set([...prev, outfit._id]));
       postAction(outfit._id, 'like');  // ✅ stored in MongoDB
     }
     // un-liking: no action logged (avoids polluting view count)

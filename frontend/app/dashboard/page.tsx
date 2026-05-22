@@ -1,25 +1,73 @@
-/* frontend/app/dashboard/page.tsx - Enhanced version */
 'use client';
 
 import { useAuth } from '@/context/AuthContext';
+import axios from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, Palette, Bookmark, ClipboardList, MapPin, TrendingUp, Award, Clock } from 'lucide-react';
+import {
+  Bookmark,
+  ClipboardList,
+  Clock,
+  MapPin,
+  Palette,
+  Sparkles,
+  ThumbsDown,
+  ThumbsUp,
+  TrendingUp,
+} from 'lucide-react';
+
+type DashboardStats = {
+  recommendations: number;
+  savedOutfits: number;
+  likes: number;
+  dislikes: number;
+  recent: Array<{ id: string; action: string; outfitName: string; theme: string; timestamp: string }>;
+};
+
+const EMPTY_STATS: DashboardStats = {
+  recommendations: 0,
+  savedOutfits: 0,
+  likes: 0,
+  dislikes: 0,
+  recent: [],
+};
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [greeting, setGreeting] = useState('');
+  const [stats, setStats] = useState<DashboardStats>(EMPTY_STATS);
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
-    
+
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Good morning');
     else if (hour < 18) setGreeting('Good afternoon');
     else setGreeting('Good evening');
   }, [user, loading, router]);
+
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+
+    const loadStats = async () => {
+      try {
+        const res = await axios.get('/api/actions/summary');
+        if (!cancelled) setStats({ ...EMPTY_STATS, ...res.data });
+      } catch {
+        if (!cancelled) setStats(EMPTY_STATS);
+      }
+    };
+
+    loadStats();
+    window.addEventListener('focus', loadStats);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('focus', loadStats);
+    };
+  }, [user]);
 
   if (loading || !user) {
     return (
@@ -30,7 +78,7 @@ export default function Dashboard() {
   }
 
   const hasProfile = !!user.bodyCharacteristics?.skinTone;
-  
+
   const steps = [
     {
       step: '1',
@@ -68,7 +116,7 @@ export default function Dashboard() {
       icon: Bookmark,
       label: 'Saved Outfits',
       desc: 'View your saved recommendation picks.',
-      done: false,
+      done: stats.savedOutfits > 0,
       color: 'from-orange-500 to-red-500',
       bg: 'bg-orange-50 dark:bg-orange-950/20',
     },
@@ -77,13 +125,10 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Welcome Section */}
         <div className="mb-12 animate-slide-up">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-xl">
-                {user.name?.charAt(0).toUpperCase()}
-              </span>
+              <span className="text-white font-bold text-xl">{user.name?.charAt(0).toUpperCase()}</span>
             </div>
             <div>
               <h1 className="text-4xl font-bold">
@@ -98,43 +143,37 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 animate-slide-in-left">
-          <div className="bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm opacity-90">Recommendations</p>
-                <p className="text-3xl font-bold mt-1">24</p>
-              </div>
-              <TrendingUp size={32} className="opacity-80" />
-            </div>
-            <p className="text-xs opacity-80 mt-2">+12 this week</p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl p-5 text-white shadow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm opacity-90">Saved Outfits</p>
-                <p className="text-3xl font-bold mt-1">8</p>
-              </div>
-              <Bookmark size={32} className="opacity-80" />
-            </div>
-            <p className="text-xs opacity-80 mt-2">3 new this month</p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-5 text-white shadow-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm opacity-90">Style Score</p>
-                <p className="text-3xl font-bold mt-1">92%</p>
-              </div>
-              <Award size={32} className="opacity-80" />
-            </div>
-            <p className="text-xs opacity-80 mt-2">Top 10% of users</p>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-12 animate-slide-in-left">
+          <StatCard
+            icon={TrendingUp}
+            label="Recommendations"
+            value={stats.recommendations}
+            detail="Generated for your account"
+            className="from-violet-500 to-purple-600"
+          />
+          <StatCard
+            icon={Bookmark}
+            label="Saved Outfits"
+            value={stats.savedOutfits}
+            detail="Only your saved picks"
+            className="from-pink-500 to-rose-600"
+          />
+          <StatCard
+            icon={ThumbsUp}
+            label="Likes"
+            value={stats.likes}
+            detail="Your positive signals"
+            className="from-emerald-500 to-teal-600"
+          />
+          <StatCard
+            icon={ThumbsDown}
+            label="Dislikes"
+            value={stats.dislikes}
+            detail="Used to improve results"
+            className="from-slate-600 to-gray-700"
+          />
         </div>
 
-        {/* Steps Grid */}
         <h2 className="text-2xl font-bold mb-6">Your Style Journey</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {steps.map((s, idx) => (
@@ -147,20 +186,15 @@ export default function Dashboard() {
                 <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
                   <s.icon size={24} className="text-white" />
                 </div>
-
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-bold text-lg">
-                    {s.step}. {s.label}
-                  </h3>
+                  <h3 className="font-bold text-lg">{s.step}. {s.label}</h3>
                   {s.done && (
                     <span className="text-xs font-semibold text-green-600 bg-green-100 dark:bg-green-900/40 dark:text-green-400 px-2 py-1 rounded-full">
-                      ✓ Done
+                      Done
                     </span>
                   )}
                 </div>
-
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{s.desc}</p>
-                
                 {!s.done && (
                   <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Sparkles size={16} className="text-violet-500" />
@@ -171,7 +205,6 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Profile Incomplete Alert */}
         {!hasProfile && (
           <div className="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-900 rounded-2xl p-6 animate-slide-up">
             <div className="flex items-start gap-4">
@@ -191,16 +224,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* CTA Banner */}
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 p-8 text-white shadow-2xl animate-slide-up">
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-            }}
-          />
-          
           <div className="relative flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold mb-2">Ready to discover your style?</h2>
@@ -218,7 +242,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Recent Activity */}
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
             <Clock size={24} className="text-violet-500" />
@@ -226,23 +249,51 @@ export default function Dashboard() {
           </h2>
           <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
             <div className="space-y-4">
-              {[
-                { action: 'Generated formal outfits', time: '2 hours ago', icon: '👔' },
-                { action: 'Saved wedding collection', time: 'Yesterday', icon: '💒' },
-                { action: 'Updated style preferences', time: '3 days ago', icon: '✨' },
-              ].map((activity, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  <div className="text-2xl">{activity.icon}</div>
+              {stats.recent.map((activity, idx) => (
+                <div key={activity.id || idx} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div className="text-2xl">{activity.action === 'save' ? '★' : activity.action === 'like' ? '+' : activity.action === 'reject' ? '-' : '•'}</div>
                   <div className="flex-1">
-                    <p className="font-medium">{activity.action}</p>
-                    <p className="text-xs text-gray-400">{activity.time}</p>
+                    <p className="font-medium capitalize">{activity.action} · {activity.outfitName}</p>
+                    <p className="text-xs text-gray-400">{new Date(activity.timestamp).toLocaleString()}</p>
                   </div>
                 </div>
               ))}
+              {stats.recent.length === 0 && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  No interactions yet. Like, dislike, or save outfits to start personalizing your dashboard.
+                </p>
+              )}
             </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  detail,
+  className,
+}: {
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  label: string;
+  value: number;
+  detail: string;
+  className: string;
+}) {
+  return (
+    <div className={`bg-gradient-to-br ${className} rounded-2xl p-5 text-white shadow-lg`}>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm opacity-90">{label}</p>
+          <p className="text-3xl font-bold mt-1">{value}</p>
+        </div>
+        <Icon size={32} className="opacity-80" />
+      </div>
+      <p className="text-xs opacity-80 mt-2">{detail}</p>
     </div>
   );
 }

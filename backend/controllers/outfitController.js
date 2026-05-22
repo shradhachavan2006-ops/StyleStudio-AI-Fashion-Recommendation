@@ -96,6 +96,57 @@ function isWesternPartyOutfit(outfit) {
     !blocked.some((word) => text.includes(word));
 }
 
+function seededNumber(seed) {
+  let h = 2166136261;
+  const text = String(seed);
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function shuffleWithSeed(items, seed) {
+  const shuffled = [...items];
+  let state = seededNumber(seed) || 1;
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    const j = state % (i + 1);
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function rotateArray(items, offset) {
+  if (!items.length) return items;
+  const start = Math.abs(offset) % items.length;
+  return [...items.slice(start), ...items.slice(0, start)];
+}
+
+function variedOutfitsForRequest(outfits, seed) {
+  const shuffled = shuffleWithSeed(outfits, seed);
+  const rotated = rotateArray(shuffled, seededNumber(`${seed}:rotate`));
+  return rotated.slice(0, Math.min(8, rotated.length));
+}
+
+const VARIANT_WORDS = ['Edit', 'Look', 'Mood', 'Style', 'Set'];
+function expandOutfitTemplates(outfits, seed) {
+  const expanded = [...outfits];
+  outfits.forEach((outfit, index) => {
+    const word = VARIANT_WORDS[(seededNumber(`${seed}:${index}`) + index) % VARIANT_WORDS.length];
+    const colours = rotateArray(outfit.colors || [], index + 1);
+    expanded.push({
+      ...outfit,
+      outfitName: `${outfit.outfitName} ${word}`,
+      description: outfit.description
+        .replace(/\.$/, '')
+        .concat(' with a refreshed colour priority.'),
+      colors: colours.length ? colours : outfit.colors,
+    });
+  });
+  return expanded;
+}
+
 const MOCK_OUTFITS = {
   formal: [
     { outfitName:'White Boardroom Shirt', description:'Crisp white formal shirt for polished business settings.',        colors:['#FFFFFF','#1E3A5F','#C5A028'], clothingPieces:['White Formal Shirt','Silk Tie','Leather Watch'] },
@@ -129,13 +180,23 @@ const MOCK_OUTFITS = {
   ],
   wedding: [
     { outfitName:'Zari Bridal Lehenga', description:'Embroidered zari lehenga choli suitable for wedding celebrations.', colors:['#FF1744','#FFD700','#FFFFF0'], clothingPieces:['Embroidered Zari Lehenga Choli','Kundan Jewelry','Heels'] },
-    { outfitName:'Cream Wedding Sherwani',description:'Cream embroidered sherwani with rich wedding-ready detail.',      colors:['#FFFDD0','#D4AF37','#8B0000'], clothingPieces:['Embroidered Cream Sherwani','Royal Brooch','Juttis'] },
     { outfitName:'Rose Gold Wedding Lehenga',description:'Rose gold embroidered lehenga for elegant wedding functions.',colors:['#FF69B4','#C0C0C0','#FFFFFF'], clothingPieces:['Embroidered Rose Gold Lehenga Choli','Diamond Jewelry','Heels'] },
-    { outfitName:'Blue Zari Sherwani',  description:'Blue zari sherwani for a regal wedding outfit.',                    colors:['#191970','#C0C0C0','#FFFFFF'], clothingPieces:['Blue Zari Sherwani','Silver Brooch','Juttis'] },
     { outfitName:'Ivory Silk Saree',    description:'Ivory silk saree with heavy wedding embroidery.',                   colors:['#FFFFF0','#D4AF37','#FF8C00'], clothingPieces:['Ivory Embroidered Silk Saree','Kundan Necklace','Gold Bangles'] },
     { outfitName:'Mirror Work Lehenga', description:'Blue embroidered mirror-work lehenga for sangeet styling.',         colors:['#4169E1','#C0C0C0','#FFD700'], clothingPieces:['Blue Embroidered Lehenga Choli','Silver Jewelry','Heels'] },
     { outfitName:'Lavender Bridal Lehenga',description:'Pastel embroidered lehenga for soft wedding elegance.',          colors:['#E6E6FA','#FFFFFF','#D4AF37'], clothingPieces:['Lavender Embroidered Lehenga Choli','Pearl Jewelry','Flats'] },
+    { outfitName:'Burgundy Wedding Saree',description:'Burgundy embroidered saree for a rich wedding-ready look.',       colors:['#800020','#FFFDD0','#D4AF37'], clothingPieces:['Burgundy Embroidered Saree','Gold Jewelry','Heels'] },
+    { outfitName:'Pink Zari Lehenga',   description:'Pink zari lehenga choli for festive wedding functions.',             colors:['#FFB6C1','#D4AF37','#FFFFFF'], clothingPieces:['Pink Zari Lehenga Choli','Kundan Jewelry','Heels'] },
+    { outfitName:'Green Silk Saree',    description:'Green silk saree with wedding embroidery and gold detail.',          colors:['#008000','#D4AF37','#FFFFFF'], clothingPieces:['Green Embroidered Silk Saree','Gold Necklace','Bangles'] },
+  ],
+  weddingMen: [
+    { outfitName:'Cream Wedding Sherwani',description:'Cream embroidered sherwani with rich wedding-ready detail.',       colors:['#FFFDD0','#D4AF37','#8B0000'], clothingPieces:['Embroidered Cream Sherwani','Royal Brooch','Juttis'] },
+    { outfitName:'Blue Zari Sherwani',  description:'Blue zari sherwani for a regal wedding outfit.',                    colors:['#191970','#C0C0C0','#FFFFFF'], clothingPieces:['Blue Zari Sherwani','Silver Brooch','Juttis'] },
     { outfitName:'Maroon Zardozi Sherwani',description:'Maroon zardozi sherwani for a rich wedding look.',              colors:['#800020','#FFFDD0','#D4AF37'], clothingPieces:['Maroon Zardozi Sherwani','Gold Brooch','Watch'] },
+    { outfitName:'Gold Embroidered Kurta',description:'Gold embroidered kurta for elegant wedding celebrations.',         colors:['#D4AF37','#FFFDD0','#8B0000'], clothingPieces:['Gold Embroidered Wedding Kurta','Mojari Shoes','Watch'] },
+    { outfitName:'Ivory Silk Kurta',    description:'Ivory silk kurta with subtle wedding embroidery.',                   colors:['#FFFFF0','#D4AF37','#FFFFFF'], clothingPieces:['Ivory Embroidered Silk Kurta','Gold Brooch','Juttis'] },
+    { outfitName:'Navy Wedding Sherwani',description:'Navy embroidered sherwani for a polished wedding outfit.',          colors:['#0A2342','#D4AF37','#FFFFFF'], clothingPieces:['Navy Embroidered Sherwani','Royal Brooch','Juttis'] },
+    { outfitName:'Red Dupion Silk Kurta',description:'Red dupion silk kurta for a festive wedding look.',                 colors:['#8B0000','#D4AF37','#FFFFFF'], clothingPieces:['Red Dupion Silk Wedding Kurta','Gold Watch','Mojari Shoes'] },
+    { outfitName:'Black Embroidered Sherwani',description:'Black embroidered sherwani for a refined evening wedding.',   colors:['#1C1C1C','#D4AF37','#FFFFFF'], clothingPieces:['Black Embroidered Sherwani','Gold Brooch','Juttis'] },
   ],
   party: [
     { outfitName:'Midnight Glam',       description:'Sequined black bodycon dress for an electrifying night out.',        colors:['#1C1C1C','#C0C0C0','#FF1744'], clothingPieces:['Black Sequin Mini Dress','Strappy Heels','Metallic Clutch','Statement Earrings'] },
@@ -191,9 +252,15 @@ exports.generateOutfits = async (req, res) => {
     const imageGender = effectiveGenderForTheme(normalizedTheme, gender);
     const dataTheme = THEME_DATA_ALIASES[normalizedTheme] || normalizedTheme;
     let outfitsData = MOCK_OUTFITS[dataTheme] || MOCK_OUTFITS.casual;
+    if (normalizedTheme === 'wedding' && ['male', 'men'].includes((imageGender || '').toLowerCase())) {
+      outfitsData = MOCK_OUTFITS.weddingMen;
+    }
     if (normalizedTheme === 'party' && ['male', 'men'].includes((imageGender || '').toLowerCase())) {
       outfitsData = MOCK_OUTFITS.partyMen;
     }
+
+    const generationSeed = `${req.user.id}:${normalizedTheme}:${Date.now()}:${Math.random()}`;
+    outfitsData = variedOutfitsForRequest(expandOutfitTemplates(outfitsData, generationSeed), generationSeed);
 
     // Delete previous generated outfits for this user + theme
     await Outfit.deleteMany({ userId: req.user.id, theme: normalizedTheme });
