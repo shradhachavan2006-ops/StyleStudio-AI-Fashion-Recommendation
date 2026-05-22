@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,6 +10,7 @@ module.exports = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
+    User.updateOne({ _id: decoded.id }, { $set: { lastActiveAt: new Date() } }).catch(() => {});
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Invalid or expired token' });

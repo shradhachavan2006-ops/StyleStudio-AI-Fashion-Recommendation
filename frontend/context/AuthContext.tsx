@@ -126,6 +126,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  role?: string;
+  status?: string;
   gender?: string;
   bodyCharacteristics?: Partial<BodyCharacteristics>;
   stylePreferences?: Partial<StylePreferences>;
@@ -135,8 +137,9 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
+  register: (name: string, email: string, password: string) => Promise<User>;
+  registerAdmin: (name: string, email: string, password: string, setupKey: string) => Promise<User>;
   logout: () => void;
   updateUser: (data: Partial<User>) => void;
   refreshUser: () => Promise<void>;
@@ -175,6 +178,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id:                  doc._id ?? doc.id,
         name:                doc.name,
         email:               doc.email,
+        role:                doc.role,
+        status:              doc.status,
         gender:              doc.gender,
         bodyCharacteristics: doc.bodyCharacteristics,
         stylePreferences:    doc.stylePreferences,
@@ -194,6 +199,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(user);
     localStorage.setItem('ss_token', token);
     localStorage.setItem('ss_user', JSON.stringify(user));
+    return user;
   }, []);
 
   const register = useCallback(async (name: string, email: string, password: string) => {
@@ -203,6 +209,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(user);
     localStorage.setItem('ss_token', token);
     localStorage.setItem('ss_user', JSON.stringify(user));
+    return user;
+  }, []);
+
+  const registerAdmin = useCallback(async (name: string, email: string, password: string, setupKey: string) => {
+    const res = await API.post('/api/auth/register-admin', { name, email, password, setupKey });
+    const { token, user } = res.data;
+    setToken(token);
+    setUser(user);
+    localStorage.setItem('ss_token', token);
+    localStorage.setItem('ss_user', JSON.stringify(user));
+    return user;
   }, []);
 
   const logout = useCallback(() => {
@@ -222,7 +239,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, updateUser, refreshUser, loading }}>
+    <AuthContext.Provider value={{ user, token, login, register, registerAdmin, logout, updateUser, refreshUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

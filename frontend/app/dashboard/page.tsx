@@ -1,28 +1,36 @@
+/* frontend/app/dashboard/page.tsx - Enhanced version */
 'use client';
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, Palette, Bookmark, ClipboardList, MapPin } from 'lucide-react';
+import { Sparkles, Palette, Bookmark, ClipboardList, MapPin, TrendingUp, Award, Clock } from 'lucide-react';
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [greeting, setGreeting] = useState('');
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
+    
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Good morning');
+    else if (hour < 18) setGreeting('Good afternoon');
+    else setGreeting('Good evening');
   }, [user, loading, router]);
 
   if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-4 border-violet-500 border-t-transparent animate-spin" />
+        <div className="loading-spinner w-12 h-12" />
       </div>
     );
   }
 
   const hasProfile = !!user.bodyCharacteristics?.skinTone;
+  
   const steps = [
     {
       step: '1',
@@ -31,7 +39,8 @@ export default function Dashboard() {
       label: 'Body Profile',
       desc: hasProfile ? 'Profile saved. Click to update it.' : 'Tell us about your appearance for personalized fits.',
       done: hasProfile,
-      accent: 'blue',
+      color: 'from-blue-500 to-cyan-500',
+      bg: 'bg-blue-50 dark:bg-blue-950/20',
     },
     {
       step: '2',
@@ -40,7 +49,8 @@ export default function Dashboard() {
       label: 'Pick a Theme',
       desc: 'Choose an occasion and let AI generate outfits.',
       done: false,
-      accent: 'pink',
+      color: 'from-violet-500 to-purple-500',
+      bg: 'bg-violet-50 dark:bg-violet-950/20',
     },
     {
       step: '3',
@@ -49,7 +59,8 @@ export default function Dashboard() {
       label: 'Visit Stores',
       desc: 'Find nearby fashion stores for your recommended looks.',
       done: false,
-      accent: 'emerald',
+      color: 'from-emerald-500 to-teal-500',
+      bg: 'bg-emerald-50 dark:bg-emerald-950/20',
     },
     {
       step: '4',
@@ -58,93 +69,179 @@ export default function Dashboard() {
       label: 'Saved Outfits',
       desc: 'View your saved recommendation picks.',
       done: false,
-      accent: 'orange',
+      color: 'from-orange-500 to-red-500',
+      bg: 'bg-orange-50 dark:bg-orange-950/20',
     },
   ];
 
-  const accentMap: Record<string, string> = {
-    blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 group-hover:border-blue-300',
-    pink: 'bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400 group-hover:border-pink-300',
-    emerald: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400 group-hover:border-emerald-300',
-    orange: 'bg-orange-100 text-orange-600 dark:bg-orange-900/50 dark:text-orange-400 group-hover:border-orange-300',
-  };
-
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <div className="mb-10">
-        <h1 className="text-4xl font-bold">Welcome back, {user.name}</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">
-          {hasProfile
-            ? 'Your profile is set. Pick a theme and generate outfits.'
-            : 'Complete your profile to get the most accurate AI recommendations.'}
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        {/* Welcome Section */}
+        <div className="mb-12 animate-slide-up">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-xl">
+                {user.name?.charAt(0).toUpperCase()}
+              </span>
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold">
+                {greeting}, <span className="gradient-text">{user.name}</span>
+              </h1>
+              <p className="text-gray-500 dark:text-gray-400 mt-1">
+                {hasProfile
+                  ? 'Your profile is set. Ready to discover your perfect style?'
+                  : 'Complete your profile to get the most accurate AI recommendations.'}
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
-        {steps.map((s) => (
-          <Link key={s.label} href={s.href} className="group">
-            <div
-              className={`p-6 rounded-3xl border-2 transition-all h-full ${
-                s.done
-                  ? 'bg-green-50/50 border-green-200 dark:bg-green-950/20 dark:border-green-900/50'
-                  : 'bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-800'
-              }`}
-            >
-              <div
-                className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 ${
-                  s.done
-                    ? 'bg-green-100 text-green-600 dark:bg-green-900/50 dark:text-green-400'
-                    : accentMap[s.accent]
-                }`}
-              >
-                <s.icon size={22} />
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 animate-slide-in-left">
+          <div className="bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">Recommendations</p>
+                <p className="text-3xl font-bold mt-1">24</p>
               </div>
+              <TrendingUp size={32} className="opacity-80" />
+            </div>
+            <p className="text-xs opacity-80 mt-2">+12 this week</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl p-5 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">Saved Outfits</p>
+                <p className="text-3xl font-bold mt-1">8</p>
+              </div>
+              <Bookmark size={32} className="opacity-80" />
+            </div>
+            <p className="text-xs opacity-80 mt-2">3 new this month</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-5 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm opacity-90">Style Score</p>
+                <p className="text-3xl font-bold mt-1">92%</p>
+              </div>
+              <Award size={32} className="opacity-80" />
+            </div>
+            <p className="text-xs opacity-80 mt-2">Top 10% of users</p>
+          </div>
+        </div>
 
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-bold text-lg leading-tight">
-                  {s.step}. {s.label}
-                </h3>
-                {s.done && (
-                  <span className="text-xs font-semibold text-green-600 bg-green-100 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-full ml-2 shrink-0">
-                    Done
-                  </span>
+        {/* Steps Grid */}
+        <h2 className="text-2xl font-bold mb-6">Your Style Journey</h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {steps.map((s, idx) => (
+            <Link key={s.label} href={s.href} className="group animate-slide-in-left" style={{ animationDelay: `${idx * 0.1}s` }}>
+              <div className={`relative p-6 rounded-2xl border-2 transition-all duration-300 card-hover ${
+                s.done
+                  ? 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-900'
+                  : `${s.bg} border-gray-100 dark:border-gray-800`
+              }`}>
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-4 shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
+                  <s.icon size={24} className="text-white" />
+                </div>
+
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-bold text-lg">
+                    {s.step}. {s.label}
+                  </h3>
+                  {s.done && (
+                    <span className="text-xs font-semibold text-green-600 bg-green-100 dark:bg-green-900/40 dark:text-green-400 px-2 py-1 rounded-full">
+                      ✓ Done
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{s.desc}</p>
+                
+                {!s.done && (
+                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Sparkles size={16} className="text-violet-500" />
+                  </div>
                 )}
               </div>
+            </Link>
+          ))}
+        </div>
 
-              <p className="text-sm text-gray-500 dark:text-gray-400 leading-snug">{s.desc}</p>
+        {/* Profile Incomplete Alert */}
+        {!hasProfile && (
+          <div className="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-900 rounded-2xl p-6 animate-slide-up">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center shrink-0">
+                <Sparkles size={20} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-amber-800 dark:text-amber-300">Complete your Body Profile first</h3>
+                <p className="text-sm text-amber-700 dark:text-amber-400 mt-1">
+                  The AI uses your skin tone, body shape, hair, and eye colour to suggest outfits that suit you perfectly.
+                </p>
+                <Link href="/body-profile" className="inline-flex items-center gap-2 mt-3 text-sm font-bold text-amber-700 dark:text-amber-300 hover:gap-3 transition-all">
+                  Fill in my profile <Sparkles size={14} />
+                </Link>
+              </div>
             </div>
-          </Link>
-        ))}
-      </div>
+          </div>
+        )}
 
-      {!hasProfile && (
-        <div className="mb-8 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 rounded-2xl p-5 flex items-start gap-4">
-          <Sparkles className="text-amber-500 shrink-0 mt-0.5" size={20} />
-          <div>
-            <p className="font-semibold text-amber-800 dark:text-amber-300 text-sm">Complete your Body Profile first</p>
-            <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">
-              The AI uses your skin tone, body shape, hair, and eye colour to suggest outfits that suit you.
-            </p>
-            <Link href="/body-profile" className="inline-block mt-3 text-xs font-bold text-amber-700 dark:text-amber-300 underline underline-offset-2">
-              Fill in my profile
+        {/* CTA Banner */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 p-8 text-white shadow-2xl animate-slide-up">
+          <div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+            }}
+          />
+          
+          <div className="relative flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Ready to discover your style?</h2>
+              <p className="opacity-90 max-w-lg text-sm">
+                Complete your body profile to get accurate recommendations, then explore themes to generate outfits.
+              </p>
+            </div>
+            <Link
+              href={hasProfile ? '/themes' : '/body-profile'}
+              className="group shrink-0 bg-white text-gray-900 px-6 py-3 rounded-xl font-bold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2"
+            >
+              {hasProfile ? 'Generate outfits' : 'Start profile'}
+              <Sparkles size={18} className="group-hover:rotate-12 transition-transform" />
             </Link>
           </div>
         </div>
-      )}
 
-      <div className="bg-gradient-to-br from-violet-500 to-pink-500 rounded-3xl p-8 text-white flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-1">Ready to design?</h2>
-          <p className="opacity-90 max-w-lg text-sm">
-            Complete your body profile to get accurate recommendations, then jump into the theme picker to generate outfits.
-          </p>
+        {/* Recent Activity */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <Clock size={24} className="text-violet-500" />
+            Recent Activity
+          </h2>
+          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+            <div className="space-y-4">
+              {[
+                { action: 'Generated formal outfits', time: '2 hours ago', icon: '👔' },
+                { action: 'Saved wedding collection', time: 'Yesterday', icon: '💒' },
+                { action: 'Updated style preferences', time: '3 days ago', icon: '✨' },
+              ].map((activity, idx) => (
+                <div key={idx} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <div className="text-2xl">{activity.icon}</div>
+                  <div className="flex-1">
+                    <p className="font-medium">{activity.action}</p>
+                    <p className="text-xs text-gray-400">{activity.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <Link
-          href={hasProfile ? '/themes' : '/body-profile'}
-          className="shrink-0 bg-white text-black px-6 py-3 rounded-xl font-bold hover:scale-105 transition-transform text-sm"
-        >
-          {hasProfile ? 'Generate outfits' : 'Start profile'}
-        </Link>
       </div>
     </div>
   );

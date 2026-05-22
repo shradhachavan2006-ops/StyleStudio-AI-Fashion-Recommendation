@@ -19,7 +19,7 @@ export default function Register() {
     setLoading(true);
     try {
       await register(name, email, password);
-      router.push('/dashboard');
+      router.push('/body-profile');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
     } finally {

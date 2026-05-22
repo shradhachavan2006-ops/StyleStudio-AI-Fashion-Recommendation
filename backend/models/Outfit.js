@@ -24,6 +24,13 @@ const outfitSchema = new mongoose.Schema({
   imageUrl: { type: String, default: '' },
 
   rating: { type: Number, default: 0, min: 0, max: 5 },
+  status: {
+    type: String,
+    enum: ['approved', 'review', 'removed'],
+    default: 'approved',
+    index: true,
+  },
+  adminNotes: { type: String, default: '' },
 
 }, { timestamps: true });
 

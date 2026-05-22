@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
 
 const recommendationRoutes = require('./routes/recommendationRoutes');
 
@@ -13,7 +12,6 @@ const app = express();
 // =============================
 // ✅ ENSURE FOLDERS EXIST
 // =============================
-if (!fs.existsSync('uploads')) fs.mkdirSync('uploads');
 
 
 // =============================
@@ -32,9 +30,6 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // ✅ STATIC FILES (VERY IMPORTANT)
 // =============================
 
-// uploads (already working)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 // 🔥 ADD THIS (YOUR FIX)
 app.use('/images', express.static(path.join(__dirname, '../New Images/New Images')));
 
@@ -46,7 +41,6 @@ app.use('/images', express.static(path.join(__dirname, '../New Images/New Images
 // ✅ ROUTES
 // =============================
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/upload', require('./routes/upload'));
 app.use('/api/outfits', require('./routes/outfit'));
 app.use('/api/saved-outfits', require('./routes/savedOutfit'));   // outfit bookmarks
 app.use('/api/profile', require('./routes/profile'));
@@ -54,6 +48,7 @@ app.use('/api/actions', require('./routes/actions'));
 app.use('/api/feedback', require('./routes/feedback'));
 app.use('/api/recommend', recommendationRoutes);
 app.use('/api/dataset', require('./routes/dataset'));  // Dataset inspection tool
+app.use('/api/admin', require('./routes/admin'));
 
 
 // =============================

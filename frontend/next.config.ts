@@ -3,11 +3,9 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      // DALL-E generated outfit images
-      { protocol: 'https', hostname: 'oaidalleapiprodscus.blob.core.windows.net' },
       // Unsplash fallback images
       { protocol: 'https', hostname: 'images.unsplash.com' },
-      // Local backend uploads
+      // Local backend dataset images
       { protocol: 'http', hostname: 'localhost' },
     ],
   },

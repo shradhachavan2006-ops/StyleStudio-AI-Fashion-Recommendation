@@ -11,17 +11,17 @@
   ],
   "extraImageFilesNotInCsv": 208,
   "themeCounts": {
-    "traditional": 6116,
+    "traditional": 6139,
     "casual": 4416,
     "office": 882,
     "wedding": 858,
-    "party": 32
+    "party": 9
   },
   "usageCounts": {
-    "Ethnic": 6974,
+    "Ethnic": 6997,
     "Casual": 4416,
     "Formal": 882,
-    "Party": 32
+    "Party": 9
   },
   "articleTypeCounts": {
     "Sarees": 2491,

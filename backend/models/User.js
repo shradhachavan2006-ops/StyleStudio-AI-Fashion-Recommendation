@@ -7,6 +7,22 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
 
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+      index: true
+    },
+    status: {
+      type: String,
+      enum: ['active', 'suspended'],
+      default: 'active',
+      index: true
+    },
+    lastLoginAt: { type: Date, default: null },
+    lastActiveAt: { type: Date, default: null },
+    loginCount: { type: Number, default: 0 },
+
     gender: {
       type: String,
       enum: ['male', 'female', 'non-binary', 'prefer-not-to-say'],

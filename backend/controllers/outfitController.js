@@ -1,7 +1,7 @@
 const Outfit  = require('../models/Outfit');
 const User    = require('../models/User');
 const http    = require('http');
-const { pickImage, pickImageByCategory, pickImageByPieceName, resetUsedIds, detectTopwearType, isFullLengthOutfit } = require('../services/imageMatchingService');
+const { pickImage, pickImageByCategory, pickImageByPieceName, isBottomwearImageUrl, isGenderMismatchedImageUrl, resetUsedIds, detectTopwearType, isFullLengthOutfit } = require('../services/imageMatchingService');
 const { rankOutfits } = require('../services/personalizationEngine');
 const { buildBehaviorProfile, scoreOutfitFromBehavior } = require('../services/behaviorProfileService');
 
@@ -61,60 +61,99 @@ const THEME_DESCRIPTIONS = {
 };
 
 const THEME_DATA_ALIASES = {
-  formal: 'office',
+  office: 'formal',
   travel: 'casual',
 };
 
+function effectiveGenderForTheme(theme, gender) {
+  const normalized = (gender || '').toLowerCase();
+  if (theme === 'party' && ['prefer-not-to-say', 'unisex', ''].includes(normalized)) {
+    return 'female';
+  }
+  return gender || 'unisex';
+}
+
+function isWesternPartyOutfit(outfit) {
+  const text = [
+    outfit.outfitName,
+    outfit.description,
+    ...(outfit.clothingPieces || []),
+    outfit.top,
+    outfit.bottom,
+  ].filter(Boolean).join(' ').toLowerCase();
+
+  const wanted = [
+    'dress', 'cocktail', 'bodycon', 'slip dress', 'mini dress', 'satin',
+    'sequin', 'sequined', 'velvet', 'evening', 'club', 'western',
+    'blazer', 'tuxedo', 'suit', 'party shirt',
+  ];
+  const blocked = [
+    'kurta', 'sherwani', 'saree', 'lehenga', 'dhoti', 'churidar',
+    'gown', 'groom', 'office', 'casual',
+  ];
+
+  return wanted.some((word) => text.includes(word)) &&
+    !blocked.some((word) => text.includes(word));
+}
+
 const MOCK_OUTFITS = {
   formal: [
-    { outfitName:'Classic Power Suit',    description:'A sharp navy suit with crisp white shirt and silk tie.',          colors:['#1E3A5F','#FFFFFF','#C5A028'], clothingPieces:['Navy Blazer','Tailored Trousers','White Dress Shirt','Silk Tie','Oxford Shoes'] },
-    { outfitName:'Executive Charcoal',    description:'Charcoal grey with subtle pinstripes for boardroom confidence.',  colors:['#4A4A4A','#F5F5F5','#8B0000'], clothingPieces:['Charcoal Blazer','Matching Trousers','Light Grey Shirt','Burgundy Tie','Derby Shoes'] },
-    { outfitName:'Corporate Elegance',    description:'Classic black suit balanced with gold accessories.',               colors:['#1C1C1C','#D4AF37','#FFFFFF'], clothingPieces:['Black Suit Jacket','Black Trousers','White Shirt','Gold Cufflinks','Patent Shoes'] },
-    { outfitName:'Navy Commander',        description:'Deep navy double-breasted suit with ivory pocket square.',          colors:['#0A2342','#FFFFF0','#C5A028'], clothingPieces:['Navy Double-Breasted Blazer','Navy Trousers','Ivory Shirt','Leather Belt','Oxford Shoes'] },
-    { outfitName:'Slate Grey Authority',  description:'Slim-fit slate grey suit with a sky-blue shirt for contrast.',      colors:['#708090','#87CEEB','#1C1C1C'], clothingPieces:['Slate Grey Blazer','Slim Trousers','Sky Blue Shirt','Tie','Formal Shoes'] },
-    { outfitName:'Burgundy Boardroom',    description:'Rich burgundy blazer paired with charcoal trousers.',               colors:['#800020','#4A4A4A','#FFFFFF'], clothingPieces:['Burgundy Blazer','Charcoal Trousers','White Shirt','Leather Belt','Derby Shoes'] },
-    { outfitName:'Pinstripe Prestige',    description:'Classic pinstripe suit in midnight blue for elite occasions.',       colors:['#191970','#FFFFFF','#D4AF37'], clothingPieces:['Pinstripe Blazer','Pinstripe Trousers','White Shirt','Gold Tie','Oxford Shoes'] },
-    { outfitName:'Modern Minimalist Suit',description:'All-black slim suit with a white turtleneck for modern flair.',     colors:['#1C1C1C','#FFFFFF','#C0C0C0'], clothingPieces:['Black Blazer','Black Trousers','White Turtleneck','Leather Watch','Formal Shoes'] },
+    { outfitName:'White Boardroom Shirt', description:'Crisp white formal shirt for polished business settings.',        colors:['#FFFFFF','#1E3A5F','#C5A028'], clothingPieces:['White Formal Shirt','Silk Tie','Leather Watch'] },
+    { outfitName:'Sky Blue Formal',       description:'Light blue formal shirt for clean corporate styling.',            colors:['#87CEEB','#1E3A5F','#FFFFFF'], clothingPieces:['Sky Blue Formal Shirt','Tie','Leather Watch'] },
+    { outfitName:'Charcoal Formal Shirt', description:'Charcoal formal shirt for sharp professional confidence.',        colors:['#4A4A4A','#FFFFFF','#8B0000'], clothingPieces:['Charcoal Formal Shirt','Burgundy Tie','Watch'] },
+    { outfitName:'Navy Office Shirt',     description:'Navy formal shirt with restrained executive polish.',             colors:['#0A2342','#FFFFFF','#C5A028'], clothingPieces:['Navy Formal Shirt','Pocket Square','Leather Watch'] },
+    { outfitName:'Ivory Meeting Shirt',   description:'Ivory formal shirt for a refined meeting-ready outfit.',          colors:['#FFFFF0','#1C1C1C','#C5A028'], clothingPieces:['Ivory Formal Shirt','Tie','Watch'] },
+    { outfitName:'Burgundy Formal',       description:'Burgundy formal shirt for confident office occasions.',           colors:['#800020','#FFFFFF','#4A4A4A'], clothingPieces:['Burgundy Formal Shirt','Leather Belt','Watch'] },
+    { outfitName:'Grey Formal Shirt',     description:'Grey formal shirt with understated professional balance.',        colors:['#708090','#FFFFFF','#1C1C1C'], clothingPieces:['Grey Formal Shirt','Tie','Leather Watch'] },
+    { outfitName:'Black Formal Shirt',    description:'Black formal shirt for sleek evening-formal confidence.',         colors:['#1C1C1C','#FFFFFF','#C0C0C0'], clothingPieces:['Black Formal Shirt','Silver Watch','Tie'] },
   ],
   casual: [
-    { outfitName:'Weekend Chic',      description:'Comfortable denim and cotton combo for a relaxed day out.',         colors:['#4169E1','#FFFFFF','#8B4513'], clothingPieces:['Slim Jeans','White T-Shirt','Denim Jacket','White Sneakers','Canvas Tote'] },
-    { outfitName:'Urban Comfort',     description:'Modern streetwear with athleisure influence.',                       colors:['#2F2F2F','#FF6B35','#FFFFFF'], clothingPieces:['Jogger Pants','Graphic Tee','Zip Hoodie','Chunky Sneakers','Cap'] },
-    { outfitName:'Sunday Stroll',     description:'Relaxed khaki chinos and a linen shirt for weekend errands.',         colors:['#C8A560','#FFFFFF','#4A7C59'], clothingPieces:['Khaki Chinos','White Linen Shirt','Loafers','Canvas Tote','Sunglasses'] },
-    { outfitName:'Street Smart',      description:'Slim black jeans with a bold graphic sweatshirt.',                    colors:['#1C1C1C','#FF6B35','#FFFFFF'], clothingPieces:['Black Slim Jeans','Graphic Sweatshirt','White Sneakers','Backpack','Cap'] },
-    { outfitName:'Coastal Casual',    description:'Light blue shirt and white shorts for a breezy coastal feel.',         colors:['#87CEEB','#FFFFFF','#D2B48C'], clothingPieces:['Light Blue Shirt','White Shorts','Canvas Sneakers','Crossbody Bag','Sunglasses'] },
-    { outfitName:'Minimal Monday',    description:'Clean white tee with olive chinos for effortless minimalism.',         colors:['#FFFFFF','#808000','#8B4513'], clothingPieces:['White T-Shirt','Olive Chinos','Tan Loafers','Leather Belt','Watch'] },
-    { outfitName:'Denim Duo',         description:'Classic double denim with white sneakers and a cap.',                  colors:['#4169E1','#1560BD','#FFFFFF'], clothingPieces:['Denim Jacket','Blue Jeans','White T-Shirt','White Sneakers','Baseball Cap'] },
-    { outfitName:'Earth Tone Ease',   description:'Earthy terracotta hoodie with beige joggers for cozy comfort.',        colors:['#E2725B','#F5DEB3','#8B4513'], clothingPieces:['Terracotta Hoodie','Beige Jogger Pants','White Sneakers','Canvas Backpack','Watch'] },
+    { outfitName:'White Tee Ease',    description:'Clean white casual t-shirt for relaxed everyday styling.',           colors:['#FFFFFF','#4169E1','#8B4513'], clothingPieces:['White T-Shirt','White Sneakers','Canvas Tote'] },
+    { outfitName:'Graphic Tee Mood',  description:'Graphic tee styling for casual streetwear energy.',                  colors:['#2F2F2F','#FF6B35','#FFFFFF'], clothingPieces:['Graphic Tee','Chunky Sneakers','Cap'] },
+    { outfitName:'Linen Casual Shirt',description:'Light casual shirt for warm weekend plans.',                         colors:['#C8A560','#FFFFFF','#4A7C59'], clothingPieces:['White Linen Shirt','Canvas Tote','Sunglasses'] },
+    { outfitName:'Black Casual Top',  description:'Black casual top with an easy urban feel.',                          colors:['#1C1C1C','#FF6B35','#FFFFFF'], clothingPieces:['Black Casual Top','White Sneakers','Backpack'] },
+    { outfitName:'Blue Casual Shirt', description:'Light blue casual shirt for a breezy relaxed look.',                 colors:['#87CEEB','#FFFFFF','#D2B48C'], clothingPieces:['Light Blue Casual Shirt','Canvas Sneakers','Crossbody Bag'] },
+    { outfitName:'Minimal Tee',       description:'Plain t-shirt styling for simple everyday wear.',                    colors:['#FFFFFF','#808000','#8B4513'], clothingPieces:['White T-Shirt','Leather Watch','Sunglasses'] },
+    { outfitName:'Denim Casual Shirt',description:'Denim shirt energy for a classic casual outfit.',                    colors:['#4169E1','#1560BD','#FFFFFF'], clothingPieces:['Denim Casual Shirt','White Sneakers','Baseball Cap'] },
+    { outfitName:'Terracotta Tee',    description:'Warm terracotta t-shirt for an easy earth-tone outfit.',             colors:['#E2725B','#F5DEB3','#8B4513'], clothingPieces:['Terracotta T-Shirt','Canvas Backpack','Watch'] },
   ],
   traditional: [
-    { outfitName:'Royal Sherwani',       description:'Embroidered sherwani in jewel tones for festive celebrations.',   colors:['#800020','#D4AF37','#FFFFF0'], clothingPieces:['Sherwani Coat','Churidar Pants','Embroidered Dupatta','Mojari Shoes','Turban'] },
-    { outfitName:'Silk Saree Glamour',   description:'Luxurious Kanjivaram silk saree for grand occasions.',             colors:['#9B111E','#FFD700','#008000'], clothingPieces:['Kanjivaram Saree','Matching Blouse','Pearl Jewelry','Embellished Sandals'] },
-    { outfitName:'Anarkali Elegance',    description:'Floor-length anarkali with delicate embroidery.',                  colors:['#4B0082','#FFB6C1','#C0C0C0'], clothingPieces:['Anarkali Kurta','Palazzo Pants','Organza Dupatta','Silver Jewelry','Heels'] },
-    { outfitName:'Dhoti Classic',        description:'Crisp white dhoti with a silk kurta for traditional purity.',      colors:['#FFFFFF','#D4AF37','#FF8C00'], clothingPieces:['Silk Kurta','White Dhoti','Juttis','Gold Necklace','Stole'] },
-    { outfitName:'Pathani Ensemble',     description:'Linen pathani suit with kolhapuri sandals for rustic charm.',      colors:['#C8A560','#8B4513','#FFFFFF'], clothingPieces:['Pathani Kurta','Pathani Salwar','Kolhapuri Sandals','Leather Watch'] },
-    { outfitName:'Lehenga Choli Gala',   description:'Vivid pink lehenga with gold embroidery for festive events.',      colors:['#FF69B4','#D4AF37','#FFFFFF'], clothingPieces:['Pink Lehenga','Gold Choli','Net Dupatta','Kundan Jewelry','Heels'] },
-    { outfitName:'Cotton Kurta Comfort', description:'Breathable cotton kurta with churidar for casual ethnic days.',    colors:['#87CEEB','#FFFFFF','#C8A560'], clothingPieces:['Blue Cotton Kurta','White Churidar','Kolhapuri Sandals','Leather Watch'] },
-    { outfitName:'Festive Sherwani Gold',description:'Gold-trim cream sherwani for Diwali and festive gatherings.',      colors:['#FFFDD0','#D4AF37','#FF8C00'], clothingPieces:['Cream Sherwani','Gold Churidar','Embroidered Juttis','Gold Brooch'] },
+    { outfitName:'Off White Kurti',      description:'Off-white kurti styling for a clean traditional look.',           colors:['#FFFFF0','#D4AF37','#FF8C00'], clothingPieces:['Off White Kurti','Gold Earrings','Juttis'] },
+    { outfitName:'Navy Kurta Set',       description:'Navy kurta set for graceful ethnic wear.',                        colors:['#0A2342','#D4AF37','#FFFFFF'], clothingPieces:['Navy Kurta Set','Juttis','Gold Earrings'] },
+    { outfitName:'Green Printed Kurti',  description:'Printed green kurti for everyday traditional styling.',           colors:['#008000','#FFFFFF','#C8A560'], clothingPieces:['Green Printed Kurti','Kolhapuri Sandals','Watch'] },
+    { outfitName:'Yellow Chikankari',    description:'Yellow chikankari kurti with delicate ethnic texture.',           colors:['#FFD700','#FFFFFF','#C8A560'], clothingPieces:['Yellow Chikankari Kurti','Silver Earrings','Juttis'] },
+    { outfitName:'Black A-Line Kurti',   description:'Black A-line kurti for a strong traditional silhouette.',         colors:['#1C1C1C','#D4AF37','#FFFFFF'], clothingPieces:['Black A-Line Kurti','Gold Earrings','Sandals'] },
+    { outfitName:'Maroon Printed Kurti', description:'Maroon printed kurti for warm festive-casual ethnic wear.',       colors:['#800020','#F5DEB3','#FFFFFF'], clothingPieces:['Maroon Printed Kurti','Juttis','Bracelet'] },
+    { outfitName:'Teal Solid Kurti',     description:'Teal solid kurti with simple traditional elegance.',              colors:['#008080','#FFFFFF','#C0C0C0'], clothingPieces:['Teal Solid Kurti','Silver Jewelry','Flats'] },
+    { outfitName:'Pink Kurta Set',       description:'Pink kurta set for soft traditional styling.',                    colors:['#FFB6C1','#F5DEB3','#FFFFFF'], clothingPieces:['Pink Kurta Set','Juttis','Earrings'] },
   ],
   wedding: [
-    { outfitName:'Bridal Bliss',        description:'Opulent lehenga choli with zardozi work for the perfect bridal look.',   colors:['#FF1744','#FFD700','#FFFFF0'], clothingPieces:['Embroidered Lehenga','Heavy Blouse','Bridal Dupatta','Kundan Jewelry','Heels'] },
-    { outfitName:'Groom Magnificence',  description:'Regal cream and gold sherwani for an unforgettable ceremony.',           colors:['#FFFDD0','#D4AF37','#8B0000'], clothingPieces:['Cream Sherwani','Gold Dhoti Pants','Safa Turban','Royal Brooch','Juttis'] },
-    { outfitName:'Cocktail Bride',      description:'Contemporary fusion lehenga blending tradition with modern aesthetics.',  colors:['#FF69B4','#C0C0C0','#FFFFFF'], clothingPieces:['Rose Gold Lehenga','Crop Top Blouse','Net Dupatta','Diamond Jewelry','Heels'] },
-    { outfitName:'Royal Blue Groom',    description:'Midnight blue sherwani with silver accents for a royal groom look.',     colors:['#191970','#C0C0C0','#FFFFFF'], clothingPieces:['Blue Sherwani','White Churidar','Silver Brooch','Embroidered Juttis','Turban'] },
-    { outfitName:'Ivory Elegance',      description:'Ivory and gold saree with heavy kundan work for the bride.',            colors:['#FFFFF0','#D4AF37','#FF8C00'], clothingPieces:['Ivory Silk Saree','Gold Blouse','Kundan Necklace','Gold Bangles','Heels'] },
-    { outfitName:'Sangeet Stunner',     description:'Electric blue lehenga with mirror work for a dazzling sangeet night.',  colors:['#4169E1','#C0C0C0','#FFD700'], clothingPieces:['Blue Lehenga','Mirror Work Choli','Dupatta','Silver Jewelry','Heels'] },
-    { outfitName:'Pastel Romance',      description:'Soft lavender lehenga with pearl accents for a dreamy ceremony.',       colors:['#E6E6FA','#FFFFFF','#D4AF37'], clothingPieces:['Lavender Lehenga','Pearl Blouse','Embroidered Dupatta','Pearl Jewelry','Flats'] },
-    { outfitName:'Classic Bandhgala',   description:'Rich maroon bandhgala suit with cream trousers for groom family.',      colors:['#800020','#FFFDD0','#D4AF37'], clothingPieces:['Maroon Bandhgala Blazer','Cream Trousers','Formal Shoes','Gold Brooch','Watch'] },
+    { outfitName:'Zari Bridal Lehenga', description:'Embroidered zari lehenga choli suitable for wedding celebrations.', colors:['#FF1744','#FFD700','#FFFFF0'], clothingPieces:['Embroidered Zari Lehenga Choli','Kundan Jewelry','Heels'] },
+    { outfitName:'Cream Wedding Sherwani',description:'Cream embroidered sherwani with rich wedding-ready detail.',      colors:['#FFFDD0','#D4AF37','#8B0000'], clothingPieces:['Embroidered Cream Sherwani','Royal Brooch','Juttis'] },
+    { outfitName:'Rose Gold Wedding Lehenga',description:'Rose gold embroidered lehenga for elegant wedding functions.',colors:['#FF69B4','#C0C0C0','#FFFFFF'], clothingPieces:['Embroidered Rose Gold Lehenga Choli','Diamond Jewelry','Heels'] },
+    { outfitName:'Blue Zari Sherwani',  description:'Blue zari sherwani for a regal wedding outfit.',                    colors:['#191970','#C0C0C0','#FFFFFF'], clothingPieces:['Blue Zari Sherwani','Silver Brooch','Juttis'] },
+    { outfitName:'Ivory Silk Saree',    description:'Ivory silk saree with heavy wedding embroidery.',                   colors:['#FFFFF0','#D4AF37','#FF8C00'], clothingPieces:['Ivory Embroidered Silk Saree','Kundan Necklace','Gold Bangles'] },
+    { outfitName:'Mirror Work Lehenga', description:'Blue embroidered mirror-work lehenga for sangeet styling.',         colors:['#4169E1','#C0C0C0','#FFD700'], clothingPieces:['Blue Embroidered Lehenga Choli','Silver Jewelry','Heels'] },
+    { outfitName:'Lavender Bridal Lehenga',description:'Pastel embroidered lehenga for soft wedding elegance.',          colors:['#E6E6FA','#FFFFFF','#D4AF37'], clothingPieces:['Lavender Embroidered Lehenga Choli','Pearl Jewelry','Flats'] },
+    { outfitName:'Maroon Zardozi Sherwani',description:'Maroon zardozi sherwani for a rich wedding look.',              colors:['#800020','#FFFDD0','#D4AF37'], clothingPieces:['Maroon Zardozi Sherwani','Gold Brooch','Watch'] },
   ],
   party: [
-    { outfitName:'Midnight Glam',     description:'Sequined bodycon dress for an electrifying night out.',              colors:['#1C1C1C','#C0C0C0','#FF1744'], clothingPieces:['Sequin Mini Dress','Strappy Heels','Metallic Clutch','Statement Earrings'] },
-    { outfitName:'Neon Nights',       description:'Bold neon accents on a contemporary silhouette.',                    colors:['#39FF14','#1C1C1C','#FF00FF'], clothingPieces:['Neon Crop Top','Black High-Waist Pants','Platform Boots','Neon Accessories'] },
-    { outfitName:'Rose Gold Dreams',  description:'Elegant rose gold satin slip dress with minimal accessories.',        colors:['#B76E79','#FFE4E1','#D4AF37'], clothingPieces:['Rose Gold Slip Dress','Nude Mules','Gold Pendant','Mini Clutch'] },
-    { outfitName:'Black Tie Casual',  description:'All-black outfit with a leather jacket for effortless cool.',         colors:['#1C1C1C','#C0C0C0','#FF1744'], clothingPieces:['Black Slim Jeans','Black Shirt','Leather Jacket','Chelsea Boots','Watch'] },
-    { outfitName:'Velvet Underground', description:'Deep purple velvet blazer with black trousers for retro glamour.',   colors:['#8B008B','#1C1C1C','#D4AF37'], clothingPieces:['Purple Velvet Blazer','Black Trousers','Black Shirt','Loafers','Watch'] },
-    { outfitName:'Festive Fusion',    description:'Gold embroidered kurta with dark jeans for an indo-western look.',    colors:['#D4AF37','#1C1C1C','#8B0000'], clothingPieces:['Gold Embroidered Kurta','Dark Slim Jeans','Leather Belt','Loafers','Watch'] },
-    { outfitName:'Glitter Queen',     description:'Silver holographic mini skirt with black crop top for ultimate glam.',colors:['#C0C0C0','#1C1C1C','#FF00FF'], clothingPieces:['Silver Mini Skirt','Black Crop Top','Platform Heels','Clutch','Hoop Earrings'] },
-    { outfitName:'Emerald Evening',   description:'Rich emerald green dress with gold accents for a sophisticated look.',colors:['#008000','#D4AF37','#1C1C1C'], clothingPieces:['Emerald Green Dress','Gold Heels','Gold Clutch','Gold Earrings'] },
+    { outfitName:'Midnight Glam',       description:'Sequined black bodycon dress for an electrifying night out.',        colors:['#1C1C1C','#C0C0C0','#FF1744'], clothingPieces:['Black Sequin Mini Dress','Strappy Heels','Metallic Clutch','Statement Earrings'] },
+    { outfitName:'Rose Gold Dreams',    description:'Rose gold satin slip dress with minimal party accessories.',         colors:['#B76E79','#FFE4E1','#D4AF37'], clothingPieces:['Rose Gold Slip Dress','Nude Heels','Gold Pendant','Mini Clutch'] },
+    { outfitName:'Emerald Evening',     description:'Rich emerald green cocktail dress with gold accents.',               colors:['#008000','#D4AF37','#1C1C1C'], clothingPieces:['Emerald Green Dress','Gold Heels','Gold Clutch','Gold Earrings'] },
+    { outfitName:'Velvet After Dark',   description:'Deep velvet mini dress styled for a western party look.',            colors:['#4B0082','#1C1C1C','#C0C0C0'], clothingPieces:['Purple Velvet Dress','Black Heels','Silver Clutch','Hoop Earrings'] },
+    { outfitName:'Silver Spotlight',    description:'Metallic silver mini dress for a bold club-night entrance.',         colors:['#C0C0C0','#1C1C1C','#FF00FF'], clothingPieces:['Silver Mini Dress','Platform Heels','Black Clutch','Hoop Earrings'] },
+    { outfitName:'Scarlet Cocktail',    description:'Red cocktail dress with sleek heels for celebrations.',              colors:['#CC2200','#1C1C1C','#D4AF37'], clothingPieces:['Red Cocktail Dress','Black Heels','Gold Clutch','Drop Earrings'] },
+    { outfitName:'Black Satin Night',   description:'Black satin dress with refined accessories for evening parties.',    colors:['#1C1C1C','#D4AF37','#FFFFFF'], clothingPieces:['Black Satin Dress','Gold Heels','Gold Clutch','Gold Earrings'] },
+    { outfitName:'Pink Party Edit',     description:'Bright pink western dress with playful party styling.',              colors:['#FF69B4','#FFFFFF','#C0C0C0'], clothingPieces:['Pink Party Dress','Silver Heels','White Clutch','Statement Earrings'] },
+  ],
+  partyMen: [
+    { outfitName:'Navy Night Blazer',     description:'Navy embroidered blazer styled for a polished party look.',        colors:['#1E3A5F','#FFFFFF','#C0C0C0'], clothingPieces:['Navy Blue Embroidered Party Blazer','White Shirt','Black Trousers','Formal Shoes','Watch'] },
+    { outfitName:'Blue Texture Edit',     description:'Textured blue blazer with crisp separates for evening events.',    colors:['#4169E1','#FFFFFF','#111111'], clothingPieces:['Blue Textured Party Blazer','White Shirt','Black Trousers','Formal Shoes','Belt'] },
+    { outfitName:'White Tux Energy',      description:'White tuxedo blazer with sharp black styling for standout parties.',colors:['#FFFFFF','#111111','#C0C0C0'], clothingPieces:['White Tuxedo Party Blazer','Black Shirt','Black Trousers','Formal Shoes','Watch'] },
+    { outfitName:'Green Slim Fit',        description:'Green slim-fit blazer balanced with dark party essentials.',       colors:['#228B22','#111111','#FFFFFF'], clothingPieces:['Green Slim Fit Party Blazer','Black Shirt','Black Trousers','Formal Shoes','Belt'] },
+    { outfitName:'Black Tux Night',       description:'Classic black tuxedo-inspired blazer for late-night celebrations.', colors:['#111111','#FFFFFF','#C0C0C0'], clothingPieces:['Black Tuxedo Party Blazer','White Shirt','Black Trousers','Formal Shoes','Watch'] },
+    { outfitName:'Burgundy Satin Shirt',  description:'Burgundy satin party shirt with sleek trousers and dress shoes.',  colors:['#800020','#111111','#D4AF37'], clothingPieces:['Burgundy Satin Party Shirt','Black Trousers','Formal Shoes','Gold Watch'] },
   ],
   office: [
     { outfitName:'Business Casual Pro',description:'Polished office look commanding respect without sacrificing ease.',colors:['#4A4A4A','#F5F5F5','#1E3A5F'], clothingPieces:['Structured Blazer','Tailored Chinos','Oxford Shirt','Derby Shoes','Leather Watch'] },
@@ -149,76 +188,11 @@ exports.generateOutfits = async (req, res) => {
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const { bodyCharacteristics, gender } = user;
-    const themeDesc = THEME_DESCRIPTIONS[normalizedTheme] || 'everyday wear';
+    const imageGender = effectiveGenderForTheme(normalizedTheme, gender);
     const dataTheme = THEME_DATA_ALIASES[normalizedTheme] || normalizedTheme;
     let outfitsData = MOCK_OUTFITS[dataTheme] || MOCK_OUTFITS.casual;
-
-    // Use OpenAI if API key is available
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (apiKey && apiKey !== 'your_openai_api_key_here') {
-      try {
-        const OpenAI = require('openai');
-        const openai = new OpenAI({ apiKey });
-
-        const prompt = `Generate 8 outfit combinations for a fashion app.
-User profile:
-- Body Type: ${bodyCharacteristics?.bodyType || 'Athletic'}
-- Skin Tone: ${bodyCharacteristics?.skinTone || 'Medium'}
-- Color Preferences: ${bodyCharacteristics?.colorPreferences?.join(', ') || 'Neutral tones'}
-- Gender: ${gender || 'unisex'}
-- Theme/Occasion: ${normalizedTheme} (${themeDesc})
-
-Return a JSON array of exactly 8 objects. Each object MUST have ALL of these fields:
-{
-  "outfitName": "Creative outfit name",
-  "description": "2-sentence description of the outfit and why it suits this person",
-  "top": "Single top garment item (e.g. White Linen Shirt)",
-  "bottom": "Single bottom garment item (e.g. Navy Chinos)",
-  "colors": ["#hex1", "#hex2", "#hex3"],
-  "style": "one of: minimal | bold | elegant | trendy | sporty | streetwear",
-  "occasion": "${normalizedTheme}",
-  "clothingPieces": ["Item 1", "Item 2", "Item 3", "Item 4"]
-}
-Return ONLY the JSON array, no markdown, no extra text.`;
-
-        const response = await openai.chat.completions.create({
-          model: 'gpt-4o-mini',
-          messages: [{ role: 'user', content: prompt }],
-          max_tokens: 1500,
-        });
-
-        const content = response.choices[0].message.content.trim();
-        const parsed = JSON.parse(content);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          outfitsData = parsed;
-
-          // Generate images for the 6 outfits in parallel
-          try {
-            console.log('Generating images for outfits via DALL-E 3...');
-            const imagePromises = outfitsData.map(async (outfit) => {
-              try {
-                const imagePrompt = `A high quality fashion editorial photo focusing on a stylish outfit completely isolated against a clean minimalist studio background. The outfit name is "${outfit.outfitName}". Description: ${outfit.description}. ${outfit.clothingPieces.join(', ')}. The outfit incorporates these colors: ${outfit.colors.join(', ')}. No text in the image.`;
-                const imageRes = await openai.images.generate({
-                  model: 'dall-e-3',
-                  prompt: imagePrompt,
-                  n: 1,
-                  size: '1024x1024',
-                });
-                outfit.imageUrl = imageRes.data[0].url;
-              } catch (imgErr) {
-                console.error(`Failed to generate image for ${outfit.outfitName}:`, imgErr.message);
-                outfit.imageUrl = ''; // Fallback empty
-              }
-            });
-            await Promise.all(imagePromises);
-            console.log('Finished generating outfit images.');
-          } catch (parallelErr) {
-            console.error('Error during parallel image generation:', parallelErr.message);
-          }
-        }
-      } catch (aiErr) {
-        console.error('OpenAI outfit gen failed, using mock data:', aiErr.message);
-      }
+    if (normalizedTheme === 'party' && ['male', 'men'].includes((imageGender || '').toLowerCase())) {
+      outfitsData = MOCK_OUTFITS.partyMen;
     }
 
     // Delete previous generated outfits for this user + theme
@@ -239,7 +213,7 @@ Return ONLY the JSON array, no markdown, no extra text.`;
           theme:         normalizedTheme,
         };
         const userDescriptor = {
-          gender:    gender || 'unisex',
+          gender:    imageGender,
           skinTone:  bodyCharacteristics?.skinTone || '',
           bodyShape: bodyCharacteristics?.bodyType || '',
         };
@@ -289,7 +263,7 @@ exports.getOutfits = async (req, res) => {
 
     // For each outfit, pick 4 category-specific images from the dataset
     const user      = await User.findById(req.user.id);
-    const gender    = user?.gender || 'unisex';
+    const gender    = effectiveGenderForTheme((theme || '').toLowerCase(), user?.gender || 'unisex');
     const skinTone  = user?.bodyCharacteristics?.skinTone  || '';
     const bodyShape = user?.bodyCharacteristics?.bodyType  || '';
     // Phase 1 personalisation fields
@@ -331,22 +305,32 @@ exports.getOutfits = async (req, res) => {
       const emptyResult = { url:'', colour:'', articleType:'' };
 
       // ── Await all 4 picks in parallel (CLIP queries run concurrently) ─────────
-      const [topResult, botResult, fooResult, accResult] = await Promise.all([
+      const [topResult, fooResult, accResult] = await Promise.all([
         topPiece ? pickImageByPieceName(topPiece, 'topwear', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
-        fullLength
-          ? Promise.resolve(emptyResult)
-          : botPiece ? pickImageByPieceName(botPiece, 'bottomwear', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
         fooPiece ? pickImageByPieceName(fooPiece, 'footwear', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
         accPiece ? pickImageByPieceName(accPiece, 'accessories', outfitDesc, userDesc, context) : Promise.resolve(emptyResult),
       ]);
 
-      doc.topImage        = topResult.url;
+      const replacementImage = topResult.url || pickImage(outfitDesc, userDesc) || '';
+      const staleBottomwearImage = isBottomwearImageUrl(doc.imageUrl);
+      const staleGenderImage = isGenderMismatchedImageUrl(doc.imageUrl, gender);
+
+      doc.topImage        = replacementImage || topResult.url;
       doc.topColour       = topResult.colour;
       doc.topArticle      = topResult.articleType;
 
-      doc.bottomImage     = botResult.url;
-      doc.bottomColour    = botResult.colour;
-      doc.bottomArticle   = botResult.articleType;
+      doc.bottomImage     = '';
+      doc.bottomColour    = '';
+      doc.bottomArticle   = '';
+
+      if ((staleBottomwearImage || staleGenderImage) && replacementImage) {
+        doc.imageUrl = replacementImage;
+        Outfit.updateOne(
+          { _id: o._id },
+          { $set: { imageUrl: replacementImage } },
+          { runValidators: false }
+        ).catch(() => {});
+      }
 
       doc.footwearImage   = fooResult.url;
       doc.footwearColour  = fooResult.colour;
@@ -397,7 +381,11 @@ exports.getOutfits = async (req, res) => {
 
     scoredOutfits.sort((a, b) => b.finalScore - a.finalScore);
 
-    res.json({ outfits: scoredOutfits });
+    const responseOutfits = (theme || '').toLowerCase() === 'party'
+      ? scoredOutfits.filter(isWesternPartyOutfit)
+      : scoredOutfits;
+
+    res.json({ outfits: responseOutfits });
   } catch (err) {
     res.status(500).json({ message: 'Error fetching outfits' });
   }

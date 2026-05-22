@@ -225,14 +225,16 @@ interface FormData {
     colorPreferences: string[];
     additionalNotes: string;
     // Step 7 — Style & Lifestyle Preferences
-    style_preference: string;
-    lifestyle: string;
-    weather_preference: string;
-    location_type: string;
     // Phase 1 — Personalisation
     season: string;
     personality: string;
     lifestyleType: string;
+}
+
+interface ExtendedUserProfile {
+    season?: string;
+    personality?: string;
+    lifestyleType?: string;
 }
 
 const INITIAL: FormData = {
@@ -240,13 +242,12 @@ const INITIAL: FormData = {
     height: '165', weight: '65', age: '25',
     hairColor: '', hairType: '', hairLength: '', eyeColor: '',
     colorPreferences: [], additionalNotes: '',
-    style_preference: '', lifestyle: '', weather_preference: '', location_type: '',
     season: '', personality: '', lifestyleType: '',
 };
 
 // ─── Style & Lifestyle option data ────────────────────────────────────────────
 
-const STYLE_PREFS = [
+const REMOVED_DUPLICATE_STYLE_PREFS = [
     { value: 'minimal',    label: 'Minimal',    desc: 'Clean lines, quiet luxury', emoji: '🤍' },
     { value: 'bold',       label: 'Bold',       desc: 'Statement pieces, high contrast', emoji: '🔥' },
     { value: 'elegant',    label: 'Elegant',    desc: 'Refined, polished, sophisticated', emoji: '✨' },
@@ -384,7 +385,6 @@ export default function BodyProfilePage() {
     useEffect(() => {
         if (!user) return;
         const bc = user.bodyCharacteristics ?? {};
-        const sp = user.stylePreferences ?? {};
         setForm({
             gender: user.gender ?? '',
             skinTone: bc.skinTone ?? '',
@@ -399,13 +399,9 @@ export default function BodyProfilePage() {
             eyeColor: bc.eyeColor ?? '',
             colorPreferences: bc.colorPreferences ?? [],
             additionalNotes: bc.additionalNotes ?? '',
-            style_preference: sp.style_preference ?? '',
-            lifestyle: sp.lifestyle ?? '',
-            weather_preference: sp.weather_preference ?? '',
-            location_type: sp.location_type ?? '',
-            season:        (user as any).season        ?? '',
-            personality:   (user as any).personality   ?? '',
-            lifestyleType: (user as any).lifestyleType ?? '',
+            season:        (user as ExtendedUserProfile).season        ?? '',
+            personality:   (user as ExtendedUserProfile).personality   ?? '',
+            lifestyleType: (user as ExtendedUserProfile).lifestyleType ?? '',
         });
     }, [user]);
 
@@ -438,15 +434,9 @@ export default function BodyProfilePage() {
                 eyeColor: form.eyeColor,
                 colorPreferences: form.colorPreferences,
                 additionalNotes: form.additionalNotes,
-                // Step 7 fields
-                style_preference: form.style_preference,
-                lifestyle: form.lifestyle,
-                weather_preference: form.weather_preference,
-                location_type: form.location_type,
-                // Phase 1 personalisation fields
                 season:        form.season,
                 personality:   form.personality,
-                lifestyleType: form.lifestyleType || (form.location_type === 'semi-urban' ? 'suburban' : form.location_type) || 'urban',
+                lifestyleType: form.lifestyleType || 'urban',
             });
             await refreshUser();
             router.push('/themes');
@@ -687,7 +677,7 @@ export default function BodyProfilePage() {
 
             // Step 6 — Style & Lifestyle Preferences
             case 'lifestyle': {
-                type SingleKey = 'style_preference' | 'lifestyle' | 'weather_preference' | 'location_type';
+                type SingleKey = keyof FormData;
                 function LifestyleSection<T extends { value: string; label: string; desc: string; emoji: string }>(
                     { title, items, field }: { title: string; items: T[]; field: SingleKey }
                 ) {
@@ -720,11 +710,6 @@ export default function BodyProfilePage() {
 
                 return (
                     <div className="space-y-7">
-                        <LifestyleSection title="Style preference" items={STYLE_PREFS} field="style_preference" />
-                        <LifestyleSection title="Your lifestyle" items={LIFESTYLES} field="lifestyle" />
-                        <LifestyleSection title="Weather you usually dress for" items={WEATHER_PREFS} field="weather_preference" />
-                        <LifestyleSection title="Where you live" items={LOCATION_TYPES} field="location_type" />
-
                         {/* Phase 1 — Season */}
                         <div className="space-y-3">
                             <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Season you dress for</p>
@@ -810,7 +795,7 @@ export default function BodyProfilePage() {
                             <div>
                                 <p className="text-sm font-bold text-violet-800 dark:text-violet-200">What happens next</p>
                                 <p className="text-xs text-violet-600 dark:text-violet-400 mt-0.5">
-                                     After saving, you'll go directly to the AI Recommendation Engine. Your skin tone, body shape, and preferences will personalise every outfit suggestion.
+                                     After saving, you&apos;ll go directly to the AI Recommendation Engine. Your skin tone, body shape, and preferences will personalise every outfit suggestion.
                                 </p>
                             </div>
                         </div>
@@ -832,13 +817,9 @@ export default function BodyProfilePage() {
                         </div>
 
                         {/* Style & Lifestyle summary */}
-                        {(form.style_preference || form.lifestyle || form.weather_preference || form.location_type || form.season || form.personality || form.lifestyleType) && (
+                        {(form.season || form.personality || form.lifestyleType) && (
                             <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
                                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Style & Lifestyle</p>
-                                {form.style_preference && <ReviewRow label="Style preference" value={STYLE_PREFS.find(s => s.value === form.style_preference)?.label ?? form.style_preference} />}
-                                {form.lifestyle && <ReviewRow label="Lifestyle" value={LIFESTYLES.find(l => l.value === form.lifestyle)?.label ?? form.lifestyle} />}
-                                {form.weather_preference && <ReviewRow label="Weather" value={WEATHER_PREFS.find(w => w.value === form.weather_preference)?.label ?? form.weather_preference} />}
-                                {form.location_type && <ReviewRow label="Location" value={LOCATION_TYPES.find(l => l.value === form.location_type)?.label ?? form.location_type} />}
                                 {form.season && <ReviewRow label="Season" value={SEASON_OPTS.find(s => s.value === form.season)?.label ?? form.season} />}
                                 {form.personality && <ReviewRow label="Personality" value={PERSONALITY_OPTS.find(p => p.value === form.personality)?.label ?? form.personality} />}
                                 {form.lifestyleType && <ReviewRow label="Environment" value={LIFESTYLE_SIMPLE.find(l => l.value === form.lifestyleType)?.label ?? form.lifestyleType} />}

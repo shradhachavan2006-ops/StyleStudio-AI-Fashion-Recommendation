@@ -59,10 +59,7 @@ interface Outfit {
 
 // ── Category tile config ───────────────────────────────────────────────────────
 const TILES = [
-  { key: 'topImage',       colourKey: 'topColour',       articleKey: 'topArticle',       label: 'TOP WEAR',    pieceKey: 'top' },
-  { key: 'bottomImage',    colourKey: 'bottomColour',    articleKey: 'bottomArticle',    label: 'BOTTOM WEAR', pieceKey: 'bottom' },
-  { key: 'footwearImage',  colourKey: 'footwearColour',  articleKey: 'footwearArticle',  label: 'FOOTWEAR',    pieceKey: null },
-  { key: 'accessoryImage', colourKey: 'accessoryColour', articleKey: 'accessoryArticle', label: 'ACCESSORY',   pieceKey: null },
+  { key: 'topImage', colourKey: 'topColour', articleKey: 'topArticle', label: 'OUTFIT', pieceKey: 'top' },
 ] as const;
 
 // Full-length outfits (saree, gown, anarkali, etc.) don't have separate bottom wear
@@ -80,8 +77,8 @@ function ImageTile({ label, src, pieceName, colour }: {
   const dotColor = colourNameToHex(colour || '');
 
   return (
-    <div className="flex flex-col rounded-2xl overflow-hidden bg-[#13132a] border border-white/8 flex-1 min-w-0">
-      <div className="relative bg-gradient-to-b from-[#1a1a35] to-[#0f0f20] flex items-center justify-center" style={{ aspectRatio: '3/4' }}>
+    <div className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/8 bg-[#13132a]">
+      <div className="relative flex h-64 items-center justify-center bg-gradient-to-b from-[#1a1a35] to-[#0f0f20] sm:h-72 lg:h-80">
         {src && !err ? (
           <img
             src={src} alt={label}
@@ -503,27 +500,28 @@ export default function OutfitsContent() {
 
             </div>
 
-            {/* 4 (or 3) Category Image Tiles — bottomwear hidden for full-length outfits */}
+            {/* Single outfit image */}
             {(() => {
-              const fullLength = isFullLength(current);
               const visibleTiles = TILES.filter(t =>
-                !(t.key === 'bottomImage' && fullLength) &&
-                Boolean(current[t.key as keyof Outfit])
+                Boolean(current.topImage || current.imageUrl || current[t.key as keyof Outfit])
               );
               return (
-                <div className={`grid gap-3 transition-all duration-400 ${removing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
-                  style={{ gridTemplateColumns: `repeat(${visibleTiles.length}, minmax(0, 1fr))` }}>
+                <div
+                  className={`mx-auto grid w-full max-w-5xl gap-3 transition-all duration-400 ${removing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}
+                  style={{
+                    gridTemplateColumns:
+                      visibleTiles.length <= 1
+                        ? 'minmax(220px, 360px)'
+                        : `repeat(${visibleTiles.length}, minmax(180px, 1fr))`,
+                    justifyContent: 'center',
+                  }}
+                >
                   {visibleTiles.map(tile => (
                     <ImageTile
                       key={tile.key}
                       label={tile.label}
-                      src={current[tile.key as keyof Outfit] as string}
-                      pieceName={getTileLabel(
-                        current,
-                        tile.key,
-                        current[tile.articleKey as keyof Outfit] as string,
-                        current[tile.colourKey as keyof Outfit] as string
-                      )}
+                      src={(tile.key === 'topImage' ? (current.topImage || current.imageUrl) : current[tile.key as keyof Outfit]) as string}
+                      pieceName=""
                       colour={(current[tile.colourKey as keyof Outfit] as string) || ''}
                     />
                   ))}
