@@ -136,11 +136,11 @@ function scoreOutfitFromBehavior(outfit, profile) {
 
   const colors = scoreMapHit(profile.colorScores, outfit.colors || []);
   raw += colors.score;
-  if (colors.score > 0 && colors.matched[0]) reasons.push(`Uses colours you engage with`);
+  if (colors.score > 0 && colors.matched[0]) reasons.push(`Uses your saved ${colors.matched[0]} tones`);
 
   const pieces = scoreMapHit(profile.pieceScores, outfit.clothingPieces || []);
   raw += pieces.score;
-  if (pieces.score > 0 && pieces.matched[0]) reasons.push(`Similar to saved or liked pieces`);
+  if (pieces.score > 0 && pieces.matched[0]) reasons.push(`Similar to saved ${pieces.matched[0]}`);
 
   const behaviorScore = Math.max(0, Math.min(100, Math.round(50 + raw)));
   return {

@@ -96,6 +96,110 @@ function isWesternPartyOutfit(outfit) {
     !blocked.some((word) => text.includes(word));
 }
 
+function readableColor(value) {
+  const color = String(value || '').trim();
+  if (!color) return '';
+
+  const hexMap = {
+    '#ffffff': 'white',
+    '#fffff0': 'ivory',
+    '#fffdd0': 'cream',
+    '#1c1c1c': 'black',
+    '#111111': 'black',
+    '#0a2342': 'navy',
+    '#1e3a5f': 'navy',
+    '#4169e1': 'blue',
+    '#87ceeb': 'sky blue',
+    '#800020': 'burgundy',
+    '#800000': 'maroon',
+    '#8b0000': 'deep red',
+    '#cc2200': 'red',
+    '#ff1744': 'red',
+    '#ff69b4': 'pink',
+    '#ffb6c1': 'pink',
+    '#e6e6fa': 'lavender',
+    '#228b22': 'green',
+    '#008000': 'green',
+    '#008080': 'teal',
+    '#ffd700': 'gold',
+    '#d4af37': 'gold',
+    '#c0c0c0': 'silver',
+    '#808080': 'grey',
+    '#708090': 'grey',
+    '#4a4a4a': 'charcoal',
+    '#c8a560': 'khaki',
+    '#f5deb3': 'beige',
+    '#e2725b': 'terracotta',
+  };
+
+  if (color.startsWith('#')) return hexMap[color.toLowerCase()] || color.toUpperCase();
+  return color.replace(/[-_]+/g, ' ').toLowerCase();
+}
+
+function titleCase(value) {
+  return String(value || '')
+    .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (m) => m.toUpperCase());
+}
+
+function primaryPiece(outfit) {
+  const pieces = outfit.clothingPieces || [];
+  const textPriority = [
+    'sherwani', 'lehenga', 'saree', 'kurta', 'kurti', 'dress', 'blazer',
+    'shirt', 't-shirt', 'tshirt', 'tee', 'top', 'sweater', 'jacket',
+  ];
+  return pieces.find((piece) => {
+    const lower = String(piece || '').toLowerCase();
+    return textPriority.some((word) => lower.includes(word));
+  }) || outfit.top || pieces[0] || outfit.outfitName || '';
+}
+
+function uniqueTags(tags, limit = 4) {
+  const seen = new Set();
+  const clean = [];
+  for (const tag of tags) {
+    const value = String(tag || '').replace(/\s+/g, ' ').trim();
+    if (!value) continue;
+    const key = value.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    clean.push(value);
+    if (clean.length >= limit) break;
+  }
+  return clean;
+}
+
+function buildExplanationTags(outfit, behavior, user, mlOnline) {
+  const tags = [];
+  const piece = primaryPiece(outfit);
+  const color = readableColor(outfit.topColour || outfit.colors?.[0] || outfit.color);
+  const theme = titleCase(outfit.theme || outfit.occasion);
+  const bodyType = titleCase(user?.bodyCharacteristics?.bodyType || '');
+  const skinTone = titleCase(user?.bodyCharacteristics?.skinTone || '');
+  const lifestyle = titleCase(user?.lifestyleType || user?.stylePreferences?.location_type || '');
+
+  if (color && piece) tags.push(`${titleCase(color)} ${titleCase(piece)}`);
+  else if (piece) tags.push(titleCase(piece));
+
+  const itemSpecificPersonal = (outfit.personalReasons || []).filter((reason) => {
+    const lower = String(reason).toLowerCase();
+    return !lower.includes('lifestyle') && !lower.includes('personality');
+  });
+  tags.push(...itemSpecificPersonal);
+
+  if (skinTone && color) tags.push(`${titleCase(color)} for ${skinTone} skin tone`);
+  if (bodyType && piece) tags.push(`${titleCase(piece)} suits ${bodyType}`);
+
+  tags.push(...(behavior.behaviorReasons || []));
+
+  if (theme && lifestyle) tags.push(`${theme} fits ${lifestyle} lifestyle`);
+  if (mlOnline) tags.push('ML preference scored');
+
+  return uniqueTags(tags, 4);
+}
+
 function seededNumber(seed) {
   let h = 2166136261;
   const text = String(seed);
@@ -431,15 +535,15 @@ exports.getOutfits = async (req, res) => {
         ? Math.round(0.35 * personalPct + 0.35 * behaviorPct + 0.20 * mlPct + 0.10 * baseline)
         : Math.round(0.55 * personalPct + 0.35 * behaviorPct + 0.10 * baseline);
 
+      const explanationTags = buildExplanationTags(o, behavior, user, mlOnline);
+
       return {
         ...o,
         behaviorScore: behaviorPct,
         behaviorReasons: behavior.behaviorReasons,
         behaviorSamples: behaviorProfile.sampleCount,
-        personalReasons: [
-          ...(o.personalReasons || []),
-          ...(behavior.behaviorReasons || []),
-        ].slice(0, 4),
+        personalReasons: explanationTags,
+        explanationTags,
         finalScore,
         mlScore:    mlOnline ? Math.round(mlPct) : null,
         mlOnline,

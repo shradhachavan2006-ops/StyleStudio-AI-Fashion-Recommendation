@@ -402,10 +402,9 @@ exports.updateOutfit = async (req, res) => {
 
 exports.getTrends = async (req, res) => {
   try {
-    const [themes, colors, footwear, styles] = await Promise.all([
+    const [themes, colors, styles] = await Promise.all([
       Outfit.aggregate([{ $group: { _id: '$theme', count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 10 }]),
       Outfit.aggregate([{ $unwind: '$colors' }, { $group: { _id: '$colors', count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 12 }]),
-      Outfit.aggregate([{ $unwind: '$clothingPieces' }, { $match: { clothingPieces: /heel|shoe|sneaker|sandal|boot|loafer/i } }, { $group: { _id: '$clothingPieces', count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 8 }]),
       Outfit.aggregate([{ $group: { _id: '$style', count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 8 }]),
     ]);
 
@@ -415,7 +414,7 @@ exports.getTrends = async (req, res) => {
       insight: `${row._id || 'General'} recommendations are receiving the highest dataset coverage and interaction volume.`,
     }));
 
-    res.json({ themes, colors, footwear, styles, forecast });
+    res.json({ themes, colors, styles, forecast });
   } catch (err) {
     res.status(500).json({ message: 'Failed to load trend analytics', error: err.message });
   }

@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
-const recommendationRoutes = require('./routes/recommendationRoutes');
-
 const app = express();
 
 
@@ -46,7 +44,6 @@ app.use('/api/saved-outfits', require('./routes/savedOutfit'));   // outfit book
 app.use('/api/profile', require('./routes/profile'));
 app.use('/api/actions', require('./routes/actions'));
 app.use('/api/feedback', require('./routes/feedback'));
-app.use('/api/recommend', recommendationRoutes);
 app.use('/api/dataset', require('./routes/dataset'));  // Dataset inspection tool
 app.use('/api/admin', require('./routes/admin'));
 

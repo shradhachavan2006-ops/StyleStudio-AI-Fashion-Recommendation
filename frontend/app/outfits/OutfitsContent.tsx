@@ -53,6 +53,7 @@ interface Outfit {
   finalScore?:      number;
   personalReasons?: string[];
   behaviorReasons?: string[];
+  explanationTags?: string[];
   behaviorSamples?: number;
 }
 
@@ -502,7 +503,7 @@ export default function OutfitsContent() {
                     Based on {current.behaviorSamples} action{current.behaviorSamples !== 1 ? 's' : ''}
                   </span>
                 )}
-                {(current.personalReasons || current.behaviorReasons || []).slice(0, 3).map((reason, i) => (
+                {(current.explanationTags || current.personalReasons || current.behaviorReasons || []).slice(0, 4).map((reason, i) => (
                   <span key={i} className="px-2.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-semibold">
                     {reason}
                   </span>

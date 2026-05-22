@@ -112,7 +112,6 @@ interface AdminOutfit {
 interface Trends {
   themes: Array<{ _id: string; count: number }>;
   colors: Array<{ _id: string; count: number }>;
-  footwear: Array<{ _id: string; count: number }>;
   styles: Array<{ _id: string; count: number }>;
   forecast: Array<{ trend: string; confidence: number; insight: string }>;
 }
@@ -986,9 +985,9 @@ export default function AdminPage() {
                     ))}
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-gray-900/40 backdrop-blur-sm p-6">
-                    <h2 className="text-xl font-bold text-white mb-4">Footwear Trends</h2>
-                    {trends.footwear.slice(0, 6).map((item) => (
-                      <ProgressBar key={item._id} value={item.count} max={trends.footwear[0]?.count || 1} label={item._id} color="bg-cyan-500" />
+                    <h2 className="text-xl font-bold text-white mb-4">Popular Colors</h2>
+                    {trends.colors.slice(0, 6).map((item) => (
+                      <ProgressBar key={item._id} value={item.count} max={trends.colors[0]?.count || 1} label={item._id || 'Unknown'} color="bg-cyan-500" />
                     ))}
                   </div>
                 </div>
